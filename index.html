@@ -9,112 +9,109 @@
   --bg:#f6f7f4;--surface:#fff;--surface-2:#eef3ed;
   --text:#1f2a25;--muted:#66736c;--line:#dce3dc;
   --primary:#18725f;--primary-strong:#0c5a49;
-  --accent:#d97843;--danger:#b84132;
-  --shadow:0 18px 50px rgba(31,42,37,.08);--radius:8px;
+  --danger:#b84132;--shadow:0 18px 50px rgba(31,42,37,.08);--radius:8px;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
-  -webkit-tap-highlight-color:transparent}
-button,input,select{font:inherit}
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+button,input,select,textarea{font:inherit}
 .app-shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
-.sidebar{display:flex;flex-direction:column;gap:24px;padding:24px;background:#22322b;color:#f8fbf8}
+.sidebar{display:flex;flex-direction:column;gap:20px;padding:24px;background:#22322b;color:#f8fbf8}
 .brand{display:flex;align-items:center;gap:12px}
-.brand-mark{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:#f0b36e;color:#22322b;font-weight:900}
+.brand-mark{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:#f0b36e;color:#22322b;font-weight:900;font-size:15px}
 .brand strong,.brand span{display:block}
-.brand span,.sidebar-card small{color:rgba(248,251,248,.68);font-size:.84rem}
-.nav{display:grid;gap:8px}
+.brand span{color:rgba(248,251,248,.68);font-size:.84rem}
+.nav{display:grid;gap:6px}
 .nav-btn{min-height:44px;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);
-  background:transparent;color:#f8fbf8;text-align:left;cursor:pointer;padding:0 14px}
+  background:transparent;color:#f8fbf8;text-align:left;cursor:pointer;padding:0 14px;font-size:.9rem}
 .nav-btn.active,.nav-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.24)}
-.install-btn{min-height:42px;border:1px solid rgba(240,179,110,.5);border-radius:var(--radius);
-  background:#f0b36e;color:#22322b;cursor:pointer;font-weight:850}
 .sidebar-card{margin-top:auto;padding:18px;border-radius:var(--radius);background:rgba(255,255,255,.1)}
-.sidebar-card strong{display:block;margin:8px 0 4px;font-size:1.8rem}
+.sidebar-card .eyebrow{color:rgba(248,251,248,.68);font-size:.78rem;font-weight:700;text-transform:uppercase}
+.sidebar-card strong{display:block;margin:6px 0 2px;font-size:1.8rem}
+.sidebar-card small{color:rgba(248,251,248,.55);font-size:.8rem}
 .main{padding:28px;overflow:auto}
-.topbar{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px}
 h1,h2,p{margin:0}
-h1{font-size:clamp(1.55rem,2vw,2.3rem);line-height:1.15}
-h1 span{display:inline-block;margin-top:6px;color:var(--muted);font-size:.58em;font-weight:700}
-h2{font-size:1.1rem}
+h1{font-size:clamp(1.4rem,2vw,2rem);line-height:1.15}
+h1 span{display:inline-block;margin-top:4px;color:var(--muted);font-size:.55em;font-weight:700}
+h2{font-size:1.05rem}
 .eyebrow{color:var(--muted);font-size:.78rem;font-weight:700;text-transform:uppercase}
 .week-picker{display:grid;gap:6px;min-width:190px}
-label{display:grid;gap:7px;color:var(--muted);font-size:.88rem;font-weight:650}
+label{display:grid;gap:6px;color:var(--muted);font-size:.85rem;font-weight:600}
 input,select{width:100%;min-height:42px;border:1px solid var(--line);border-radius:var(--radius);
-  background:#fff;color:var(--text);font-size:16px;padding:0 11px}
-input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(24,114,95,.16);outline:none}
+  background:#fff;color:var(--text);font-size:15px;padding:0 10px}
+input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(24,114,95,.15);outline:none}
 .view{display:none}.view.active{display:block}
-.grid{display:grid;gap:18px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.lower-grid{margin-top:18px}
-.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
-  box-shadow:var(--shadow);padding:18px}
-.panel-head{display:flex;align-items:start;justify-content:space-between;gap:14px;margin-bottom:16px}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lower-grid{margin-top:16px}
+.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);padding:18px}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .form-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 .wide{grid-column:1/-1}
-.settings-panel{margin-bottom:18px}
-.calculated-strip{display:flex;align-items:center;justify-content:space-between;min-height:54px;
-  margin:16px 0;padding:12px 14px;border-radius:var(--radius);background:var(--surface-2)}
-.calculated-strip span,.metric span{color:var(--muted);font-size:.83rem;font-weight:700}
+.settings-panel{margin-bottom:16px}
+.calculated-strip{display:flex;align-items:center;justify-content:space-between;min-height:52px;
+  margin:14px 0;padding:12px 14px;border-radius:var(--radius);background:var(--surface-2)}
+.calculated-strip span{color:var(--muted);font-size:.83rem;font-weight:700}
 .calculated-strip strong{font-size:1.4rem}
-.button-row{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px}
-.primary-btn,.secondary-btn,.danger-btn,.icon-btn{min-height:42px;border-radius:var(--radius);cursor:pointer}
-.primary-btn{border:0;background:var(--primary);color:#fff;font-weight:800;padding:0 16px}
+.button-row{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
+.primary-btn,.secondary-btn,.danger-btn,.icon-btn{min-height:40px;border-radius:var(--radius);cursor:pointer;font-weight:700}
+.primary-btn{border:0;background:var(--primary);color:#fff;padding:0 16px}
 .primary-btn:hover{background:var(--primary-strong)}
-#entrySubmitLabel{width:100%}
-.secondary-btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:0 14px;font-weight:750}
-.action-select{width:min(230px,100%)}.action-input{width:min(190px,100%)}
-.warning-banner{margin:0 0 14px;border:1px solid rgba(217,120,67,.34);border-radius:var(--radius);
-  background:#fff7ed;color:#714414;padding:11px 13px;font-size:.9rem;font-weight:700}
-.print-preview{position:fixed;inset:0;z-index:50;display:grid;grid-template-rows:auto 1fr;background:rgba(0,0,0,.72)}
-.print-preview[hidden]{display:none}
-.print-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:14px;background:#22322b;color:#fff}
-#printFrame{width:100%;height:100%;border:0;background:#000}
-.danger-btn{border:1px solid rgba(184,65,50,.24);background:rgba(184,65,50,.08);color:var(--danger);padding:0 10px;font-weight:800}
-.icon-btn{width:42px;border:1px solid var(--line);background:#fff;color:var(--text);font-size:1.3rem}
-.metric-row,.dashboard-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.secondary-btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:0 12px}
+.danger-btn{border:1px solid rgba(184,65,50,.24);background:rgba(184,65,50,.08);color:var(--danger);padding:0 10px}
+.icon-btn{width:40px;border:1px solid var(--line);background:#fff;color:var(--text);font-size:1.2rem}
+.warning-banner{margin:0 0 12px;border:1px solid rgba(217,120,67,.34);border-radius:var(--radius);
+  background:#fff7ed;color:#714414;padding:10px 12px;font-size:.88rem;font-weight:700}
+.metric-row,.dashboard-grid{display:grid;gap:10px;margin-bottom:14px}
+.metric-row{grid-template-columns:repeat(3,minmax(0,1fr))}
 .dashboard-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.metric{min-height:92px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;padding:15px}
-.metric strong{display:block;margin-top:8px;font-size:1.45rem}
+.metric{min-height:88px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;padding:14px}
+.metric span{color:var(--muted);font-size:.8rem;font-weight:700}
+.metric strong{display:block;margin-top:6px;font-size:1.35rem}
 .metric.highlight{background:#e9f2ef;border-color:#cfe0da}
 .metric.profit{background:#fff4ed;border-color:#f3d8c4}
-.table-wrap{width:100%;overflow:auto}.table-wrap.compact{max-height:360px}
-table{width:100%;border-collapse:collapse;min-width:640px}
-th,td{border-bottom:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:middle}
-th{color:var(--muted);font-size:.78rem;text-transform:uppercase}
-td{font-size:.92rem}
-.table-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px}
-.pill{display:inline-flex;align-items:center;min-height:28px;border-radius:999px;background:#edf1ee;padding:0 10px;font-weight:750}
+.table-wrap{width:100%;overflow:auto}.table-wrap.compact{max-height:340px}
+table{width:100%;border-collapse:collapse;min-width:580px}
+th,td{border-bottom:1px solid var(--line);padding:10px 9px;text-align:left;vertical-align:middle}
+th{color:var(--muted);font-size:.76rem;text-transform:uppercase}
+td{font-size:.9rem}
+.table-actions{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;min-height:26px;border-radius:999px;background:#edf1ee;padding:0 9px;font-weight:700;font-size:.85rem}
 .muted{color:var(--muted)}
+.print-preview{position:fixed;inset:0;z-index:50;display:grid;grid-template-rows:auto 1fr;background:rgba(0,0,0,.75)}
+.print-preview[hidden]{display:none}
+.print-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#22322b;color:#fff}
+#printFrame{width:100%;height:100%;border:0;background:#fff}
+/* client info modal */
+.modal-overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-overlay[hidden]{display:none}
+.modal{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:480px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.modal h3{margin:0 0 16px;font-size:1.1rem}
 @media(max-width:980px){
   .app-shell{grid-template-columns:1fr}
   .sidebar{position:static;padding:16px}
   .nav{grid-template-columns:repeat(3,minmax(0,1fr))}
   .sidebar-card{display:none}
-  .grid.two,.dashboard-grid,.form-grid.four{grid-template-columns:1fr}
-  .topbar{align-items:stretch;flex-direction:column}
+  .grid.two,.dashboard-grid,.form-grid.four,.form-grid.three{grid-template-columns:1fr}
+  .topbar{flex-direction:column;align-items:stretch}
 }
 @media(max-width:640px){
   .app-shell{display:block}
-  .sidebar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;gap:8px;
+  .sidebar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;gap:6px;
     padding:8px 10px calc(8px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.14)}
-  .brand,.install-btn{display:none}
-  .sidebar .nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-  .nav-btn{display:grid;place-items:center;min-height:50px;padding:0 6px;text-align:center;font-size:.78rem;line-height:1.15}
-  .main{padding:14px 14px calc(92px + env(safe-area-inset-bottom))}
+  .brand{display:none}
+  .sidebar .nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+  .nav-btn{display:grid;place-items:center;min-height:48px;padding:0 4px;text-align:center;font-size:.75rem;line-height:1.2}
+  .main{padding:14px 14px calc(88px + env(safe-area-inset-bottom))}
   .form-grid,.metric-row{grid-template-columns:1fr}
-  .panel-head{align-items:stretch;flex-direction:column}
-  .button-row{justify-content:stretch}
-  .button-row>button{flex:1 1 150px}
-  .action-select,.action-input{width:100%}
-  h1{font-size:1.45rem}.panel{padding:14px}
-  .metric{min-height:78px;padding:12px}.metric strong{font-size:1.22rem}
+  .panel{padding:14px}
+  .metric{min-height:74px;padding:11px}.metric strong{font-size:1.18rem}
   .table-wrap{margin-inline:-14px;padding-inline:14px}
-  table{min-width:720px}
+  table{min-width:680px}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
 }
-@media print{body{background:#fff}}
 </style>
 </head>
 <body>
@@ -126,12 +123,11 @@ td{font-size:.92rem}
     </div>
     <nav class="nav">
       <button class="nav-btn active" data-view="workerView" type="button">工人端 Worker</button>
-      <button class="nav-btn" data-view="adminView" type="button">老板管理端 Admin</button>
-      <button class="nav-btn" data-view="reportsView" type="button">周报与导出 Reports</button>
+      <button class="nav-btn" data-view="adminView" type="button">管理端 Admin</button>
+      <button class="nav-btn" data-view="reportsView" type="button">周报导出 Reports</button>
     </nav>
-    <button class="install-btn" id="installAppBtn" type="button">安装 App / Install App</button>
     <div class="sidebar-card">
-      <span class="eyebrow">本周利润 Weekly profit</span>
+      <div class="eyebrow">本周利润 Weekly Profit</div>
       <strong id="sidebarProfit">$0.00</strong>
       <small id="sidebarWeek">当前周</small>
     </div>
@@ -140,11 +136,11 @@ td{font-size:.92rem}
   <main class="main">
     <header class="topbar">
       <div>
-        <p class="eyebrow">Brisbane Commercial Labour</p>
+        <p class="eyebrow">H3 Interior Pty Ltd · Brisbane</p>
         <h1>工时上报与项目利润系统<br/><span>Timesheet & Job Profit System</span></h1>
       </div>
       <div class="week-picker">
-        <label for="weekStart">统计周 / Week start<input id="weekStart" type="date"/></label>
+        <label for="weekStart">统计周 Week start<input id="weekStart" type="date"/></label>
       </div>
     </header>
 
@@ -153,41 +149,41 @@ td{font-size:.92rem}
       <div class="grid two">
         <form id="entryForm" class="panel">
           <div class="panel-head">
-            <div><p class="eyebrow">工人日报 Worker daily entry</p><h2>填写上工情况 / Submit work record</h2></div>
-            <button class="icon-btn" id="clearEntryForm" type="button" title="清空">×</button>
+            <div><p class="eyebrow">工人日报</p><h2>填写上工情况 / Submit work record</h2></div>
+            <button class="icon-btn" id="clearEntryForm" type="button">×</button>
           </div>
           <input id="entryId" type="hidden"/>
           <div class="form-grid">
-            <label>工人 / Worker<select id="entryWorker" required></select></label>
-            <label>日期 / Date<input id="entryDate" type="date" required/></label>
-            <label>服务公司 / Client<select id="entryClient" required></select></label>
-            <label>工地 / Job site<select id="entrySite" required></select></label>
-            <label>上班 / Start<input id="entryStart" type="time" required/></label>
-            <label>下班 / Finish<input id="entryEnd" type="time" required/></label>
-            <label>休息分钟 / Break<input id="entryBreak" type="number" min="0" step="5" value="30"/></label>
-            <label>补贴 / Allowance<input id="entryAllowance" type="number" min="0" step="0.01" value="0"/></label>
-            <label class="wide">备注 / Notes<input id="entryNotes" placeholder="parking, travel, etc."/></label>
+            <label>工人 Worker<select id="entryWorker" required></select></label>
+            <label>日期 Date<input id="entryDate" type="date" required/></label>
+            <label>服务公司 Client<select id="entryClient" required></select></label>
+            <label>工地 Site<select id="entrySite" required></select></label>
+            <label>上班 Start<input id="entryStart" type="time" required/></label>
+            <label>下班 Finish<input id="entryEnd" type="time" required/></label>
+            <label>休息分钟 Break<input id="entryBreak" type="number" min="0" step="5" value="0"/></label>
+            <label>补贴 Allowance<input id="entryAllowance" type="number" min="0" step="0.01" value="0"/></label>
+            <label class="wide">备注 Notes<input id="entryNotes" placeholder="parking, travel, etc."/></label>
           </div>
           <div class="calculated-strip">
-            <span>当天工时 / Daily hours</span>
+            <span>当天工时 Daily hours</span>
             <strong id="entryHoursPreview">0.00 h</strong>
           </div>
-          <button class="primary-btn" id="entrySubmitLabel" type="submit">保存日报 / Save entry</button>
+          <button class="primary-btn wide" id="entrySubmitLabel" type="submit" style="width:100%">保存日报 / Save entry</button>
         </form>
 
         <div class="panel">
           <div class="panel-head">
-            <div><p class="eyebrow">Worker view</p><h2>本周个人工时 / My weekly hours</h2></div>
-            <select id="workerSummarySelect"></select>
+            <div><p class="eyebrow">Worker view</p><h2>本周个人工时</h2></div>
+            <select id="workerSummarySelect" style="width:auto;min-width:140px"></select>
           </div>
           <div class="metric-row">
-            <div class="metric"><span>天数 / Days</span><strong id="workerDays">0</strong></div>
-            <div class="metric"><span>工时 / Hours</span><strong id="workerHours">0.00</strong></div>
-            <div class="metric"><span>补贴 / Allowance</span><strong id="workerAllowance">$0.00</strong></div>
+            <div class="metric"><span>天数 Days</span><strong id="workerDays">0</strong></div>
+            <div class="metric"><span>工时 Hours</span><strong id="workerHours">0.00</strong></div>
+            <div class="metric"><span>补贴 Allowance</span><strong id="workerAllowance">$0.00</strong></div>
           </div>
           <div class="table-wrap compact">
             <table>
-              <thead><tr><th>日期</th><th>公司/工地</th><th>时间</th><th>工时</th></tr></thead>
+              <thead><tr><th>日期</th><th>客户/工地</th><th>时间</th><th>工时</th></tr></thead>
               <tbody id="workerEntriesTable"></tbody>
             </table>
           </div>
@@ -200,13 +196,13 @@ td{font-size:.92rem}
       <form id="settingsForm" class="panel settings-panel">
         <div class="panel-head"><div><p class="eyebrow">Invoice settings</p><h2>公司发票信息</h2></div></div>
         <div class="form-grid four">
-          <label>公司名称<input id="businessName" placeholder="Your Labour Co Pty Ltd"/></label>
-          <label>ABN<input id="businessAbn" placeholder="12 345 678 901"/></label>
-          <label>电话<input id="businessPhone" placeholder="04xx xxx xxx"/></label>
-          <label>邮箱<input id="businessEmail" placeholder="admin@example.com"/></label>
-          <label class="wide">银行/付款信息<input id="paymentDetails" placeholder="BSB: xxx-xxx  ACC: xxxxxxxxx"/></label>
+          <label>公司名称<input id="businessName" value="H3 Interior Pty Ltd"/></label>
+          <label>ABN<input id="businessAbn" value="14 630 033 591"/></label>
+          <label>电话<input id="businessPhone"/></label>
+          <label>邮箱<input id="businessEmail" value="info.h3interior@gmail.com"/></label>
+          <label class="wide">银行付款信息<input id="paymentDetails" value="BSB: 084-961  ACC: 70-451-7526"/></label>
         </div>
-        <div class="button-row"><button class="secondary-btn" type="submit">保存发票信息 / Save</button></div>
+        <div class="button-row"><button class="secondary-btn" type="submit">保存 Save</button></div>
       </form>
 
       <div class="grid two">
@@ -214,30 +210,33 @@ td{font-size:.92rem}
           <div class="panel-head"><div><p class="eyebrow">Worker cost</p><h2>工人资料与成本</h2></div></div>
           <input id="workerId" type="hidden"/>
           <div class="form-grid">
-            <label>姓名 / Name<input id="workerName" required/></label>
-            <label>电话 / Phone<input id="workerPhone"/></label>
-            <label>付给工人时薪 / Pay rate<input id="workerPayRate" type="number" min="0" step="0.01" required/></label>
-            <label>真实小时成本 / Cost rate<input id="workerCostRate" type="number" min="0" step="0.01" required/></label>
-            <label class="wide">备注<input id="workerNotes" placeholder="技能、交通、可工作区域"/></label>
+            <label>姓名 Name<input id="workerName" required/></label>
+            <label>电话 Phone<input id="workerPhone"/></label>
+            <label>付给工人时薪 Pay rate ($/hr)<input id="workerPayRate" type="number" min="0" step="0.01" required/></label>
+            <label>真实成本 Cost rate ($/hr)<input id="workerCostRate" type="number" min="0" step="0.01" required/></label>
+            <label class="wide">备注<input id="workerNotes" placeholder="技能、可工作区域"/></label>
           </div>
           <div class="button-row">
-            <button class="primary-btn" type="submit">保存工人 / Save</button>
-            <button class="secondary-btn" id="resetWorkerForm" type="button">新增 / New</button>
+            <button class="primary-btn" type="submit">保存 Save</button>
+            <button class="secondary-btn" id="resetWorkerForm" type="button">新增 New</button>
           </div>
         </form>
 
         <form id="siteForm" class="panel">
-          <div class="panel-head"><div><p class="eyebrow">Client billing</p><h2>工地与收费时薪</h2></div></div>
+          <div class="panel-head"><div><p class="eyebrow">Client billing</p><h2>工地与客户收费</h2></div></div>
           <input id="siteId" type="hidden"/>
           <div class="form-grid">
-            <label>服务公司 / Client<input id="siteClient" required/></label>
-            <label>工地名称 / Site<input id="siteName" required/></label>
-            <label>客户收费时薪 / Bill rate<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
-            <label>GST %<input id="siteTaxRate" type="number" min="0" step="0.01" value="10"/></label>
+            <label>服务公司简称 Client short name<input id="siteClientShort" placeholder="CB" required/></label>
+            <label>服务公司全称 Client full name<input id="siteClient" placeholder="Citibuild Construction Pty Ltd" required/></label>
+            <label>客户ABN<input id="siteClientAbn" placeholder="25 607 468 315"/></label>
+            <label>客户邮箱<input id="siteClientEmail" placeholder="accounts@example.com"/></label>
+            <label>工地名称 Site name<input id="siteName" required/></label>
+            <label>向客户收费时薪 Bill rate ($/hr)<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
+            <label>GST %<input id="siteTaxRate" type="number" value="10" min="0" step="0.01"/></label>
           </div>
           <div class="button-row">
-            <button class="primary-btn" type="submit">保存工地 / Save</button>
-            <button class="secondary-btn" id="resetSiteForm" type="button">新增 / New</button>
+            <button class="primary-btn" type="submit">保存 Save</button>
+            <button class="secondary-btn" id="resetSiteForm" type="button">新增 New</button>
           </div>
         </form>
       </div>
@@ -263,21 +262,21 @@ td{font-size:.92rem}
     <!-- REPORTS VIEW -->
     <section id="reportsView" class="view">
       <div class="dashboard-grid">
-        <div class="metric highlight"><span>总工时 / Hours</span><strong id="totalHours">0.00</strong></div>
-        <div class="metric"><span>收入 / Revenue</span><strong id="totalRevenue">$0.00</strong></div>
-        <div class="metric"><span>成本 / Cost</span><strong id="totalCost">$0.00</strong></div>
-        <div class="metric profit"><span>利润 / Profit</span><strong id="totalProfit">$0.00</strong></div>
+        <div class="metric highlight"><span>总工时 Hours</span><strong id="totalHours">0.00</strong></div>
+        <div class="metric"><span>收入 Revenue</span><strong id="totalRevenue">$0.00</strong></div>
+        <div class="metric"><span>成本 Cost</span><strong id="totalCost">$0.00</strong></div>
+        <div class="metric profit"><span>利润 Profit</span><strong id="totalProfit">$0.00</strong></div>
       </div>
 
       <div class="panel">
         <div class="panel-head">
-          <div><p class="eyebrow">Weekly site summary</p><h2>按工地统计</h2></div>
+          <div><p class="eyebrow">Weekly summary</p><h2>按工地统计</h2></div>
           <div class="button-row">
-            <select id="invoiceClientFilter" class="action-select"></select>
-            <input id="invoiceNumber" class="action-input" placeholder="Invoice # / 发票号"/>
-            <button class="secondary-btn" id="exportCsvBtn" type="button">导出CSV</button>
-            <button class="secondary-btn" id="printTimesheetBtn" type="button">生成Timesheet</button>
-            <button class="primary-btn" id="printInvoiceBtn" type="button">生成Invoice</button>
+            <select id="invoiceClientFilter" style="min-width:160px"></select>
+            <input id="invoiceNumber" style="width:160px" placeholder="发票序号 e.g. 077"/>
+            <button class="secondary-btn" id="exportCsvBtn" type="button">导出 CSV</button>
+            <button class="secondary-btn" id="printTimesheetBtn" type="button">Timesheet</button>
+            <button class="primary-btn" id="printInvoiceBtn" type="button">Invoice</button>
           </div>
         </div>
         <div id="rateWarning" class="warning-banner" hidden></div>
@@ -289,8 +288,8 @@ td{font-size:.92rem}
         </div>
       </div>
 
-      <div class="panel" style="margin-top:18px">
-        <div class="panel-head"><div><p class="eyebrow">Worker pay summary</p><h2>工人工资周报</h2></div></div>
+      <div class="panel" style="margin-top:16px">
+        <div class="panel-head"><div><p class="eyebrow">Worker pay</p><h2>工人工资周报</h2></div></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>工人</th><th>天数</th><th>工时</th><th>时薪</th><th>工资</th><th>补贴</th><th>应付合计</th><th>真实成本</th></tr></thead>
@@ -299,8 +298,8 @@ td{font-size:.92rem}
         </div>
       </div>
 
-      <div class="panel" style="margin-top:18px">
-        <div class="panel-head"><div><p class="eyebrow">Daily records</p><h2>本周日报明细</h2></div></div>
+      <div class="panel" style="margin-top:16px">
+        <div class="panel-head"><div><p class="eyebrow">Daily records</p><h2>日报明细</h2></div></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>日期</th><th>工人</th><th>客户</th><th>工地</th><th>时间</th><th>工时</th><th>收入</th><th>成本</th><th></th></tr></thead>
@@ -312,63 +311,74 @@ td{font-size:.92rem}
   </main>
 </div>
 
+<!-- Print preview -->
 <div id="printPreview" class="print-preview" hidden>
   <div class="print-preview-bar">
     <strong id="printPreviewTitle">Preview</strong>
     <div class="button-row">
-      <button class="secondary-btn" id="closePrintPreview" type="button">关闭 / Close</button>
-      <button class="primary-btn" id="printPreviewBtn" type="button">打印或保存PDF / Print</button>
+      <button class="secondary-btn" id="closePrintPreview" type="button">关闭 Close</button>
+      <button class="primary-btn" id="printPreviewBtn" type="button">打印/保存PDF Print/Save PDF</button>
     </div>
   </div>
   <iframe id="printFrame" title="Print preview"></iframe>
 </div>
 
 <script>
-const STORAGE_KEY="labourflow_v1";
-const today=new Date();
-const $=s=>document.querySelector(s);
-const $$=s=>Array.from(document.querySelectorAll(s));
-const money=v=>new Intl.NumberFormat("en-AU",{style:"currency",currency:"AUD"}).format(Number(v)||0);
-const number=v=>(Number(v)||0).toFixed(2);
-function uid(p){return`${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`}
-function isoDate(d){return d.toISOString().slice(0,10)}
+// ── Storage ──────────────────────────────────────────────────────────────────
+const KEY = "labourflow_v2";
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const money  = v => new Intl.NumberFormat("en-AU",{style:"currency",currency:"AUD"}).format(Number(v)||0);
+const num    = v => (Number(v)||0).toFixed(2);
+const esc    = v => String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+const uid    = p => `${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+const isoDate= d => d.toISOString().slice(0,10);
+const today  = new Date();
+
 function mondayOf(d){const c=new Date(d);const day=c.getDay()||7;c.setDate(c.getDate()-day+1);c.setHours(0,0,0,0);return c}
 function addDays(d,n){const c=new Date(d);c.setDate(c.getDate()+n);return c}
 function parseDate(v){return new Date(`${v}T00:00:00`)}
-function minutesFromTime(v){const[h,m]=v.split(":").map(Number);return h*60+m}
-function calculateHours(s,e,b=0){if(!s||!e)return 0;let m=minutesFromTime(e)-minutesFromTime(s)-Number(b||0);if(m<0)m+=24*60;return Math.max(0,m/60)}
-function currentWeekStart(){return $("#weekStart").value||isoDate(mondayOf(today))}
-function weekRange(){const start=parseDate(currentWeekStart());const end=addDays(start,6);return{start,end,startIso:isoDate(start),endIso:isoDate(end)}}
-function withinCurrentWeek(e){const{startIso,endIso}=weekRange();return e.date>=startIso&&e.date<=endIso}
-function escapeHtml(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
-function formatShortDate(v){return new Intl.DateTimeFormat("en-AU",{weekday:"short",day:"2-digit",month:"2-digit"}).format(parseDate(v))}
+function minsFromTime(v){const[h,m]=v.split(":").map(Number);return h*60+m}
+function calcHours(s,e,b=0){if(!s||!e)return 0;let m=minsFromTime(e)-minsFromTime(s)-Number(b||0);if(m<0)m+=1440;return Math.max(0,m/60)}
+function fmtDmy(iso){const d=parseDate(iso);return`${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`}
+function fmtTime(v){if(!v)return"";const[h,m]=v.split(":");return`${Number(h)}:${m}`}
+function fmtQty(v){const n=Number(v||0);return Number.isInteger(n)?String(n):String(Number(n.toFixed(2)))}
+function compactMoney(v){const n=Number(v||0);return`$${n.toLocaleString("en-AU",{minimumFractionDigits:0,maximumFractionDigits:2})}`}
+function fmtShortDate(v){return new Intl.DateTimeFormat("en-AU",{weekday:"short",day:"2-digit",month:"2-digit"}).format(parseDate(v))}
 
 function loadState(){
-  const saved=localStorage.getItem(STORAGE_KEY);
-  if(saved)return JSON.parse(saved);
+  try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s);}catch{}
   return{
     settings:{businessName:"H3 Interior Pty Ltd",businessAbn:"14 630 033 591",businessPhone:"",businessEmail:"info.h3interior@gmail.com",paymentDetails:"BSB: 084-961  ACC: 70-451-7526"},
     workers:[
-      {id:uid("worker"),name:"David Chen",phone:"0400 111 222",payRate:34,costRate:40,notes:"Labourer"},
-      {id:uid("worker"),name:"Jason Li",phone:"0400 333 444",payRate:38,costRate:45,notes:"Trade assistant"},
+      {id:uid("w"),name:"Frank",phone:"",payRate:58,costRate:65,notes:"Leading Hand"},
+      {id:uid("w"),name:"Junguo",phone:"",payRate:55,costRate:62,notes:""},
     ],
     sites:[
-      {id:uid("site"),client:"ABC Fitout",name:"Queen St Retail",billRate:62,taxRate:10},
-      {id:uid("site"),client:"Northside Interiors",name:"Fortitude Valley Office",billRate:65,taxRate:10},
+      {id:uid("s"),clientShort:"CB",client:"Citibuild Construction Pty Ltd",clientAbn:"25 607 468 315",clientEmail:"accounts@citibuildconstructions.com",name:"Griffith Uni CBD Campus",billRate:55,taxRate:10},
     ],
     entries:[],
+    invoiceCounters:{},
   };
 }
 
-const state=loadState();
-state.settings=state.settings||{};
-state.workers=state.workers||[];
-state.sites=state.sites||[];
-state.entries=state.entries||[];
+const state = loadState();
+state.settings   = state.settings   || {};
+state.workers    = state.workers    || [];
+state.sites      = state.sites      || [];
+state.entries    = state.entries    || [];
+state.invoiceCounters = state.invoiceCounters || {};
 
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
 function getWorker(id){return state.workers.find(w=>w.id===id)}
-function getSite(client,name){return state.sites.find(s=>s.client.trim().toLowerCase()===client.trim().toLowerCase()&&s.name.trim().toLowerCase()===name.trim().toLowerCase())}
+function getSite(client,name){
+  return state.sites.find(s=>
+    s.client.trim().toLowerCase()===client.trim().toLowerCase()&&
+    s.name.trim().toLowerCase()===name.trim().toLowerCase()
+  );
+}
 function getRates(entry){
   const worker=getWorker(entry.workerId);
   const site=getSite(entry.client,entry.site);
@@ -379,70 +389,77 @@ function getRates(entry){
   const cost=entry.hours*costRate+allowance;
   return{worker,site,billRate,costRate,allowance,revenue,cost,profit:revenue-cost};
 }
-function weeklyEntries(){return state.entries.filter(withinCurrentWeek).sort((a,b)=>a.date.localeCompare(b.date))}
+function currentWeekStart(){return $("#weekStart").value||isoDate(mondayOf(today))}
+function weekRange(){const start=parseDate(currentWeekStart());const end=addDays(start,6);return{start,end,startIso:isoDate(start),endIso:isoDate(end)}}
+function withinWeek(e){const{startIso,endIso}=weekRange();return e.date>=startIso&&e.date<=endIso}
+function weeklyEntries(){return state.entries.filter(withinWeek).sort((a,b)=>a.date.localeCompare(b.date))}
 
 function groupBySite(entries=weeklyEntries()){
-  const grouped=new Map();
-  entries.forEach(entry=>{
-    const rates=getRates(entry);
-    const key=`${entry.client}|||${entry.site}`;
-    const item=grouped.get(key)||{client:entry.client,site:entry.site,hours:0,revenue:0,cost:0,profit:0,taxRate:rates.site?.taxRate??10,billRate:rates.billRate,entries:[]};
-    item.hours+=entry.hours;item.revenue+=rates.revenue;item.cost+=rates.cost;item.profit+=rates.profit;item.entries.push(entry);
-    grouped.set(key,item);
+  const m=new Map();
+  entries.forEach(e=>{
+    const r=getRates(e);const key=`${e.client}|||${e.site}`;
+    const item=m.get(key)||{client:e.client,site:e.site,hours:0,revenue:0,cost:0,profit:0,taxRate:r.site?.taxRate??10,billRate:r.billRate,entries:[]};
+    item.hours+=e.hours;item.revenue+=r.revenue;item.cost+=r.cost;item.profit+=r.profit;item.entries.push(e);
+    m.set(key,item);
   });
-  return Array.from(grouped.values()).sort((a,b)=>a.client.localeCompare(b.client));
+  return Array.from(m.values()).sort((a,b)=>a.client.localeCompare(b.client));
 }
 
 function groupByWorker(){
-  const grouped=new Map();
-  weeklyEntries().forEach(entry=>{
-    const rates=getRates(entry);
-    const worker=rates.worker;
-    const key=entry.workerId;
-    const item=grouped.get(key)||{workerName:worker?.name||"未知",days:new Set(),hours:0,payRate:Number(worker?.payRate||0),wage:0,allowance:0,payable:0,realCost:0};
-    item.days.add(entry.date);item.hours+=entry.hours;item.wage+=entry.hours*item.payRate;
-    item.allowance+=Number(entry.allowance||0);item.payable=item.wage+item.allowance;item.realCost+=rates.cost;
-    grouped.set(key,item);
+  const m=new Map();
+  weeklyEntries().forEach(e=>{
+    const r=getRates(e);const w=r.worker;const key=e.workerId;
+    const item=m.get(key)||{workerName:w?.name||"?",days:new Set(),hours:0,payRate:Number(w?.payRate||0),wage:0,allowance:0,payable:0,realCost:0};
+    item.days.add(e.date);item.hours+=e.hours;item.wage+=e.hours*item.payRate;
+    item.allowance+=Number(e.allowance||0);item.payable=item.wage+item.allowance;item.realCost+=r.cost;
+    m.set(key,item);
   });
-  return Array.from(grouped.values()).sort((a,b)=>a.workerName.localeCompare(b.workerName));
+  return Array.from(m.values()).sort((a,b)=>a.workerName.localeCompare(b.workerName));
 }
 
 function totals(){
-  return groupBySite().reduce((acc,item)=>{
-    acc.hours+=item.hours;acc.revenue+=item.revenue;acc.cost+=item.cost;acc.profit+=item.profit;return acc;
-  },{hours:0,revenue:0,cost:0,profit:0});
+  return groupBySite().reduce((acc,i)=>{acc.hours+=i.hours;acc.revenue+=i.revenue;acc.cost+=i.cost;acc.profit+=i.profit;return acc},{hours:0,revenue:0,cost:0,profit:0});
 }
 
+// ── Invoice number ────────────────────────────────────────────────────────────
+function getNextInvoiceNumber(clientShort){
+  const year=new Date().getFullYear();
+  const key=`${clientShort}_${year}`;
+  const n=(state.invoiceCounters[key]||0)+1;
+  state.invoiceCounters[key]=n;
+  save();
+  return`INV ${clientShort} ${String(n).padStart(3,"0")}-${year}`;
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
 function setDefaultDates(){
   $("#weekStart").value=isoDate(mondayOf(today));
   $("#entryDate").value=isoDate(today);
-  $("#entryStart").value="07:00";
-  $("#entryEnd").value="15:30";
+  $("#entryStart").value="05:00";
+  $("#entryEnd").value="15:00";
 }
 
 function renderOptions(){
-  const prevWorker=$("#entryWorker")?.value;
-  const prevSummary=$("#workerSummarySelect")?.value;
-  const prevClient=$("#entryClient")?.value;
-  const prevSite=$("#entrySite")?.value;
-  const wo=state.workers.map(w=>`<option value="${w.id}">${escapeHtml(w.name)}</option>`).join("");
-  $("#entryWorker").innerHTML=wo;
-  $("#workerSummarySelect").innerHTML=wo;
-  if(state.workers.some(w=>w.id===prevWorker))$("#entryWorker").value=prevWorker;
-  if(state.workers.some(w=>w.id===prevSummary))$("#workerSummarySelect").value=prevSummary;
+  const pw=$("#entryWorker")?.value;const psw=$("#workerSummarySelect")?.value;
+  const pc=$("#entryClient")?.value;const ps=$("#entrySite")?.value;
+  const wo=state.workers.map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("");
+  $("#entryWorker").innerHTML=wo||"<option value=''>先在Admin添加工人</option>";
+  $("#workerSummarySelect").innerHTML=wo||"<option value=''>先在Admin添加工人</option>";
+  if(state.workers.some(w=>w.id===pw))$("#entryWorker").value=pw;
+  if(state.workers.some(w=>w.id===psw))$("#workerSummarySelect").value=psw;
   const clients=[...new Set(state.sites.map(s=>s.client))].sort();
-  $("#entryClient").innerHTML=clients.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("")||`<option value="">请先在Admin添加客户</option>`;
-  if(clients.includes(prevClient))$("#entryClient").value=prevClient;
-  renderEntrySiteOptions(prevSite);
-  const selClient=$("#invoiceClientFilter")?.value||"__all";
-  $("#invoiceClientFilter").innerHTML=[`<option value="__all">全部客户 / All</option>`,...clients.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)].join("");
-  if(clients.includes(selClient)||selClient==="__all")$("#invoiceClientFilter").value=selClient;
+  $("#entryClient").innerHTML=clients.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("")||"<option value=''>先在Admin添加工地</option>";
+  if(clients.includes(pc))$("#entryClient").value=pc;
+  renderSiteOptions(ps);
+  const sel=$("#invoiceClientFilter")?.value||"__all";
+  $("#invoiceClientFilter").innerHTML=[`<option value="__all">全部客户</option>`,...clients.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`)].join("");
+  if(clients.includes(sel)||sel==="__all")$("#invoiceClientFilter").value=sel;
 }
 
-function renderEntrySiteOptions(preferred=""){
+function renderSiteOptions(preferred=""){
   const client=$("#entryClient").value;
   const sites=state.sites.filter(s=>s.client===client);
-  $("#entrySite").innerHTML=sites.map(s=>`<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`).join("")||`<option value="">请先在Admin添加工地</option>`;
+  $("#entrySite").innerHTML=sites.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("")||"<option value=''>先在Admin添加工地</option>";
   if(sites.some(s=>s.name===preferred))$("#entrySite").value=preferred;
 }
 
@@ -457,101 +474,102 @@ function renderSettings(){
 function renderWorkers(){
   $("#workersTable").innerHTML=state.workers.map(w=>`
     <tr>
-      <td><strong>${escapeHtml(w.name)}</strong><div class="muted">${escapeHtml(w.phone||"")}</div></td>
+      <td><strong>${esc(w.name)}</strong><div class="muted">${esc(w.phone||"")}</div></td>
       <td>${money(w.payRate)}/h</td><td>${money(w.costRate)}/h</td>
       <td><div class="table-actions">
-        <button class="secondary-btn" type="button" data-edit-worker="${w.id}">编辑</button>
-        <button class="danger-btn" type="button" data-delete-worker="${w.id}">删除</button>
+        <button class="secondary-btn" data-edit-worker="${w.id}" type="button">编辑</button>
+        <button class="danger-btn" data-delete-worker="${w.id}" type="button">删除</button>
       </div></td>
-    </tr>`).join("")||`<tr><td colspan="4">暂无工人</td></tr>`;
+    </tr>`).join("")||`<tr><td colspan="4" class="muted">暂无工人</td></tr>`;
 }
 
 function renderSites(){
   $("#sitesTable").innerHTML=state.sites.map(s=>`
     <tr>
-      <td>${escapeHtml(s.client)}</td><td><strong>${escapeHtml(s.name)}</strong></td><td>${money(s.billRate)}/h</td>
+      <td><strong>${esc(s.clientShort||"")}</strong> ${esc(s.client)}</td>
+      <td>${esc(s.name)}</td><td>${money(s.billRate)}/h</td>
       <td><div class="table-actions">
-        <button class="secondary-btn" type="button" data-edit-site="${s.id}">编辑</button>
-        <button class="danger-btn" type="button" data-delete-site="${s.id}">删除</button>
+        <button class="secondary-btn" data-edit-site="${s.id}" type="button">编辑</button>
+        <button class="danger-btn" data-delete-site="${s.id}" type="button">删除</button>
       </div></td>
-    </tr>`).join("")||`<tr><td colspan="4">暂无工地</td></tr>`;
+    </tr>`).join("")||`<tr><td colspan="4" class="muted">暂无工地</td></tr>`;
 }
 
 function renderWorkerSummary(){
-  const workerId=$("#workerSummarySelect").value||state.workers[0]?.id;
-  const entries=weeklyEntries().filter(e=>e.workerId===workerId);
+  const wid=$("#workerSummarySelect").value||state.workers[0]?.id;
+  const entries=weeklyEntries().filter(e=>e.workerId===wid);
   const hours=entries.reduce((s,e)=>s+e.hours,0);
   const allowance=entries.reduce((s,e)=>s+Number(e.allowance||0),0);
   $("#workerDays").textContent=new Set(entries.map(e=>e.date)).size;
-  $("#workerHours").textContent=number(hours);
+  $("#workerHours").textContent=num(hours);
   $("#workerAllowance").textContent=money(allowance);
   $("#workerEntriesTable").innerHTML=entries.map(e=>`
     <tr>
-      <td>${formatShortDate(e.date)}</td>
-      <td><strong>${escapeHtml(e.client)}</strong><div class="muted">${escapeHtml(e.site)}</div></td>
-      <td>${e.start} - ${e.end}</td>
-      <td><span class="pill">${number(e.hours)} h</span></td>
-    </tr>`).join("")||`<tr><td colspan="4">本周暂无记录</td></tr>`;
+      <td>${fmtShortDate(e.date)}</td>
+      <td><strong>${esc(e.client)}</strong><div class="muted">${esc(e.site)}</div></td>
+      <td>${e.start}–${e.end}</td>
+      <td><span class="pill">${num(e.hours)}h</span></td>
+    </tr>`).join("")||`<tr><td colspan="4" class="muted">本周暂无记录</td></tr>`;
 }
 
 function renderReports(){
   const total=totals();
-  $("#totalHours").textContent=number(total.hours);
+  $("#totalHours").textContent=num(total.hours);
   $("#totalRevenue").textContent=money(total.revenue);
   $("#totalCost").textContent=money(total.cost);
   $("#totalProfit").textContent=money(total.profit);
   $("#sidebarProfit").textContent=money(total.profit);
   const range=weekRange();
-  $("#sidebarWeek").textContent=`${range.startIso} 至 ${range.endIso}`;
-  const missing=groupBySite().filter(item=>!item.billRate&&item.hours>0);
-  const warn=$("#rateWarning");
-  warn.hidden=!missing.length;
-  if(missing.length)warn.textContent=`有 ${missing.length} 个工地没有设置收费时薪，请到Admin补齐。`;
+  $("#sidebarWeek").textContent=`${range.startIso} → ${range.endIso}`;
+  const missing=groupBySite().filter(i=>!i.billRate&&i.hours>0);
+  $("#rateWarning").hidden=!missing.length;
+  if(missing.length)$("#rateWarning").textContent=`有 ${missing.length} 个工地没有设置收费时薪，收入和利润数据不准确。`;
   $("#siteSummaryTable").innerHTML=groupBySite().map(item=>{
     const margin=item.revenue?(item.profit/item.revenue)*100:0;
-    return`<tr><td>${escapeHtml(item.client)}</td><td>${escapeHtml(item.site)}</td>
-      <td>${number(item.hours)}</td><td>${money(item.revenue)}</td>
+    return`<tr><td>${esc(item.client)}</td><td>${esc(item.site)}</td>
+      <td>${num(item.hours)}</td><td>${money(item.revenue)}</td>
       <td>${money(item.cost)}</td><td><strong>${money(item.profit)}</strong></td>
-      <td>${number(margin)}%</td></tr>`;
-  }).join("")||`<tr><td colspan="7">本周暂无日报</td></tr>`;
+      <td>${num(margin)}%</td></tr>`;
+  }).join("")||`<tr><td colspan="7" class="muted">本周暂无日报</td></tr>`;
   $("#workerPaySummaryTable").innerHTML=groupByWorker().map(item=>`
-    <tr><td><strong>${escapeHtml(item.workerName)}</strong></td><td>${item.days.size}</td>
-    <td>${number(item.hours)}</td><td>${money(item.payRate)}/h</td>
+    <tr><td><strong>${esc(item.workerName)}</strong></td><td>${item.days.size}</td>
+    <td>${num(item.hours)}</td><td>${money(item.payRate)}/h</td>
     <td>${money(item.wage)}</td><td>${money(item.allowance)}</td>
     <td><strong>${money(item.payable)}</strong></td><td>${money(item.realCost)}</td></tr>
-  `).join("")||`<tr><td colspan="8">本周暂无数据</td></tr>`;
-  $("#entriesTable").innerHTML=weeklyEntries().map(entry=>{
-    const rates=getRates(entry);
+  `).join("")||`<tr><td colspan="8" class="muted">本周暂无数据</td></tr>`;
+  $("#entriesTable").innerHTML=weeklyEntries().map(e=>{
+    const r=getRates(e);
     return`<tr>
-      <td>${formatShortDate(entry.date)}</td>
-      <td>${escapeHtml(rates.worker?.name||"未知")}</td>
-      <td>${escapeHtml(entry.client)}</td><td>${escapeHtml(entry.site)}</td>
-      <td>${entry.start} - ${entry.end}</td><td>${number(entry.hours)}</td>
-      <td>${money(rates.revenue)}</td><td>${money(rates.cost)}</td>
+      <td>${fmtShortDate(e.date)}</td>
+      <td>${esc(r.worker?.name||"?")}</td>
+      <td>${esc(e.client)}</td><td>${esc(e.site)}</td>
+      <td>${e.start}–${e.end}</td><td>${num(e.hours)}</td>
+      <td>${money(r.revenue)}</td><td>${money(r.cost)}</td>
       <td><div class="table-actions">
-        <button class="secondary-btn" type="button" data-edit-entry="${entry.id}">编辑</button>
-        <button class="danger-btn" type="button" data-delete-entry="${entry.id}">删除</button>
+        <button class="secondary-btn" data-edit-entry="${e.id}" type="button">编辑</button>
+        <button class="danger-btn" data-delete-entry="${e.id}" type="button">删除</button>
       </div></td></tr>`;
-  }).join("")||`<tr><td colspan="9">本周暂无日报</td></tr>`;
+  }).join("")||`<tr><td colspan="9" class="muted">本周暂无日报</td></tr>`;
 }
 
-function renderAll(){renderSettings();renderOptions();renderWorkers();renderSites();renderWorkerSummary();renderReports();updateHoursPreview()}
-function updateHoursPreview(){const h=calculateHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);$("#entryHoursPreview").textContent=`${number(h)} h`}
+function renderAll(){renderSettings();renderOptions();renderWorkers();renderSites();renderWorkerSummary();renderReports();updatePreview()}
+function updatePreview(){const h=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);$("#entryHoursPreview").textContent=`${num(h)} h`}
 
 function resetEntryForm(){
   $("#entryForm").reset();$("#entryId").value="";
-  $("#entryDate").value=isoDate(today);$("#entryStart").value="07:00";$("#entryEnd").value="15:30";
-  $("#entryBreak").value=30;$("#entryAllowance").value=0;
+  $("#entryDate").value=isoDate(today);$("#entryStart").value="05:00";$("#entryEnd").value="15:00";
+  $("#entryBreak").value=0;$("#entryAllowance").value=0;
   if(state.workers[0])$("#entryWorker").value=state.workers[0].id;
-  renderEntrySiteOptions();$("#entrySubmitLabel").textContent="保存日报 / Save entry";updateHoursPreview();
+  renderSiteOptions();$("#entrySubmitLabel").textContent="保存日报 / Save entry";updatePreview();
 }
-function resetWorkerForm(){$("#workerForm").reset();$("#workerId").value="";$("#workerPayRate").value=35;$("#workerCostRate").value=42}
-function resetSiteForm(){$("#siteForm").reset();$("#siteId").value="";$("#siteBillRate").value=62;$("#siteTaxRate").value=10}
+function resetWorkerForm(){$("#workerForm").reset();$("#workerId").value="";$("#workerPayRate").value=55;$("#workerCostRate").value=62}
+function resetSiteForm(){$("#siteForm").reset();$("#siteId").value="";$("#siteBillRate").value=55;$("#siteTaxRate").value=10}
 
+// ── Form handlers ─────────────────────────────────────────────────────────────
 function handleEntrySubmit(e){
   e.preventDefault();
-  if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在Admin添加工人、客户和工地。");return}
-  const hours=calculateHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
+  if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在Admin添加工人和工地。");return}
+  const hours=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
   const id=$("#entryId").value||uid("entry");
   const entry={id,workerId:$("#entryWorker").value,date:$("#entryDate").value,
     client:$("#entryClient").value.trim(),site:$("#entrySite").value.trim(),
@@ -560,7 +578,7 @@ function handleEntrySubmit(e){
     notes:$("#entryNotes").value.trim(),hours};
   const idx=state.entries.findIndex(x=>x.id===id);
   if(idx>=0)state.entries[idx]=entry;else state.entries.push(entry);
-  saveState();resetEntryForm();renderAll();switchView("reportsView");
+  save();resetEntryForm();renderAll();switchView("reportsView");
 }
 
 function handleSettingsSubmit(e){
@@ -568,28 +586,34 @@ function handleSettingsSubmit(e){
   state.settings={businessName:$("#businessName").value.trim(),businessAbn:$("#businessAbn").value.trim(),
     businessPhone:$("#businessPhone").value.trim(),businessEmail:$("#businessEmail").value.trim(),
     paymentDetails:$("#paymentDetails").value.trim()};
-  saveState();renderAll();alert("✅ 发票信息已保存");
+  save();alert("✅ 发票信息已保存");
 }
 
 function handleWorkerSubmit(e){
   e.preventDefault();
-  const id=$("#workerId").value||uid("worker");
+  const id=$("#workerId").value||uid("w");
   const worker={id,name:$("#workerName").value.trim(),phone:$("#workerPhone").value.trim(),
     payRate:Number($("#workerPayRate").value||0),costRate:Number($("#workerCostRate").value||0),
     notes:$("#workerNotes").value.trim()};
   const idx=state.workers.findIndex(x=>x.id===id);
   if(idx>=0)state.workers[idx]=worker;else state.workers.push(worker);
-  saveState();resetWorkerForm();renderAll();
+  save();resetWorkerForm();renderAll();
 }
 
 function handleSiteSubmit(e){
   e.preventDefault();
-  const id=$("#siteId").value||uid("site");
-  const site={id,client:$("#siteClient").value.trim(),name:$("#siteName").value.trim(),
-    billRate:Number($("#siteBillRate").value||0),taxRate:Number($("#siteTaxRate").value||10)};
+  const id=$("#siteId").value||uid("s");
+  const site={id,
+    clientShort:$("#siteClientShort").value.trim().toUpperCase(),
+    client:$("#siteClient").value.trim(),
+    clientAbn:$("#siteClientAbn").value.trim(),
+    clientEmail:$("#siteClientEmail").value.trim(),
+    name:$("#siteName").value.trim(),
+    billRate:Number($("#siteBillRate").value||0),
+    taxRate:Number($("#siteTaxRate").value||10)};
   const idx=state.sites.findIndex(x=>x.id===id);
   if(idx>=0)state.sites[idx]=site;else state.sites.push(site);
-  saveState();resetSiteForm();renderAll();
+  save();resetSiteForm();renderAll();
 }
 
 function switchView(id){
@@ -597,192 +621,272 @@ function switchView(id){
   $$(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
 }
 
-function editWorker(id){const w=getWorker(id);if(!w)return;$("#workerId").value=w.id;$("#workerName").value=w.name;$("#workerPhone").value=w.phone||"";$("#workerPayRate").value=w.payRate;$("#workerCostRate").value=w.costRate;$("#workerNotes").value=w.notes||"";switchView("adminView")}
-function editSite(id){const s=state.sites.find(x=>x.id===id);if(!s)return;$("#siteId").value=s.id;$("#siteClient").value=s.client;$("#siteName").value=s.name;$("#siteBillRate").value=s.billRate;$("#siteTaxRate").value=s.taxRate;switchView("adminView")}
+function editWorker(id){
+  const w=getWorker(id);if(!w)return;
+  $("#workerId").value=w.id;$("#workerName").value=w.name;$("#workerPhone").value=w.phone||"";
+  $("#workerPayRate").value=w.payRate;$("#workerCostRate").value=w.costRate;$("#workerNotes").value=w.notes||"";
+  switchView("adminView");
+}
+function editSite(id){
+  const s=state.sites.find(x=>x.id===id);if(!s)return;
+  $("#siteId").value=s.id;$("#siteClientShort").value=s.clientShort||"";$("#siteClient").value=s.client;
+  $("#siteClientAbn").value=s.clientAbn||"";$("#siteClientEmail").value=s.clientEmail||"";
+  $("#siteName").value=s.name;$("#siteBillRate").value=s.billRate;$("#siteTaxRate").value=s.taxRate;
+  switchView("adminView");
+}
 function editEntry(id){
-  const entry=state.entries.find(x=>x.id===id);if(!entry)return;
-  $("#entryId").value=entry.id;$("#entryWorker").value=entry.workerId;$("#entryDate").value=entry.date;
-  $("#entryClient").value=entry.client;renderEntrySiteOptions(entry.site);
-  $("#entryStart").value=entry.start;$("#entryEnd").value=entry.end;
-  $("#entryBreak").value=entry.breakMinutes;$("#entryAllowance").value=entry.allowance;
-  $("#entryNotes").value=entry.notes||"";$("#entrySubmitLabel").textContent="更新日报 / Update";
-  updateHoursPreview();switchView("workerView");$("#entryForm").scrollIntoView({behavior:"smooth"});
+  const e=state.entries.find(x=>x.id===id);if(!e)return;
+  $("#entryId").value=e.id;$("#entryWorker").value=e.workerId;$("#entryDate").value=e.date;
+  $("#entryClient").value=e.client;renderSiteOptions(e.site);
+  $("#entryStart").value=e.start;$("#entryEnd").value=e.end;
+  $("#entryBreak").value=e.breakMinutes;$("#entryAllowance").value=e.allowance;
+  $("#entryNotes").value=e.notes||"";$("#entrySubmitLabel").textContent="更新日报 / Update";
+  updatePreview();switchView("workerView");$("#entryForm").scrollIntoView({behavior:"smooth"});
 }
 
+// ── CSV Export ────────────────────────────────────────────────────────────────
 function exportCsv(){
   const headers=["日期","工人","客户","工地","上班","下班","休息(分钟)","工时","补贴","收入","成本","利润","备注"];
-  const rows=weeklyEntries().map(e=>{const r=getRates(e);return[e.date,r.worker?.name||"",e.client,e.site,e.start,e.end,e.breakMinutes,number(e.hours),number(e.allowance),number(r.revenue),number(r.cost),number(r.profit),e.notes||""]});
-  downloadText(`labourflow-${currentWeekStart()}.csv`,toCsv([headers,...rows]));
+  const rows=weeklyEntries().map(e=>{const r=getRates(e);return[e.date,r.worker?.name||"",e.client,e.site,e.start,e.end,e.breakMinutes,num(e.hours),num(e.allowance),num(r.revenue),num(r.cost),num(r.profit),e.notes||""]});
+  const csv=([headers,...rows]).map(r=>r.map(c=>{const v=String(c??"");return/[",\n]/.test(v)?`"${v.replaceAll('"','""')}"`:(v)}).join(",")).join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");
+  a.href=url;a.download=`labourflow-${currentWeekStart()}.csv`;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);
 }
 
-function daysForWeek(){
+// ── Timesheet ─────────────────────────────────────────────────────────────────
+function daysOfWeek(){
   const{start}=weekRange();
   return["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((label,i)=>({label,iso:isoDate(addDays(start,i))}));
 }
 
-function formatTimeVal(v){if(!v)return"";const[h,m]=v.split(":");return`${Number(h)}:${m}`}
-function formatQty(v){const n=Number(v||0);return Number.isInteger(n)?String(n):String(Number(n.toFixed(2)))}
-function compactCurrency(v){const n=Number(v||0);return`$${n.toLocaleString("en-AU",{minimumFractionDigits:0,maximumFractionDigits:2})}`}
-
-function groupForTemplate(entries){
-  const grouped=new Map();
-  entries.forEach(entry=>{
-    const rates=getRates(entry);const worker=rates.worker;const key=entry.workerId;
-    const item=grouped.get(key)||{workerName:worker?.name||"Worker",rate:rates.billRate,days:{}};
-    const day=item.days[entry.date]||{starts:[],ends:[],hours:0,revenue:0};
-    day.starts.push(entry.start);day.ends.push(entry.end);day.hours+=entry.hours;day.revenue+=rates.revenue;
-    item.rate=rates.billRate||item.rate;item.days[entry.date]=day;grouped.set(key,item);
+function groupForTimesheet(entries){
+  const m=new Map();
+  entries.forEach(e=>{
+    const r=getRates(e);const w=r.worker;const key=e.workerId;
+    const item=m.get(key)||{workerName:w?.name||"Worker",rate:r.billRate,days:{}};
+    const day=item.days[e.date]||{starts:[],ends:[],hours:0};
+    day.starts.push(e.start);day.ends.push(e.end);day.hours+=e.hours;
+    item.rate=r.billRate||item.rate;item.days[e.date]=day;m.set(key,item);
   });
-  return Array.from(grouped.values()).sort((a,b)=>a.workerName.localeCompare(b.workerName));
+  // Sort by worker name order in state.workers
+  const order=state.workers.map(w=>w.id);
+  return Array.from(m.entries()).sort((a,b)=>{
+    const ia=order.indexOf(a[0]);const ib=order.indexOf(b[0]);
+    if(ia<0&&ib<0)return a[1].workerName.localeCompare(b[1].workerName);
+    if(ia<0)return 1;if(ib<0)return-1;return ia-ib;
+  }).map(([,v])=>v);
 }
 
-function renderTimesheetBlock(worker){
-  const days=daysForWeek();
+function timesheetWorkerBlock(worker,days){
   const wkHours=days.reduce((s,d)=>s+(worker.days[d.iso]?.hours||0),0);
   const wkTotal=wkHours*Number(worker.rate||0);
-  const cell=(day,kind)=>{const rec=worker.days[day.iso];if(!rec)return"";if(kind==="start")return formatTimeVal(rec.starts.sort()[0]);if(kind==="finish")return formatTimeVal(rec.ends.sort().at(-1));if(kind==="hours")return formatQty(rec.hours);return""};
+  const cell=(day,kind)=>{
+    const rec=worker.days[day.iso];if(!rec)return"";
+    if(kind==="start")return fmtTime(rec.starts.sort()[0]);
+    if(kind==="finish")return fmtTime(rec.ends.sort().at(-1));
+    if(kind==="hours")return fmtQty(rec.hours);
+    return"";
+  };
   const dh=days.map(d=>`<th>${d.label}</th>`).join("");
-  const dc=days.map(()=>`<col class="day">`).join("");
-  return`<table class="ts-table"><colgroup><col>${dc}<col></colgroup>
-    <thead><tr><th>${escapeHtml(worker.workerName)}</th>${dh}<th>Weekly</th></tr></thead>
+  return`<table class="ts-table">
+    <colgroup><col class="col-label">${days.map(()=>`<col class="col-day">`).join("")}<col class="col-total"></colgroup>
+    <thead><tr><th>${esc(worker.workerName)}</th>${dh}<th>Time weekly</th></tr></thead>
     <tbody>
       <tr><td>Start</td>${days.map(d=>`<td>${cell(d,"start")}</td>`).join("")}<td></td></tr>
       <tr><td>Finish</td>${days.map(d=>`<td>${cell(d,"finish")}</td>`).join("")}<td></td></tr>
-      <tr><td>Payment time</td>${days.map(d=>`<td>${cell(d,"hours")}</td>`).join("")}<td>${formatQty(wkHours)}</td></tr>
-      <tr><td>Rate</td>${days.map(()=>"<td></td>").join("")}<td>${compactCurrency(worker.rate)}/hr+GST</td></tr>
-      <tr><td>Total</td>${days.map(()=>"<td></td>").join("")}<td>${compactCurrency(wkTotal)}+GST</td></tr>
-    </tbody></table>`;
+      <tr><td>Payment time</td>${days.map(d=>`<td>${cell(d,"hours")}</td>`).join("")}<td>${fmtQty(wkHours)}</td></tr>
+      <tr><td>Rate</td>${days.map(()=>"<td></td>").join("")}<td>${compactMoney(worker.rate)}/hr+GST</td></tr>
+      <tr><td>Total</td>${days.map(()=>"<td></td>").join("")}<td>${compactMoney(wkTotal)}+GST</td></tr>
+    </tbody>
+  </table>`;
 }
 
 function printTimesheet(){
-  const range=weekRange();const entries=weeklyEntries();
-  const grouped=groupBySite(entries);
-  const mainSite=grouped[0]?.site||"Job Site";const mainClient=grouped[0]?.client||"Client";
-  const blocks=groupForTemplate(entries).map(w=>renderTimesheetBlock(w)).join("");
-  const dayCounts=daysForWeek().map(day=>{const ws=new Set(entries.filter(e=>e.date===day.iso).map(e=>e.workerId));return ws.size||""});
-  const totalRev=grouped.reduce((s,i)=>s+i.revenue,0);
-  const fmt=iso=>{const d=parseDate(iso);return`${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`};
+  const range=weekRange();
+  const selClient=$("#invoiceClientFilter").value;
+  const srcEntries=selClient==="__all"?weeklyEntries():weeklyEntries().filter(e=>e.client===selClient);
+  const siteData=groupBySite(srcEntries);
+  const mainSite=siteData[0]?.site||"Job Site";
+  const mainClient=siteData[0]?.client||"Client";
+  const mainClientShort=state.sites.find(s=>s.client===mainClient)?.clientShort||"";
+  const days=daysOfWeek();
+  const workers=groupForTimesheet(srcEntries);
+  const blocks=workers.map(w=>timesheetWorkerBlock(w,days)).join("");
+  const dayCounts=days.map(day=>{
+    const ws=new Set(srcEntries.filter(e=>e.date===day.iso).map(e=>e.workerId));
+    return ws.size||"";
+  });
+  const totalRev=siteData.reduce((s,i)=>s+i.revenue,0);
+
+  // Split long names for header display
+  function splitName(v){return String(v||"").replaceAll(" ","\n")}
+
   openPrintWindow("Weekly Time Sheet",`
-    <section class="template-page timesheet-template">
+    <section class="template-page">
       <div class="ts-header">
         <div>WEEKLY TIME SHEET OF H3<br>Interior (Frank)</div>
-        <div>${escapeHtml(mainSite)}</div>
-        <div>${escapeHtml(mainClient)}</div>
+        <div>${esc(splitName(mainSite))}</div>
+        <div>${esc(splitName(mainClientShort?mainClient.replace(mainClientShort,"").trim():mainClient))}</div>
       </div>
-      <div class="period-label">Working period</div>
-      <div class="period-value">${fmt(range.startIso)}-${fmt(range.endIso)}</div>
-      ${blocks||`<p>No records</p>`}
+      <div class="period-row">
+        <span class="period-label">Working period</span>
+        <span class="period-value">${fmtDmy(range.startIso)}-${fmtDmy(range.endIso)}</span>
+      </div>
+      ${blocks||"<p>No records this week</p>"}
       <table class="ts-table amount-table">
-        <tbody><tr><td>Amount</td>${dayCounts.map(c=>`<td>${c}</td>`).join("")}<td>${compactCurrency(totalRev)}+GST</td></tr></tbody>
+        <colgroup><col class="col-label">${days.map(()=>`<col class="col-day">`).join("")}<col class="col-total"></colgroup>
+        <tbody>
+          <tr><td>Amount</td>${dayCounts.map(c=>`<td>${c}</td>`).join("")}<td>${compactMoney(totalRev)}+GST</td></tr>
+        </tbody>
       </table>
-    </section>`);
+    </section>`,"timesheet");
 }
 
+// ── Invoice ───────────────────────────────────────────────────────────────────
 function printInvoice(){
   const range=weekRange();
   const selClient=$("#invoiceClientFilter").value;
   const srcEntries=selClient==="__all"?weeklyEntries():weeklyEntries().filter(e=>e.client===selClient);
-  const invoiceClient=selClient==="__all"?"Multiple clients":selClient;
+  if(!srcEntries.length){alert("本周没有日报数据，无法生成Invoice。");return}
+
+  const siteData=groupBySite(srcEntries);
+  const mainClient=selClient==="__all"?siteData[0]?.client||"Client":selClient;
+  const siteObj=state.sites.find(s=>s.client===mainClient)||{};
+  const clientShort=siteObj.clientShort||"INV";
+
+  // Get or use manual invoice number
+  const manualNum=$("#invoiceNumber").value.trim();
+  const invoiceNum=manualNum?`INV ${clientShort} ${manualNum}`:getNextInvoiceNumber(clientShort);
+
+  const issueDate=fmtDmy(range.endIso);
+  const dueDate=fmtDmy(isoDate(addDays(parseDate(range.endIso),7)));
   const settings=state.settings;
-  const invRows=groupForTemplate(srcEntries).map(worker=>{
-    const hours=Object.values(worker.days).reduce((s,d)=>s+d.hours,0);
-    const billRate=Number(worker.rate||0);
-    return{description:`${srcEntries[0]?.site||"Labour"} Labour`,hours,billRate,total:hours*billRate};
+
+  // Build line items: one per worker per site
+  const workers=groupForTimesheet(srcEntries);
+  const siteName=siteData[0]?.site||"";
+  const lineItems=workers.map(w=>{
+    const hours=Object.values(w.days).reduce((s,d)=>s+d.hours,0);
+    return{hours,rate:w.rate,total:hours*w.rate};
   }).filter(x=>x.hours>0);
-  const invNum=$("#invoiceNumber").value.trim()||`INV ${Date.now()}`;
-  const fmt=iso=>{const d=parseDate(iso);return`${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`};
-  const issueDate=fmt(range.endIso);const dueDate=fmt(isoDate(addDays(parseDate(range.endIso),7)));
-  const rows=invRows.map((item,i)=>`<tr><td>${i===0?escapeHtml(item.description):""}</td><td>${formatQty(item.hours)}</td><td>${money(item.billRate)}</td><td>${money(item.total)}</td></tr>`).join("");
-  const totalRev=invRows.reduce((s,x)=>s+x.total,0);const totalTax=totalRev*0.1;
+
+  const totalRev=lineItems.reduce((s,x)=>s+x.total,0);
+  const totalGst=totalRev*((siteObj.taxRate||10)/100);
+
+  const rows=lineItems.map((item,i)=>`
+    <tr>
+      <td>${i===0?`Framing in ${esc(siteName)}`:" "}</td>
+      <td>${fmtQty(item.hours)}</td>
+      <td>${money(item.rate)}</td>
+      <td>${money(item.total)}</td>
+    </tr>`).join("");
+
   openPrintWindow("Invoice",`
-    <section class="template-page invoice-template">
-      <div class="invoice-top-rule"></div>
-      <div class="invoice-header">
-        <h1>${escapeHtml(settings.businessName||"H3 Interior Pty Ltd")}</h1>
-        <dl><dt>Invoice #</dt><dd>${escapeHtml(invNum)}</dd><dt>Issue date</dt><dd>${issueDate}</dd><dt>ABN</dt><dd>${escapeHtml(settings.businessAbn||"")}</dd><dt>Due date</dt><dd>${dueDate}</dd></dl>
+    <section class="template-page invoice-page">
+      <div class="inv-top-rule"></div>
+      <div class="inv-header">
+        <div class="inv-from">
+          <h1>${esc(settings.businessName||"H3 Interior Pty Ltd")}</h1>
+        </div>
+        <dl class="inv-meta">
+          <dt>Invoice #</dt><dd>${esc(invoiceNum)}</dd>
+          <dt>Issue date</dt><dd>${issueDate}</dd>
+          <dt>ABN</dt><dd>${esc(settings.businessAbn||"")}</dd>
+          <dt>Due date</dt><dd>${dueDate}</dd>
+        </dl>
       </div>
-      <div class="invoice-to"><strong>Invoice to</strong><span>${escapeHtml(invoiceClient)}</span></div>
-      <table class="invoice-table">
-        <thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Total</th></tr></thead>
-        <tbody>${rows||"<tr><td colspan='4'>No records</td></tr>"}</tbody>
+
+      <div class="inv-to">
+        <span class="inv-to-label">Invoice to</span>
+        <span class="inv-to-name">${esc(siteObj.client||mainClient)}</span>
+        ${siteObj.clientAbn?`<span>ABN, ${esc(siteObj.clientAbn)}</span>`:""}
+        ${siteObj.clientEmail?`<span>email: ${esc(siteObj.clientEmail)}</span>`:""}
+      </div>
+
+      <table class="inv-table">
+        <thead>
+          <tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Total price</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr><td colspan="3"></td><td>$0.00</td></tr></tfoot>
       </table>
-      <div class="invoice-bottom">
-        <div class="notes"><strong>Notes,</strong><span>${escapeHtml(settings.paymentDetails||"")}</span></div>
-        <div class="invoice-totals">
-          <p><span>Subtotal</span><strong>${money(totalRev)}</strong></p>
-          <p><span>GST (10%)</span><strong>${money(totalTax)}</strong></p>
-          <p class="total-payment"><span>Total Payment</span><strong>${money(totalRev+totalTax)}</strong></p>
+
+      <div class="inv-bottom">
+        <div class="inv-notes">
+          <strong>Notes,</strong>
+          <span>${esc(settings.paymentDetails||"")}  ${esc(settings.businessAbn||"")}</span>
+        </div>
+        <div class="inv-totals">
+          <div class="inv-total-row"><span>Subtotal</span><strong>${money(totalRev)}</strong></div>
+          <div class="inv-total-row"><span>GST (${siteObj.taxRate||10}%)</span><strong>${money(totalGst)}</strong></div>
+          <div class="inv-total-row final"><span>Total Payment</span><strong>${money(totalRev+totalGst)}</strong></div>
         </div>
       </div>
-    </section>`);
+    </section>`,"invoice");
 }
 
-function openPrintWindow(title,body){
-  const html=`<!doctype html><html><head><title>${title}</title><style>
-    @page{size:A4 portrait;margin:0}*{box-sizing:border-box}
+// ── Print window ──────────────────────────────────────────────────────────────
+function openPrintWindow(title,body,type){
+  const tsStyles=`
     body{margin:0;background:#000;color:#ebeeee;font-family:"Trebuchet MS",Arial,sans-serif}
-    .template-page{width:210mm;min-height:297mm;background:#000;padding:14mm 13mm}
-    .ts-header{display:grid;grid-template-columns:2fr 1fr 1.9fr;width:154mm;background:#293845;color:#fff;font-size:14px;font-weight:700;line-height:1.18}
-    .ts-header>div{padding:3px 4px;min-height:14mm;white-space:pre-line}
-    .period-label{margin-top:3mm;color:#7d8e50;font-size:11px}
-    .period-value{margin-top:3mm;color:#7d8e50;font-size:11px;font-weight:700}
-    .ts-table{width:154mm;border-collapse:collapse;table-layout:fixed;margin-top:2mm;margin-bottom:7mm;font-size:10px}
-    .ts-table col:first-child{width:35mm}.ts-table col.day{width:13.5mm}.ts-table col:last-child{width:20mm}
-    .ts-table th{background:#293845;color:#fff;border:1px solid #293845;height:4.8mm;padding:1px 3px;text-align:left}
-    .ts-table td{border:1px solid #4f4f4f;height:4.2mm;padding:1px 3px;color:#7d8e50;text-align:right}
-    .ts-table td:first-child{background:#f1eeea;color:#293845;text-align:left}
-    .amount-table{margin-top:10mm}.amount-table td:first-child{background:transparent;color:#ebeeee;font-weight:700}
-    .invoice-template{padding:14mm 13mm;color:#6c6c6c;font-family:Arial,sans-serif}
-    .invoice-top-rule{width:115mm;height:1.4mm;background:#4438d4;margin-bottom:6mm}
-    .invoice-header{display:grid;grid-template-columns:1.2fr 1fr;width:115mm;align-items:start}
-    .invoice-header h1{margin:0;color:#6757ff;font-size:20px}
-    .invoice-header dl{display:grid;grid-template-columns:24mm 1fr;gap:1.5mm 6mm;margin:0;font-size:10px;font-weight:700}
-    .invoice-header dt{color:#4c4c4c}.invoice-header dd{margin:0;color:#6c6c6c}
-    .invoice-to{display:grid;gap:2mm;margin-top:31mm;width:115mm;font-size:10px;color:#8a8a8a}
-    .invoice-to strong{color:#6f6f6f}
-    .invoice-table{width:115mm;border-collapse:collapse;margin-top:11mm;font-size:10px}
-    .invoice-table thead th{border-top:1mm solid #bfbfbf;padding:5mm 2mm 3mm;color:#3f45d7;text-align:left}
-    .invoice-table th:nth-child(n+2),.invoice-table td:nth-child(n+2){text-align:right}
-    .invoice-table tbody td{height:7mm;padding:1.5mm 2mm;background:#f0f0f0;color:#555}
-    .invoice-table tbody tr:nth-child(odd) td{background:#fff}
-    .invoice-table tbody td:first-child{color:#111}
-    .invoice-bottom{display:grid;grid-template-columns:1.2fr 1fr;gap:8mm;width:115mm;margin-top:4mm;font-size:10px}
-    .notes{display:grid;gap:4mm;color:#8a8a8a}
-    .invoice-totals p{display:grid;grid-template-columns:1fr 1fr;margin:0 0 3mm}
-    .invoice-totals span{color:#3f45d7;font-weight:700;text-align:right;padding-right:8mm}
-    .invoice-totals strong{color:#8a8a8a;text-align:right}
-    .invoice-totals .total-payment span,.invoice-totals .total-payment strong{font-size:13px}
-    .invoice-totals .total-payment strong{color:#ff2aa1}
-    @media print{button{display:none}}
-  </style></head><body>${body}</body></html>`;
+    .template-page{width:210mm;min-height:297mm;background:#000;padding:10mm 10mm}
+    .ts-header{display:grid;grid-template-columns:2fr 1fr 1.8fr;width:155mm;
+      background:#293845;color:#fff;font-size:13px;font-weight:700;line-height:1.2}
+    .ts-header>div{padding:4px 5px;min-height:13mm;white-space:pre-line}
+    .period-row{display:flex;gap:6mm;margin:3mm 0;width:155mm}
+    .period-label{color:#7d8e50;font-size:10px}
+    .period-value{color:#7d8e50;font-size:10px;font-weight:700}
+    .ts-table{width:155mm;border-collapse:collapse;table-layout:fixed;margin:2mm 0 6mm;font-size:10px}
+    .ts-table .col-label{width:32mm}.ts-table .col-day{width:14mm}.ts-table .col-total{width:22mm}
+    .ts-table thead th{background:#293845;color:#fff;border:1px solid #293845;height:5mm;padding:1px 3px;text-align:left}
+    .ts-table tbody td{border:1px solid #4f4f4f;height:4.5mm;padding:1px 3px;color:#7d8e50;text-align:right}
+    .ts-table tbody td:first-child{background:#f1eeea;color:#293845;text-align:left}
+    .amount-table{margin-top:8mm}
+    .amount-table td:first-child{background:transparent!important;color:#ebeeee!important;text-align:left!important;font-weight:700}
+    @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
+
+  const invStyles=`
+    body{margin:0;background:#fff;color:#6c6c6c;font-family:Arial,sans-serif;font-size:10px}
+    .template-page{width:210mm;min-height:297mm;padding:14mm 13mm}
+    .inv-top-rule{width:115mm;height:1.5mm;background:#4438d4;margin-bottom:7mm}
+    .inv-header{display:grid;grid-template-columns:1.3fr 1fr;width:115mm;align-items:start;margin-bottom:0}
+    .inv-from h1{margin:0;color:#6757ff;font-size:18px;font-family:Arial,sans-serif}
+    dl.inv-meta{display:grid;grid-template-columns:26mm 1fr;gap:1.5mm 5mm;margin:0;font-size:10px;font-weight:700}
+    .inv-meta dt{color:#4c4c4c}.inv-meta dd{margin:0;color:#6c6c6c}
+    .inv-to{display:grid;gap:2mm;margin-top:28mm;width:115mm;font-size:10px;color:#8a8a8a}
+    .inv-to-label{color:#6f6f6f;font-weight:700}.inv-to-name{color:#333;font-weight:700}
+    .inv-table{width:115mm;border-collapse:collapse;margin-top:10mm;font-size:10px}
+    .inv-table thead th{border-top:1mm solid #bfbfbf;padding:4mm 2mm 3mm;color:#3f45d7;text-align:left;font-weight:700}
+    .inv-table th:nth-child(n+2),.inv-table td:nth-child(n+2){text-align:right}
+    .inv-table tbody td{height:7mm;padding:1.5mm 2mm;background:#f0f0f0;color:#555}
+    .inv-table tbody tr:nth-child(odd) td{background:#fff}
+    .inv-table tbody td:first-child{color:#111}
+    .inv-table tfoot td{border-bottom:1mm solid #d4d4d4;background:#f0f0f0;height:7mm;padding:1.5mm 2mm;text-align:right;color:#666}
+    .inv-bottom{display:grid;grid-template-columns:1.2fr 1fr;gap:6mm;width:115mm;margin-top:5mm}
+    .inv-notes{display:grid;gap:3mm;color:#8a8a8a;font-size:10px}
+    .inv-notes strong{color:#555}
+    .inv-total-row{display:grid;grid-template-columns:1fr auto;gap:4mm;margin-bottom:3mm;font-size:10px}
+    .inv-total-row span{color:#3f45d7;font-weight:700}
+    .inv-total-row strong{color:#8a8a8a;text-align:right;min-width:24mm}
+    .inv-total-row.final span,.inv-total-row.final strong{font-size:13px}
+    .inv-total-row.final strong{color:#ff2aa1}
+    @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
+
+  const html=`<!doctype html><html><head><meta charset="UTF-8"><title>${title}</title>
+    <style>${type==="invoice"?invStyles:tsStyles}</style></head>
+    <body>${body}</body></html>`;
   $("#printPreviewTitle").textContent=title;
   $("#printFrame").srcdoc=html;
   $("#printPreview").hidden=false;
 }
 
-function toCsv(rows){return rows.map(row=>row.map(cell=>{const v=String(cell??"");return/[",\n]/.test(v)?`"${v.replaceAll('"','""')}"`:(v)}).join(",")).join("\n")}
-function downloadText(filename,content){const blob=new Blob([content],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url)}
-
-document.addEventListener("click",e=>{
-  const ew=e.target.closest("[data-edit-worker]");
-  const dw=e.target.closest("[data-delete-worker]");
-  const es=e.target.closest("[data-edit-site]");
-  const ds=e.target.closest("[data-delete-site]");
-  const ee=e.target.closest("[data-edit-entry]");
-  const de=e.target.closest("[data-delete-entry]");
-  if(ew)editWorker(ew.dataset.editWorker);
-  if(es)editSite(es.dataset.editSite);
-  if(ee)editEntry(ee.dataset.editEntry);
-  if(dw&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);saveState();renderAll()}
-  if(ds&&confirm("确定删除这个工地吗？")){state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);saveState();renderAll()}
-  if(de&&confirm("确定删除这条日报吗？")){state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);saveState();renderAll()}
-});
-
+// ── Event binding ─────────────────────────────────────────────────────────────
 $$(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));
-["entryStart","entryEnd","entryBreak"].forEach(id=>$(`#${id}`).addEventListener("input",updateHoursPreview));
+["entryStart","entryEnd","entryBreak"].forEach(id=>$(`#${id}`).addEventListener("input",updatePreview));
 $("#weekStart").addEventListener("change",renderAll);
 $("#workerSummarySelect").addEventListener("change",renderWorkerSummary);
-$("#entryClient").addEventListener("change",()=>{renderEntrySiteOptions();renderReports()});
+$("#entryClient").addEventListener("change",()=>{renderSiteOptions();renderReports()});
 $("#invoiceClientFilter").addEventListener("change",renderReports);
 $("#entryForm").addEventListener("submit",handleEntrySubmit);
 $("#settingsForm").addEventListener("submit",handleSettingsSubmit);
@@ -794,10 +898,22 @@ $("#resetSiteForm").addEventListener("click",resetSiteForm);
 $("#exportCsvBtn").addEventListener("click",exportCsv);
 $("#printTimesheetBtn").addEventListener("click",printTimesheet);
 $("#printInvoiceBtn").addEventListener("click",printInvoice);
-$("#installAppBtn").addEventListener("click",()=>alert("iPhone/iPad: 用Safari打开，点分享按钮→添加到主屏幕。\nMac: 用Chrome打开后点地址栏右侧安装图标。"));
 $("#closePrintPreview").addEventListener("click",()=>{$("#printPreview").hidden=true;$("#printFrame").srcdoc=""});
 $("#printPreviewBtn").addEventListener("click",()=>{const fw=$("#printFrame").contentWindow;if(fw){fw.focus();fw.print()}});
 
+document.addEventListener("click",e=>{
+  const ew=e.target.closest("[data-edit-worker]");const dw=e.target.closest("[data-delete-worker]");
+  const es=e.target.closest("[data-edit-site]");const ds=e.target.closest("[data-delete-site]");
+  const ee=e.target.closest("[data-edit-entry]");const de=e.target.closest("[data-delete-entry]");
+  if(ew)editWorker(ew.dataset.editWorker);
+  if(es)editSite(es.dataset.editSite);
+  if(ee)editEntry(ee.dataset.editEntry);
+  if(dw&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);save();renderAll()}
+  if(ds&&confirm("确定删除这个工地吗？")){state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);save();renderAll()}
+  if(de&&confirm("确定删除这条日报吗？")){state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);save();renderAll()}
+});
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
 setDefaultDates();
 resetWorkerForm();
 resetSiteForm();
