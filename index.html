@@ -3,114 +3,177 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>LabourFlow | 工时与利润管理</title>
+<title>LabourFlow | 工地人员管理</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="LabourFlow"/>
+<meta name="theme-color" content="#22322b"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADBklEQVR4nO3dsWoUURSAYSMSUlgELARL22iTViwkhY2lL2JhKWJl6cvYiaVg5WPYCRYWYmUhRIn+uuzuvTOY76sDMxz+PbO5hMnB7dOTK/AnV5e+AdZLHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgfp2tI3cNGHF2dL38KSTp+/XfoWfjpYySsYLnkTv1tDJQvHoYl/WrCSJb9zKGMTC05pmc0hiy3MXyELbA5lbGf+3GbHoYxdTJ7e1DiUsbuZM5wXhzL2ZdokJ8WhjP2aM0/H56QZcVgbI0yY6vA4lDHO6Nl6rJDEQRobh2fKaEMnbHOQxEEaGIdnyhzj5mxzkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdpdW/2ueDj56+PXr37+8/cuH745un9+dfd0cvHdx7evTn0EjuyOUjiIImDJA6SOEjiIImDJA7S2g/B1mzE4duq2BwkcZDEQRIHSRwkcZDEQRIHySHY9j59+bb1/0B5/eTereOj/d7P3tkcJHGQxEESB0kcJHGQxEESB8kh2Pb8JRiXlzhI4iCJgyQOkjhI4iCJgyQOkjhI/8Px+S5/y/nD+2cPDq/5nFxkIiRxkMRBEgdJHCRxkMRBEgdp7Ydgt46PPrw4uzzXXRWbgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgzQwjh1fi8CGxs3Z5iCJgzQ2Dk+W0YZO2OYgiYM0PA5PlnFGz3bG5tDHCBOm6rFCmhSH5bFfc+Y5b3PoY1+mTXLqY0Ufu5s5w9nfOfSxi8nTW+ALqT62M39uB7dPTyZf8pyXbm1oqY/Tkr/KWiGbWHBKS26OX9kiF6zhk7OWOM5d8krW0MS51cXBejg+J4mDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjfAUcXdMmcpDvVAAAAAElFTkSuQmCC"/>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADBklEQVR4nO3dsWoUURSAYSMSUlgELARL22iTViwkhY2lL2JhKWJl6cvYiaVg5WPYCRYWYmUhRIn+uuzuvTOY76sDMxz+PbO5hMnB7dOTK/AnV5e+AdZLHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgfp2tI3cNGHF2dL38KSTp+/XfoWfjpYySsYLnkTv1tDJQvHoYl/WrCSJb9zKGMTC05pmc0hiy3MXyELbA5lbGf+3GbHoYxdTJ7e1DiUsbuZM5wXhzL2ZdokJ8WhjP2aM0/H56QZcVgbI0yY6vA4lDHO6Nl6rJDEQRobh2fKaEMnbHOQxEEaGIdnyhzj5mxzkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdJHCRxkMRBEgdpdW/2ueDj56+PXr37+8/cuH745un9+dfd0cvHdx7evTn0EjuyOUjiIImDJA6SOEjiIImDJA7S2g/B1mzE4duq2BwkcZDEQRIHSRwkcZDEQRIHySHY9j59+bb1/0B5/eTereOj/d7P3tkcJHGQxEESB0kcJHGQxEESB8kh2Pb8JRiXlzhI4iCJgyQOkjhI4iCJgyQOkjhI/8Px+S5/y/nD+2cPDq/5nFxkIiRxkMRBEgdJHCRxkMRBEgdp7Ydgt46PPrw4uzzXXRWbgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgzQwjh1fi8CGxs3Z5iCJgzQ2Dk+W0YZO2OYgiYM0PA5PlnFGz3bG5tDHCBOm6rFCmhSH5bFfc+Y5b3PoY1+mTXLqY0Ufu5s5w9nfOfSxi8nTW+ALqT62M39uB7dPTyZf8pyXbm1oqY/Tkr/KWiGbWHBKS26OX9kiF6zhk7OWOM5d8krW0MS51cXBejg+J4mDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjfAUcXdMmcpDvVAAAAAElFTkSuQmCC"/>
+
 <style>
 :root{
   --bg:#f6f7f4;--surface:#fff;--surface-2:#eef3ed;
   --text:#1f2a25;--muted:#66736c;--line:#dce3dc;
   --primary:#18725f;--primary-strong:#0c5a49;
-  --danger:#b84132;--shadow:0 18px 50px rgba(31,42,37,.08);--radius:8px;
+  --danger:#b84132;--warn:#d97843;--info:#2d6fa3;
+  --shadow:0 18px 50px rgba(31,42,37,.08);--radius:8px;
 }
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
 button,input,select,textarea{font:inherit}
-.app-shell{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
-.sidebar{display:flex;flex-direction:column;gap:20px;padding:24px;background:#22322b;color:#f8fbf8}
+.app-shell{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{display:flex;flex-direction:column;gap:16px;padding:20px;background:#22322b;color:#f8fbf8}
 .brand{display:flex;align-items:center;gap:12px}
-.brand-mark{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:#f0b36e;color:#22322b;font-weight:900;font-size:15px}
+.brand-mark{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;background:#f0b36e;color:#22322b;font-weight:900;font-size:15px;flex-shrink:0}
 .brand strong,.brand span{display:block}
-.brand span{color:rgba(248,251,248,.68);font-size:.84rem}
-.nav{display:grid;gap:6px}
-.nav-btn{min-height:44px;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);
-  background:transparent;color:#f8fbf8;text-align:left;cursor:pointer;padding:0 14px;font-size:.9rem}
-.nav-btn.active,.nav-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.24)}
-.sidebar-card{margin-top:auto;padding:18px;border-radius:var(--radius);background:rgba(255,255,255,.1)}
-.sidebar-card .eyebrow{color:rgba(248,251,248,.68);font-size:.78rem;font-weight:700;text-transform:uppercase}
-.sidebar-card strong{display:block;margin:6px 0 2px;font-size:1.8rem}
-.sidebar-card small{color:rgba(248,251,248,.55);font-size:.8rem}
-.main{padding:28px;overflow:auto}
-.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px}
-h1,h2,p{margin:0}
-h1{font-size:clamp(1.4rem,2vw,2rem);line-height:1.15}
-h1 span{display:inline-block;margin-top:4px;color:var(--muted);font-size:.55em;font-weight:700}
-h2{font-size:1.05rem}
-.eyebrow{color:var(--muted);font-size:.78rem;font-weight:700;text-transform:uppercase}
-.week-picker{display:grid;gap:6px;min-width:190px}
-label{display:grid;gap:6px;color:var(--muted);font-size:.85rem;font-weight:600}
-input,select{width:100%;min-height:42px;border:1px solid var(--line);border-radius:var(--radius);
-  background:#fff;color:var(--text);font-size:15px;padding:0 10px}
-input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(24,114,95,.15);outline:none}
+.brand span{color:rgba(248,251,248,.68);font-size:.82rem}
+.nav{display:grid;gap:5px}
+.nav-section{color:rgba(248,251,248,.38);font-size:.7rem;font-weight:700;text-transform:uppercase;padding:8px 4px 4px;letter-spacing:.06em}
+.nav-btn{min-height:42px;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);
+  background:transparent;color:#f8fbf8;text-align:left;cursor:pointer;padding:0 12px;font-size:.88rem;
+  display:flex;align-items:center;gap:8px}
+.nav-btn .nav-icon{font-size:1rem;width:20px;flex-shrink:0}
+.nav-btn.active,.nav-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
+.sidebar-stats{margin-top:auto;display:grid;gap:8px}
+.stat-chip{padding:12px;border-radius:var(--radius);background:rgba(255,255,255,.08);display:grid;gap:2px}
+.stat-chip .eyebrow{color:rgba(248,251,248,.5);font-size:.72rem;font-weight:700;text-transform:uppercase}
+.stat-chip strong{font-size:1.5rem}
+.stat-chip small{color:rgba(248,251,248,.45);font-size:.75rem}
+.main{padding:24px;overflow:auto}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+h1,h2,h3,p{margin:0}
+h1{font-size:clamp(1.3rem,2vw,1.8rem);line-height:1.15}
+h1 small{display:inline-block;margin-top:4px;color:var(--muted);font-size:.5em;font-weight:700}
+h2{font-size:1rem}
+.eyebrow{color:var(--muted);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.week-picker{min-width:180px}
+label{display:grid;gap:5px;color:var(--muted);font-size:.83rem;font-weight:600}
+input,select,textarea{width:100%;min-height:40px;border:1px solid var(--line);border-radius:var(--radius);
+  background:#fff;color:var(--text);font-size:14px;padding:0 10px}
+textarea{padding:8px 10px;min-height:70px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(24,114,95,.14);outline:none}
 .view{display:none}.view.active{display:block}
-.grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.lower-grid{margin-top:16px}
-.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);padding:18px}
-.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid{display:grid;gap:14px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);padding:16px}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
 .form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .form-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 .wide{grid-column:1/-1}
-.settings-panel{margin-bottom:16px}
-.calculated-strip{display:flex;align-items:center;justify-content:space-between;min-height:52px;
-  margin:14px 0;padding:12px 14px;border-radius:var(--radius);background:var(--surface-2)}
-.calculated-strip span{color:var(--muted);font-size:.83rem;font-weight:700}
-.calculated-strip strong{font-size:1.4rem}
+.calculated-strip{display:flex;align-items:center;justify-content:space-between;min-height:48px;
+  margin:12px 0;padding:10px 13px;border-radius:var(--radius);background:var(--surface-2)}
+.calculated-strip span{color:var(--muted);font-size:.82rem;font-weight:700}
+.calculated-strip strong{font-size:1.35rem}
 .button-row{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}
-.primary-btn,.secondary-btn,.danger-btn,.icon-btn{min-height:40px;border-radius:var(--radius);cursor:pointer;font-weight:700}
-.primary-btn{border:0;background:var(--primary);color:#fff;padding:0 16px}
+.primary-btn,.secondary-btn,.danger-btn,.warn-btn,.icon-btn{min-height:38px;border-radius:var(--radius);cursor:pointer;font-weight:700;font-size:.88rem}
+.primary-btn{border:0;background:var(--primary);color:#fff;padding:0 14px}
 .primary-btn:hover{background:var(--primary-strong)}
 .secondary-btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:0 12px}
-.danger-btn{border:1px solid rgba(184,65,50,.24);background:rgba(184,65,50,.08);color:var(--danger);padding:0 10px}
-.icon-btn{width:40px;border:1px solid var(--line);background:#fff;color:var(--text);font-size:1.2rem}
-.warning-banner{margin:0 0 12px;border:1px solid rgba(217,120,67,.34);border-radius:var(--radius);
-  background:#fff7ed;color:#714414;padding:10px 12px;font-size:.88rem;font-weight:700}
-.metric-row,.dashboard-grid{display:grid;gap:10px;margin-bottom:14px}
-.metric-row{grid-template-columns:repeat(3,minmax(0,1fr))}
-.dashboard-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.metric{min-height:88px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;padding:14px}
-.metric span{color:var(--muted);font-size:.8rem;font-weight:700}
-.metric strong{display:block;margin-top:6px;font-size:1.35rem}
-.metric.highlight{background:#e9f2ef;border-color:#cfe0da}
-.metric.profit{background:#fff4ed;border-color:#f3d8c4}
-.table-wrap{width:100%;overflow:auto}.table-wrap.compact{max-height:340px}
-table{width:100%;border-collapse:collapse;min-width:580px}
-th,td{border-bottom:1px solid var(--line);padding:10px 9px;text-align:left;vertical-align:middle}
-th{color:var(--muted);font-size:.76rem;text-transform:uppercase}
-td{font-size:.9rem}
+.danger-btn{border:1px solid rgba(184,65,50,.24);background:rgba(184,65,50,.07);color:var(--danger);padding:0 10px}
+.warn-btn{border:1px solid rgba(217,120,67,.3);background:rgba(217,120,67,.08);color:var(--warn);padding:0 10px}
+.icon-btn{width:38px;border:1px solid var(--line);background:#fff;color:var(--text);font-size:1.1rem}
+.warning-banner{margin:0 0 10px;border:1px solid rgba(217,120,67,.34);border-radius:var(--radius);background:#fff7ed;color:#714414;padding:9px 11px;font-size:.86rem;font-weight:700}
+/* Metrics */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.kpi{border:1px solid var(--line);border-radius:var(--radius);background:#fff;padding:14px}
+.kpi span{color:var(--muted);font-size:.78rem;font-weight:700}
+.kpi strong{display:block;margin-top:5px;font-size:1.4rem;line-height:1}
+.kpi small{color:var(--muted);font-size:.75rem}
+.kpi.green{background:#e9f2ef;border-color:#cfe0da}
+.kpi.amber{background:#fff7ed;border-color:#f3d8c4}
+.kpi.red{background:#fff1f0;border-color:#f5c7c3}
+.kpi.blue{background:#eef5fb;border-color:#c5ddf0}
+/* Tables */
+.table-wrap{width:100%;overflow:auto}.table-wrap.compact{max-height:320px}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:middle}
+th{color:var(--muted);font-size:.74rem;text-transform:uppercase;white-space:nowrap}
+td{font-size:.88rem}
 .table-actions{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;min-height:26px;border-radius:999px;background:#edf1ee;padding:0 9px;font-weight:700;font-size:.85rem}
+/* Badges */
+.badge{display:inline-flex;align-items:center;height:22px;border-radius:999px;padding:0 8px;font-weight:700;font-size:.76rem;white-space:nowrap}
+.badge.green{background:#d0f0e4;color:#0d5c37}
+.badge.amber{background:#fde9cc;color:#7a4010}
+.badge.red{background:#fdd8d5;color:#7a1010}
+.badge.blue{background:#daeaf9;color:#1a4e7a}
+.badge.grey{background:#e8ebe8;color:#4a5c50}
+.badge.purple{background:#ede6fa;color:#4a1e8a}
+.pill{display:inline-flex;align-items:center;min-height:24px;border-radius:999px;background:#edf1ee;padding:0 8px;font-weight:700;font-size:.82rem}
 .muted{color:var(--muted)}
+/* Worker cards */
+.worker-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:4px}
+.worker-card{border:1px solid var(--line);border-radius:10px;background:#fff;padding:16px;box-shadow:var(--shadow);transition:box-shadow .15s}
+.worker-card:hover{box-shadow:0 8px 32px rgba(31,42,37,.14)}
+.worker-card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.worker-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#18725f,#2d9c82);display:grid;place-items:center;font-size:1.2rem;font-weight:900;color:#fff;flex-shrink:0}
+.worker-card-name{font-weight:800;font-size:1rem}
+.worker-card-role{color:var(--muted);font-size:.82rem}
+.worker-card-body{display:grid;gap:6px;font-size:.84rem}
+.worker-card-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.worker-card-row span{color:var(--muted)}
+.cert-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.worker-card-actions{display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+/* Status dot */
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-dot.active{background:#18b25e}
+.status-dot.leave{background:#d97843}
+.status-dot.inactive{background:#b0b8b0}
+/* Cert expiry */
+.cert-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:.86rem}
+.cert-row:last-child{border-bottom:none}
+/* Print */
 .print-preview{position:fixed;inset:0;z-index:50;display:grid;grid-template-rows:auto 1fr;background:rgba(0,0,0,.75)}
 .print-preview[hidden]{display:none}
-.print-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#22322b;color:#fff}
+.print-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#22322b;color:#fff}
 #printFrame{width:100%;height:100%;border:0;background:#fff}
-/* client info modal */
+/* Modal */
 .modal-overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-overlay[hidden]{display:none}
-.modal{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:480px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
-.modal h3{margin:0 0 16px;font-size:1.1rem}
-@media(max-width:980px){
+.modal{background:#fff;border-radius:12px;padding:24px;width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.2);max-height:90vh;overflow:auto}
+.modal h3{margin:0 0 16px;font-size:1.05rem}
+/* Tabs inside panel */
+.tab-strip{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:14px}
+.tab-btn{min-height:36px;border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 14px;font-weight:700;font-size:.86rem;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+/* Alerts */
+.alert{border-radius:var(--radius);padding:10px 13px;font-size:.86rem;font-weight:700;margin-bottom:10px}
+.alert.red{background:#fff1f0;color:#7a1010;border:1px solid #f5c7c3}
+.alert.amber{background:#fff7ed;color:#714414;border:1px solid rgba(217,120,67,.34)}
+/* Availability mini calendar */
+.avail-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.avail-day{border-radius:6px;border:1px solid var(--line);padding:4px;text-align:center;font-size:.75rem;cursor:pointer;user-select:none}
+.avail-day .day-label{color:var(--muted);font-weight:700;font-size:.65rem}
+.avail-day .day-num{font-weight:800;font-size:.95rem;margin-top:1px}
+.avail-day.available{background:#e3f5ec;border-color:#9fd4b8}
+.avail-day.unavailable{background:#fde8e6;border-color:#f5bcb8}
+.avail-day.partial{background:#fff3e0;border-color:#ffc97a}
+/* responsive */
+@media(max-width:1000px){
   .app-shell{grid-template-columns:1fr}
-  .sidebar{position:static;padding:16px}
-  .nav{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .sidebar-card{display:none}
-  .grid.two,.dashboard-grid,.form-grid.four,.form-grid.three{grid-template-columns:1fr}
-  .topbar{flex-direction:column;align-items:stretch}
+  .sidebar{position:static;padding:14px}
+  .nav{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .sidebar-stats{display:none}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .grid.two,.grid.three,.form-grid.four,.form-grid.three{grid-template-columns:1fr}
 }
 @media(max-width:640px){
   .app-shell{display:block}
-  .sidebar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;gap:6px;
-    padding:8px 10px calc(8px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.14)}
+  .sidebar{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.12)}
   .brand{display:none}
-  .sidebar .nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
-  .nav-btn{display:grid;place-items:center;min-height:48px;padding:0 4px;text-align:center;font-size:.75rem;line-height:1.2}
-  .main{padding:14px 14px calc(88px + env(safe-area-inset-bottom))}
-  .form-grid,.metric-row{grid-template-columns:1fr}
-  .panel{padding:14px}
-  .metric{min-height:74px;padding:11px}.metric strong{font-size:1.18rem}
-  .table-wrap{margin-inline:-14px;padding-inline:14px}
-  table{min-width:680px}
-  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+  .nav-section{display:none}
+  .nav-btn{justify-content:center;flex-direction:column;min-height:46px;padding:4px;font-size:.65rem;text-align:center;gap:2px}
+  .nav-btn .nav-icon{font-size:1.2rem}
+  .main{padding:12px 12px calc(80px + env(safe-area-inset-bottom))}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .worker-cards{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .panel{padding:12px}
 }
 </style>
 </head>
@@ -119,17 +182,29 @@ td{font-size:.9rem}
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-mark">LF</div>
-      <div><strong>LabourFlow</strong><span>工时 · 成本 · 发票</span></div>
+      <div><strong>LabourFlow</strong><span>H3 Interior Pty Ltd</span></div>
     </div>
     <nav class="nav">
-      <button class="nav-btn active" data-view="workerView" type="button">工人端 Worker</button>
-      <button class="nav-btn" data-view="adminView" type="button">管理端 Admin</button>
-      <button class="nav-btn" data-view="reportsView" type="button">周报导出 Reports</button>
+      <div class="nav-section">工时管理</div>
+      <button class="nav-btn active" data-view="workerView" type="button"><span class="nav-icon">📋</span>日报上报</button>
+      <button class="nav-btn" data-view="reportsView" type="button"><span class="nav-icon">📊</span>周报利润</button>
+      <div class="nav-section">人员管理</div>
+      <button class="nav-btn" data-view="personnelView" type="button"><span class="nav-icon">👷</span>工人档案</button>
+      <button class="nav-btn" data-view="certsView" type="button"><span class="nav-icon">🪪</span>证书到期</button>
+      <div class="nav-section">系统</div>
+      <button class="nav-btn" data-view="adminView" type="button"><span class="nav-icon">⚙️</span>管理设置</button>
     </nav>
-    <div class="sidebar-card">
-      <div class="eyebrow">本周利润 Weekly Profit</div>
-      <strong id="sidebarProfit">$0.00</strong>
-      <small id="sidebarWeek">当前周</small>
+    <div class="sidebar-stats">
+      <div class="stat-chip">
+        <div class="eyebrow">在职人员</div>
+        <strong id="sidebarActiveCount">0</strong>
+        <small>Active workers</small>
+      </div>
+      <div class="stat-chip">
+        <div class="eyebrow">本周利润</div>
+        <strong id="sidebarProfit">$0</strong>
+        <small id="sidebarWeek">当前周</small>
+      </div>
     </div>
   </aside>
 
@@ -137,20 +212,20 @@ td{font-size:.9rem}
     <header class="topbar">
       <div>
         <p class="eyebrow">H3 Interior Pty Ltd · Brisbane</p>
-        <h1>工时上报与项目利润系统<br/><span>Timesheet & Job Profit System</span></h1>
+        <h1>LabourFlow 工地管理系统<br/><small>Worksite Personnel & Timesheet System</small></h1>
       </div>
       <div class="week-picker">
         <label for="weekStart">统计周 Week start<input id="weekStart" type="date"/></label>
       </div>
     </header>
 
-    <!-- WORKER VIEW -->
+    <!-- ═══ WORKER VIEW (日报上报) ═══ -->
     <section id="workerView" class="view active">
       <div class="grid two">
         <form id="entryForm" class="panel">
           <div class="panel-head">
-            <div><p class="eyebrow">工人日报</p><h2>填写上工情况 / Submit work record</h2></div>
-            <button class="icon-btn" id="clearEntryForm" type="button">×</button>
+            <div><p class="eyebrow">工人日报</p><h2>填写上工记录 / Submit Work Record</h2></div>
+            <button class="icon-btn" id="clearEntryForm" type="button" title="清空表单">×</button>
           </div>
           <input id="entryId" type="hidden"/>
           <div class="form-grid">
@@ -160,26 +235,26 @@ td{font-size:.9rem}
             <label>工地 Site<select id="entrySite" required></select></label>
             <label>上班 Start<input id="entryStart" type="time" required/></label>
             <label>下班 Finish<input id="entryEnd" type="time" required/></label>
-            <label>休息分钟 Break<input id="entryBreak" type="number" min="0" step="5" value="0"/></label>
-            <label>补贴 Allowance<input id="entryAllowance" type="number" min="0" step="0.01" value="0"/></label>
+            <label>休息分钟 Break (min)<input id="entryBreak" type="number" min="0" step="5" value="0"/></label>
+            <label>补贴 Allowance ($)<input id="entryAllowance" type="number" min="0" step="0.01" value="0"/></label>
             <label class="wide">备注 Notes<input id="entryNotes" placeholder="parking, travel, etc."/></label>
           </div>
           <div class="calculated-strip">
             <span>当天工时 Daily hours</span>
             <strong id="entryHoursPreview">0.00 h</strong>
           </div>
-          <button class="primary-btn wide" id="entrySubmitLabel" type="submit" style="width:100%">保存日报 / Save entry</button>
+          <button class="primary-btn wide" id="entrySubmitLabel" type="submit" style="width:100%">保存日报 / Save Entry</button>
         </form>
 
         <div class="panel">
           <div class="panel-head">
-            <div><p class="eyebrow">Worker view</p><h2>本周个人工时</h2></div>
+            <div><p class="eyebrow">Worker View</p><h2>本周个人工时</h2></div>
             <select id="workerSummarySelect" style="width:auto;min-width:140px"></select>
           </div>
-          <div class="metric-row">
-            <div class="metric"><span>天数 Days</span><strong id="workerDays">0</strong></div>
-            <div class="metric"><span>工时 Hours</span><strong id="workerHours">0.00</strong></div>
-            <div class="metric"><span>补贴 Allowance</span><strong id="workerAllowance">$0.00</strong></div>
+          <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">
+            <div class="kpi"><span>天数 Days</span><strong id="workerDays">0</strong></div>
+            <div class="kpi green"><span>工时 Hours</span><strong id="workerHours">0.00</strong></div>
+            <div class="kpi amber"><span>补贴 Allow.</span><strong id="workerAllowance">$0</strong></div>
           </div>
           <div class="table-wrap compact">
             <table>
@@ -191,90 +266,82 @@ td{font-size:.9rem}
       </div>
     </section>
 
-    <!-- ADMIN VIEW -->
-    <section id="adminView" class="view">
-      <form id="settingsForm" class="panel settings-panel">
-        <div class="panel-head"><div><p class="eyebrow">Invoice settings</p><h2>公司发票信息</h2></div></div>
-        <div class="form-grid four">
-          <label>公司名称<input id="businessName" value="H3 Interior Pty Ltd"/></label>
-          <label>ABN<input id="businessAbn" value="14 630 033 591"/></label>
-          <label>电话<input id="businessPhone"/></label>
-          <label>邮箱<input id="businessEmail" value="info.h3interior@gmail.com"/></label>
-          <label class="wide">银行付款信息<input id="paymentDetails" value="BSB: 084-961  ACC: 70-451-7526"/></label>
+    <!-- ═══ PERSONNEL VIEW (工人档案) ═══ -->
+    <section id="personnelView" class="view">
+      <div class="panel-head">
+        <div><p class="eyebrow">Personnel Management</p><h2>工人档案管理</h2></div>
+        <div class="button-row">
+          <select id="personnelStatusFilter" style="min-width:130px">
+            <option value="all">全部状态</option>
+            <option value="active">在职 Active</option>
+            <option value="leave">请假 On Leave</option>
+            <option value="inactive">离职 Inactive</option>
+          </select>
+          <input id="personnelSearch" placeholder="搜索工人..." style="width:170px;min-height:38px"/>
+          <button class="primary-btn" id="addWorkerCardBtn" type="button">+ 新增工人</button>
         </div>
-        <div class="button-row"><button class="secondary-btn" type="submit">保存 Save</button></div>
-      </form>
-
-      <div class="grid two">
-        <form id="workerForm" class="panel">
-          <div class="panel-head"><div><p class="eyebrow">Worker cost</p><h2>工人资料与成本</h2></div></div>
-          <input id="workerId" type="hidden"/>
-          <div class="form-grid">
-            <label>姓名 Name<input id="workerName" required/></label>
-            <label>电话 Phone<input id="workerPhone"/></label>
-            <label>付给工人时薪 Pay rate ($/hr)<input id="workerPayRate" type="number" min="0" step="0.01" required/></label>
-            <label>真实成本 Cost rate ($/hr)<input id="workerCostRate" type="number" min="0" step="0.01" required/></label>
-            <label class="wide">备注<input id="workerNotes" placeholder="技能、可工作区域"/></label>
-          </div>
-          <div class="button-row">
-            <button class="primary-btn" type="submit">保存 Save</button>
-            <button class="secondary-btn" id="resetWorkerForm" type="button">新增 New</button>
-          </div>
-        </form>
-
-        <form id="siteForm" class="panel">
-          <div class="panel-head"><div><p class="eyebrow">Client billing</p><h2>工地与客户收费</h2></div></div>
-          <input id="siteId" type="hidden"/>
-          <div class="form-grid">
-            <label>服务公司简称 Client short name<input id="siteClientShort" placeholder="CB" required/></label>
-            <label>服务公司全称 Client full name<input id="siteClient" placeholder="Citibuild Construction Pty Ltd" required/></label>
-            <label>客户ABN<input id="siteClientAbn" placeholder="25 607 468 315"/></label>
-            <label>客户邮箱<input id="siteClientEmail" placeholder="accounts@example.com"/></label>
-            <label>工地名称 Site name<input id="siteName" required/></label>
-            <label>向客户收费时薪 Bill rate ($/hr)<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
-            <label>GST %<input id="siteTaxRate" type="number" value="10" min="0" step="0.01"/></label>
-          </div>
-          <div class="button-row">
-            <button class="primary-btn" type="submit">保存 Save</button>
-            <button class="secondary-btn" id="resetSiteForm" type="button">新增 New</button>
-          </div>
-        </form>
       </div>
 
-      <div class="grid two lower-grid">
-        <div class="panel">
-          <div class="panel-head"><div><p class="eyebrow">Workers</p><h2>工人列表</h2></div></div>
-          <div class="table-wrap">
-            <table><thead><tr><th>姓名</th><th>时薪</th><th>成本</th><th></th></tr></thead>
-            <tbody id="workersTable"></tbody></table>
-          </div>
+      <div id="personnelAlerts"></div>
+
+      <div class="kpi-grid">
+        <div class="kpi green"><span>在职 Active</span><strong id="pActiveCount">0</strong><small>workers</small></div>
+        <div class="kpi amber"><span>请假 On Leave</span><strong id="pLeaveCount">0</strong><small>workers</small></div>
+        <div class="kpi red"><span>证书即将到期</span><strong id="pCertWarnCount">0</strong><small>within 30 days</small></div>
+        <div class="kpi blue"><span>总工时 This Week</span><strong id="pWeekHours">0.0</strong><small>hours</small></div>
+      </div>
+
+      <div id="workerCards" class="worker-cards"></div>
+    </section>
+
+    <!-- ═══ CERTS VIEW (证书到期) ═══ -->
+    <section id="certsView" class="view">
+      <div class="panel-head">
+        <div><p class="eyebrow">Compliance</p><h2>证书 / 执照到期追踪</h2></div>
+        <button class="primary-btn" id="addCertBtn" type="button">+ 添加证书</button>
+      </div>
+
+      <div id="certAlerts"></div>
+
+      <div class="kpi-grid">
+        <div class="kpi red"><span>已过期 Expired</span><strong id="certExpiredCount">0</strong></div>
+        <div class="kpi amber"><span>30天内到期</span><strong id="cert30Count">0</strong></div>
+        <div class="kpi"><span>90天内到期</span><strong id="cert90Count">0</strong></div>
+        <div class="kpi green"><span>全部有效</span><strong id="certOkCount">0</strong></div>
+      </div>
+
+      <div class="panel">
+        <div class="tab-strip">
+          <button class="tab-btn active" data-tab="certAll">全部</button>
+          <button class="tab-btn" data-tab="certExpired">已过期 🔴</button>
+          <button class="tab-btn" data-tab="certSoon">即将到期 🟡</button>
+          <button class="tab-btn" data-tab="certOk">有效 ✅</button>
         </div>
-        <div class="panel">
-          <div class="panel-head"><div><p class="eyebrow">Sites</p><h2>工地列表</h2></div></div>
-          <div class="table-wrap">
-            <table><thead><tr><th>客户</th><th>工地</th><th>收费</th><th></th></tr></thead>
-            <tbody id="sitesTable"></tbody></table>
-          </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>工人</th><th>证书类型</th><th>证书编号</th><th>到期日</th><th>状态</th><th></th></tr></thead>
+            <tbody id="certsTable"></tbody>
+          </table>
         </div>
       </div>
     </section>
 
-    <!-- REPORTS VIEW -->
+    <!-- ═══ REPORTS VIEW (周报利润) ═══ -->
     <section id="reportsView" class="view">
-      <div class="dashboard-grid">
-        <div class="metric highlight"><span>总工时 Hours</span><strong id="totalHours">0.00</strong></div>
-        <div class="metric"><span>收入 Revenue</span><strong id="totalRevenue">$0.00</strong></div>
-        <div class="metric"><span>成本 Cost</span><strong id="totalCost">$0.00</strong></div>
-        <div class="metric profit"><span>利润 Profit</span><strong id="totalProfit">$0.00</strong></div>
+      <div class="kpi-grid">
+        <div class="kpi green"><span>总工时 Hours</span><strong id="totalHours">0.00</strong></div>
+        <div class="kpi blue"><span>收入 Revenue</span><strong id="totalRevenue">$0</strong></div>
+        <div class="kpi amber"><span>成本 Cost</span><strong id="totalCost">$0</strong></div>
+        <div class="kpi" style="background:#fff4ed;border-color:#f3d8c4"><span>利润 Profit</span><strong id="totalProfit">$0</strong></div>
       </div>
 
       <div class="panel">
         <div class="panel-head">
-          <div><p class="eyebrow">Weekly summary</p><h2>按工地统计</h2></div>
+          <div><p class="eyebrow">Weekly Summary</p><h2>按工地统计</h2></div>
           <div class="button-row">
             <select id="invoiceClientFilter" style="min-width:160px"></select>
-            <input id="invoiceNumber" style="width:160px" placeholder="发票序号 e.g. 077"/>
-            <button class="secondary-btn" id="exportCsvBtn" type="button">导出 CSV</button>
+            <input id="invoiceNumber" style="width:140px" placeholder="发票序号 e.g. 077"/>
+            <button class="secondary-btn" id="exportCsvBtn" type="button">CSV</button>
             <button class="secondary-btn" id="printTimesheetBtn" type="button">Timesheet</button>
             <button class="primary-btn" id="printInvoiceBtn" type="button">Invoice</button>
           </div>
@@ -288,8 +355,8 @@ td{font-size:.9rem}
         </div>
       </div>
 
-      <div class="panel" style="margin-top:16px">
-        <div class="panel-head"><div><p class="eyebrow">Worker pay</p><h2>工人工资周报</h2></div></div>
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-head"><div><p class="eyebrow">Worker Pay</p><h2>工人工资周报</h2></div></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>工人</th><th>天数</th><th>工时</th><th>时薪</th><th>工资</th><th>补贴</th><th>应付合计</th><th>真实成本</th></tr></thead>
@@ -298,8 +365,8 @@ td{font-size:.9rem}
         </div>
       </div>
 
-      <div class="panel" style="margin-top:16px">
-        <div class="panel-head"><div><p class="eyebrow">Daily records</p><h2>日报明细</h2></div></div>
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-head"><div><p class="eyebrow">Daily Records</p><h2>日报明细</h2></div></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>日期</th><th>工人</th><th>客户</th><th>工地</th><th>时间</th><th>工时</th><th>收入</th><th>成本</th><th></th></tr></thead>
@@ -308,24 +375,145 @@ td{font-size:.9rem}
         </div>
       </div>
     </section>
+
+    <!-- ═══ ADMIN VIEW (管理设置) ═══ -->
+    <section id="adminView" class="view">
+      <form id="settingsForm" class="panel" style="margin-bottom:14px">
+        <div class="panel-head"><div><p class="eyebrow">Invoice Settings</p><h2>公司发票信息</h2></div></div>
+        <div class="form-grid four">
+          <label>公司名称<input id="businessName" value="H3 Interior Pty Ltd"/></label>
+          <label>ABN<input id="businessAbn" value="14 630 033 591"/></label>
+          <label>电话<input id="businessPhone"/></label>
+          <label>邮箱<input id="businessEmail" value="info.h3interior@gmail.com"/></label>
+          <label class="wide">银行付款信息<input id="paymentDetails" value="BSB: 084-961  ACC: 70-451-7526"/></label>
+        </div>
+        <div class="button-row"><button class="secondary-btn" type="submit">保存 Save</button></div>
+      </form>
+
+      <div class="grid two">
+        <form id="workerForm" class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Worker Cost</p><h2>工人资料与成本</h2></div></div>
+          <input id="workerId" type="hidden"/>
+          <div class="form-grid">
+            <label>姓名 Name<input id="workerName" required/></label>
+            <label>电话 Phone<input id="workerPhone"/></label>
+            <label>付工人时薪 Pay rate ($/hr)<input id="workerPayRate" type="number" min="0" step="0.01" required/></label>
+            <label>真实成本 Cost rate ($/hr)<input id="workerCostRate" type="number" min="0" step="0.01" required/></label>
+            <label>紧急联系人<input id="workerEmergencyName" placeholder="Name"/></label>
+            <label>紧急联系电话<input id="workerEmergencyPhone" placeholder="04xx xxx xxx"/></label>
+            <label>White Card #<input id="workerWhiteCard" placeholder="WC000000"/></label>
+            <label>White Card 到期<input id="workerWhiteCardExp" type="date"/></label>
+            <label>职位 Role<select id="workerRole"><option value="labourer">Labourer</option><option value="leading_hand">Leading Hand</option><option value="foreman">Foreman</option><option value="pm">Project Manager</option></select></label>
+            <label>状态 Status<select id="workerStatus"><option value="active">在职 Active</option><option value="leave">请假 Leave</option><option value="inactive">离职 Inactive</option></select></label>
+            <label class="wide">备注 Notes<textarea id="workerNotes" placeholder="技能、可工作区域、特殊要求..."></textarea></label>
+          </div>
+          <div class="button-row">
+            <button class="primary-btn" type="submit">保存 Save</button>
+            <button class="secondary-btn" id="resetWorkerForm" type="button">新增 New</button>
+          </div>
+        </form>
+
+        <form id="siteForm" class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Client Billing</p><h2>工地与客户收费</h2></div></div>
+          <input id="siteId" type="hidden"/>
+          <div class="form-grid">
+            <label>客户简称 Short name<input id="siteClientShort" placeholder="CB" required/></label>
+            <label>客户全称 Full name<input id="siteClient" placeholder="Citibuild Construction Pty Ltd" required/></label>
+            <label>客户ABN<input id="siteClientAbn" placeholder="25 607 468 315"/></label>
+            <label>客户邮箱<input id="siteClientEmail" placeholder="accounts@example.com"/></label>
+            <label>工地名称 Site name<input id="siteName" required/></label>
+            <label>收费时薪 Bill rate ($/hr)<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
+            <label>GST %<input id="siteTaxRate" type="number" value="10" min="0" step="0.01"/></label>
+          </div>
+          <div class="button-row">
+            <button class="primary-btn" type="submit">保存 Save</button>
+            <button class="secondary-btn" id="resetSiteForm" type="button">新增 New</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="grid two" style="margin-top:14px">
+        <div class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Workers</p><h2>工人列表</h2></div></div>
+          <div class="table-wrap compact">
+            <table><thead><tr><th>姓名</th><th>职位</th><th>时薪</th><th>状态</th><th></th></tr></thead>
+            <tbody id="workersTable"></tbody></table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Sites</p><h2>工地列表</h2></div></div>
+          <div class="table-wrap compact">
+            <table><thead><tr><th>客户</th><th>工地</th><th>收费</th><th></th></tr></thead>
+            <tbody id="sitesTable"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
-<!-- Print preview -->
+<!-- Print Preview -->
 <div id="printPreview" class="print-preview" hidden>
   <div class="print-preview-bar">
     <strong id="printPreviewTitle">Preview</strong>
     <div class="button-row">
       <button class="secondary-btn" id="closePrintPreview" type="button">关闭 Close</button>
-      <button class="primary-btn" id="printPreviewBtn" type="button">打印/保存PDF Print/Save PDF</button>
+      <button class="primary-btn" id="printPreviewBtn" type="button">打印/PDF Print/Save PDF</button>
     </div>
   </div>
   <iframe id="printFrame" title="Print preview"></iframe>
 </div>
 
+<!-- Worker Modal -->
+<div id="workerModal" class="modal-overlay" hidden>
+  <div class="modal">
+    <h3 id="workerModalTitle">工人档案</h3>
+    <div id="workerModalBody"></div>
+    <div class="button-row" style="margin-top:16px">
+      <button class="secondary-btn" id="closeWorkerModal" type="button">关闭</button>
+      <button class="primary-btn" id="editWorkerFromModal" type="button">编辑</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cert Modal -->
+<div id="certModal" class="modal-overlay" hidden>
+  <div class="modal">
+    <h3 id="certModalTitle">添加证书</h3>
+    <form id="certForm">
+      <input id="certId" type="hidden"/>
+      <div class="form-grid">
+        <label>工人 Worker<select id="certWorker" required></select></label>
+        <label>证书类型 Type<select id="certType" required>
+          <option value="white_card">White Card (General Induction)</option>
+          <option value="qbcc">QBCC Licence</option>
+          <option value="first_aid">First Aid</option>
+          <option value="whs_induction">WHS Site Induction</option>
+          <option value="forklift">Forklift Licence</option>
+          <option value="scaffolding">Scaffolding</option>
+          <option value="elevated_platform">Elevated Work Platform</option>
+          <option value="asbestos">Asbestos Awareness</option>
+          <option value="other">Other</option>
+        </select></label>
+        <label>证书编号 Number<input id="certNumber" placeholder="e.g. WC12345678"/></label>
+        <label>颁发机构 Issuer<input id="certIssuer" placeholder="e.g. Safe Work QLD"/></label>
+        <label>颁发日期 Issue date<input id="certIssueDate" type="date"/></label>
+        <label>到期日 Expiry date<input id="certExpiry" type="date" required/></label>
+        <label class="wide">备注 Notes<input id="certNotes" placeholder="e.g. renewal booked"/></label>
+      </div>
+      <div class="button-row" style="margin-top:14px">
+        <button class="secondary-btn" id="closeCertModal" type="button" type="button">取消</button>
+        <button class="primary-btn" type="submit">保存 Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
-// ── Storage ──────────────────────────────────────────────────────────────────
-const KEY = "labourflow_v2";
+// ══════════════════════════════════════════════════════════════
+//  STORAGE & HELPERS
+// ══════════════════════════════════════════════════════════════
+const KEY = "labourflow_v3";
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const money  = v => new Intl.NumberFormat("en-AU",{style:"currency",currency:"AUD"}).format(Number(v)||0);
@@ -345,19 +533,30 @@ function fmtTime(v){if(!v)return"";const[h,m]=v.split(":");return`${Number(h)}:$
 function fmtQty(v){const n=Number(v||0);return Number.isInteger(n)?String(n):String(Number(n.toFixed(2)))}
 function compactMoney(v){const n=Number(v||0);return`$${n.toLocaleString("en-AU",{minimumFractionDigits:0,maximumFractionDigits:2})}`}
 function fmtShortDate(v){return new Intl.DateTimeFormat("en-AU",{weekday:"short",day:"2-digit",month:"2-digit"}).format(parseDate(v))}
+function daysUntil(isoStr){if(!isoStr)return null;const d=parseDate(isoStr);const diff=Math.ceil((d-today)/(1000*60*60*24));return diff}
+function initials(name){return(name||"?").split(" ").map(w=>w[0]||"").join("").slice(0,2).toUpperCase()}
+
+const CERT_LABELS = {
+  white_card:"White Card",qbcc:"QBCC Licence",first_aid:"First Aid",
+  whs_induction:"WHS Induction",forklift:"Forklift",scaffolding:"Scaffolding",
+  elevated_platform:"EWP",asbestos:"Asbestos Awareness",other:"Other"
+};
+const ROLE_LABELS = {labourer:"Labourer",leading_hand:"Leading Hand",foreman:"Foreman",pm:"Project Manager"};
+const STATUS_LABELS = {active:"在职",leave:"请假",inactive:"离职"};
 
 function loadState(){
   try{const s=localStorage.getItem(KEY);if(s)return JSON.parse(s);}catch{}
   return{
     settings:{businessName:"H3 Interior Pty Ltd",businessAbn:"14 630 033 591",businessPhone:"",businessEmail:"info.h3interior@gmail.com",paymentDetails:"BSB: 084-961  ACC: 70-451-7526"},
     workers:[
-      {id:uid("w"),name:"Frank",phone:"",payRate:58,costRate:65,notes:"Leading Hand"},
-      {id:uid("w"),name:"Junguo",phone:"",payRate:55,costRate:62,notes:""},
+      {id:uid("w"),name:"Frank",phone:"",payRate:58,costRate:65,notes:"Leading Hand – Owner",role:"leading_hand",status:"active",emergencyName:"",emergencyPhone:"",whiteCard:"",whiteCardExp:""},
+      {id:uid("w"),name:"Junguo",phone:"",payRate:55,costRate:62,notes:"",role:"labourer",status:"active",emergencyName:"",emergencyPhone:"",whiteCard:"",whiteCardExp:""},
     ],
     sites:[
       {id:uid("s"),clientShort:"CB",client:"Citibuild Construction Pty Ltd",clientAbn:"25 607 468 315",clientEmail:"accounts@citibuildconstructions.com",name:"Griffith Uni CBD Campus",billRate:55,taxRate:10},
     ],
     entries:[],
+    certs:[],
     invoiceCounters:{},
   };
 }
@@ -367,11 +566,22 @@ state.settings   = state.settings   || {};
 state.workers    = state.workers    || [];
 state.sites      = state.sites      || [];
 state.entries    = state.entries    || [];
+state.certs      = state.certs      || [];
 state.invoiceCounters = state.invoiceCounters || {};
+
+// migrate old workers that lack new fields
+state.workers.forEach(w=>{
+  w.role     = w.role     || "labourer";
+  w.status   = w.status   || "active";
+  w.emergencyName  = w.emergencyName  || "";
+  w.emergencyPhone = w.emergencyPhone || "";
+  w.whiteCard    = w.whiteCard    || "";
+  w.whiteCardExp = w.whiteCardExp || "";
+});
 
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Core helpers ──────────────────────────────────────────────
 function getWorker(id){return state.workers.find(w=>w.id===id)}
 function getSite(client,name){
   return state.sites.find(s=>
@@ -404,7 +614,6 @@ function groupBySite(entries=weeklyEntries()){
   });
   return Array.from(m.values()).sort((a,b)=>a.client.localeCompare(b.client));
 }
-
 function groupByWorker(){
   const m=new Map();
   weeklyEntries().forEach(e=>{
@@ -416,22 +625,41 @@ function groupByWorker(){
   });
   return Array.from(m.values()).sort((a,b)=>a.workerName.localeCompare(b.workerName));
 }
-
 function totals(){
   return groupBySite().reduce((acc,i)=>{acc.hours+=i.hours;acc.revenue+=i.revenue;acc.cost+=i.cost;acc.profit+=i.profit;return acc},{hours:0,revenue:0,cost:0,profit:0});
 }
 
-// ── Invoice number ────────────────────────────────────────────────────────────
+// ── Cert helpers ──────────────────────────────────────────────
+function certStatus(c){
+  const d=daysUntil(c.expiry);
+  if(d===null)return"unknown";
+  if(d<0)return"expired";
+  if(d<=30)return"soon30";
+  if(d<=90)return"soon90";
+  return"ok";
+}
+function certBadge(c){
+  const s=certStatus(c);const d=daysUntil(c.expiry);
+  if(s==="expired")return`<span class="badge red">已过期</span>`;
+  if(s==="soon30")return`<span class="badge amber">⚠ ${d}天后到期</span>`;
+  if(s==="soon90")return`<span class="badge grey">${d}天后到期</span>`;
+  return`<span class="badge green">有效</span>`;
+}
+function workerCerts(workerId){return state.certs.filter(c=>c.workerId===workerId)}
+function workerCertWarnings(workerId){return workerCerts(workerId).filter(c=>["expired","soon30"].includes(certStatus(c)))}
+
+// ── Invoice number ────────────────────────────────────────────
 function getNextInvoiceNumber(clientShort){
   const year=new Date().getFullYear();
   const key=`${clientShort}_${year}`;
   const n=(state.invoiceCounters[key]||0)+1;
-  state.invoiceCounters[key]=n;
-  save();
+  state.invoiceCounters[key]=n;save();
   return`INV ${clientShort} ${String(n).padStart(3,"0")}-${year}`;
 }
 
-// ── Render ────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════════════
 function setDefaultDates(){
   $("#weekStart").value=isoDate(mondayOf(today));
   $("#entryDate").value=isoDate(today);
@@ -442,13 +670,15 @@ function setDefaultDates(){
 function renderOptions(){
   const pw=$("#entryWorker")?.value;const psw=$("#workerSummarySelect")?.value;
   const pc=$("#entryClient")?.value;const ps=$("#entrySite")?.value;
-  const wo=state.workers.map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("");
-  $("#entryWorker").innerHTML=wo||"<option value=''>先在Admin添加工人</option>";
-  $("#workerSummarySelect").innerHTML=wo||"<option value=''>先在Admin添加工人</option>";
+  const wo=state.workers.filter(w=>w.status!=="inactive").map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("");
+  const woAll=state.workers.map(w=>`<option value="${w.id}">${esc(w.name)}</option>`).join("");
+  $("#entryWorker").innerHTML=wo||"<option>先在设置添加工人</option>";
+  $("#workerSummarySelect").innerHTML=woAll||"<option>先在设置添加工人</option>";
+  $("#certWorker").innerHTML=woAll||"<option>先在设置添加工人</option>";
   if(state.workers.some(w=>w.id===pw))$("#entryWorker").value=pw;
   if(state.workers.some(w=>w.id===psw))$("#workerSummarySelect").value=psw;
   const clients=[...new Set(state.sites.map(s=>s.client))].sort();
-  $("#entryClient").innerHTML=clients.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("")||"<option value=''>先在Admin添加工地</option>";
+  $("#entryClient").innerHTML=clients.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("")||"<option>先在设置添加工地</option>";
   if(clients.includes(pc))$("#entryClient").value=pc;
   renderSiteOptions(ps);
   const sel=$("#invoiceClientFilter")?.value||"__all";
@@ -459,28 +689,31 @@ function renderOptions(){
 function renderSiteOptions(preferred=""){
   const client=$("#entryClient").value;
   const sites=state.sites.filter(s=>s.client===client);
-  $("#entrySite").innerHTML=sites.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("")||"<option value=''>先在Admin添加工地</option>";
+  $("#entrySite").innerHTML=sites.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("")||"<option>先在设置添加工地</option>";
   if(sites.some(s=>s.name===preferred))$("#entrySite").value=preferred;
 }
 
 function renderSettings(){
-  $("#businessName").value=state.settings.businessName||"";
-  $("#businessAbn").value=state.settings.businessAbn||"";
-  $("#businessPhone").value=state.settings.businessPhone||"";
-  $("#businessEmail").value=state.settings.businessEmail||"";
-  $("#paymentDetails").value=state.settings.paymentDetails||"";
+  const s=state.settings;
+  $("#businessName").value=s.businessName||"";$("#businessAbn").value=s.businessAbn||"";
+  $("#businessPhone").value=s.businessPhone||"";$("#businessEmail").value=s.businessEmail||"";
+  $("#paymentDetails").value=s.paymentDetails||"";
 }
 
 function renderWorkers(){
+  const roles={labourer:"Labourer",leading_hand:"Leading Hand",foreman:"Foreman",pm:"PM"};
+  const statusColors={active:"green",leave:"amber",inactive:"grey"};
   $("#workersTable").innerHTML=state.workers.map(w=>`
     <tr>
-      <td><strong>${esc(w.name)}</strong><div class="muted">${esc(w.phone||"")}</div></td>
-      <td>${money(w.payRate)}/h</td><td>${money(w.costRate)}/h</td>
+      <td><strong>${esc(w.name)}</strong><div class="muted" style="font-size:.78rem">${esc(w.phone||"")}</div></td>
+      <td><span class="badge ${statusColors[w.role]||"grey"}">${roles[w.role]||w.role}</span></td>
+      <td>${money(w.payRate)}/h</td>
+      <td><span class="badge ${statusColors[w.status]||"grey"}">${STATUS_LABELS[w.status]||w.status}</span></td>
       <td><div class="table-actions">
         <button class="secondary-btn" data-edit-worker="${w.id}" type="button">编辑</button>
         <button class="danger-btn" data-delete-worker="${w.id}" type="button">删除</button>
       </div></td>
-    </tr>`).join("")||`<tr><td colspan="4" class="muted">暂无工人</td></tr>`;
+    </tr>`).join("")||`<tr><td colspan="5" class="muted">暂无工人</td></tr>`;
 }
 
 function renderSites(){
@@ -512,6 +745,126 @@ function renderWorkerSummary(){
     </tr>`).join("")||`<tr><td colspan="4" class="muted">本周暂无记录</td></tr>`;
 }
 
+// ── Personnel cards ───────────────────────────────────────────
+function renderPersonnel(){
+  const filter=$("#personnelStatusFilter").value;
+  const search=($("#personnelSearch").value||"").toLowerCase();
+  const activeW=state.workers.filter(w=>w.status==="active");
+  const leaveW=state.workers.filter(w=>w.status==="leave");
+  const certWarnWorkers=new Set(state.workers.filter(w=>workerCertWarnings(w.id).length>0).map(w=>w.id));
+
+  $("#pActiveCount").textContent=activeW.length;
+  $("#pLeaveCount").textContent=leaveW.length;
+  $("#pCertWarnCount").textContent=certWarnWorkers.size;
+  const weekH=weeklyEntries().reduce((s,e)=>s+e.hours,0);
+  $("#pWeekHours").textContent=num(weekH);
+  $("#sidebarActiveCount").textContent=activeW.length;
+
+  // Alerts
+  const alerts=[];
+  state.workers.forEach(w=>{
+    const warns=workerCertWarnings(w.id);
+    warns.forEach(c=>{
+      const d=daysUntil(c.expiry);
+      if(d<0)alerts.push(`<div class="alert red">🔴 ${esc(w.name)} — ${esc(CERT_LABELS[c.certType]||c.certType)} 已过期</div>`);
+      else alerts.push(`<div class="alert amber">⚠️ ${esc(w.name)} — ${esc(CERT_LABELS[c.certType]||c.certType)} 还有 ${d} 天到期</div>`);
+    });
+  });
+  $("#personnelAlerts").innerHTML=alerts.join("");
+
+  const filtered=state.workers.filter(w=>{
+    if(filter!=="all"&&w.status!==filter)return false;
+    if(search&&!w.name.toLowerCase().includes(search)&&!(w.notes||"").toLowerCase().includes(search))return false;
+    return true;
+  });
+
+  const avatarColors=["#18725f","#2d6fa3","#7a3d8a","#c05820","#1a7a4a","#4a5c8a"];
+  const weeklyHoursMap={};
+  weeklyEntries().forEach(e=>{weeklyHoursMap[e.workerId]=(weeklyHoursMap[e.workerId]||0)+e.hours});
+
+  const statusColors={active:"green",leave:"amber",inactive:"grey"};
+  const roleColors={labourer:"grey",leading_hand:"blue",foreman:"purple",pm:"purple"};
+
+  $("#workerCards").innerHTML=filtered.map((w,i)=>{
+    const wh=weeklyHoursMap[w.id]||0;
+    const certs=workerCerts(w.id);
+    const warns=workerCertWarnings(w.id);
+    const color=avatarColors[i%avatarColors.length];
+    const certBadges=certs.slice(0,4).map(c=>{
+      const s=certStatus(c);
+      const cl=s==="expired"?"red":s==="soon30"?"amber":s==="soon90"?"grey":"green";
+      return`<span class="badge ${cl}" style="font-size:.7rem">${esc(CERT_LABELS[c.certType]||c.certType)}</span>`;
+    }).join("");
+    return`
+    <div class="worker-card">
+      <div class="worker-card-top">
+        <div class="worker-avatar" style="background:${color}">${esc(initials(w.name))}</div>
+        <div>
+          <div class="worker-card-name">${esc(w.name)}</div>
+          <div class="worker-card-role">${esc(ROLE_LABELS[w.role]||w.role||"")}</div>
+        </div>
+        <span class="badge ${statusColors[w.status]||"grey"}" style="margin-left:auto">${esc(STATUS_LABELS[w.status]||w.status)}</span>
+      </div>
+      <div class="worker-card-body">
+        <div class="worker-card-row"><span>📞 电话</span><strong>${esc(w.phone||"—")}</strong></div>
+        <div class="worker-card-row"><span>⏱ 本周工时</span><strong>${num(wh)} h</strong></div>
+        <div class="worker-card-row"><span>💰 时薪</span><strong>${money(w.payRate)}/hr</strong></div>
+        ${warns.length?`<div class="worker-card-row"><span>⚠️ 证书警告</span><strong style="color:var(--warn)">${warns.length} 项</strong></div>`:""}
+      </div>
+      <div class="cert-list">${certBadges||'<span class="muted" style="font-size:.78rem">暂无证书记录</span>'}</div>
+      <div class="worker-card-actions">
+        <button class="secondary-btn" style="flex:1" data-view-worker="${w.id}" type="button">查看档案</button>
+        <button class="secondary-btn" data-edit-worker="${w.id}" type="button">编辑</button>
+        <button class="warn-btn" data-add-cert-worker="${w.id}" type="button">+ 证书</button>
+      </div>
+    </div>`;
+  }).join("")||`<div class="panel muted" style="padding:24px;text-align:center">暂无符合条件的工人</div>`;
+}
+
+// ── Certs table ───────────────────────────────────────────────
+function renderCerts(){
+  const activeTab=$$(".tab-btn.active")[0]?.dataset.tab||"certAll";
+  let certs=state.certs.slice().sort((a,b)=>{
+    const da=daysUntil(a.expiry)??9999;const db=daysUntil(b.expiry)??9999;return da-db;
+  });
+
+  const expired=certs.filter(c=>certStatus(c)==="expired");
+  const soon30=certs.filter(c=>certStatus(c)==="soon30");
+  const soon90=certs.filter(c=>certStatus(c)==="soon90");
+  const ok=certs.filter(c=>certStatus(c)==="ok");
+
+  $("#certExpiredCount").textContent=expired.length;
+  $("#cert30Count").textContent=soon30.length;
+  $("#cert90Count").textContent=soon90.length;
+  $("#certOkCount").textContent=ok.length;
+
+  if(activeTab==="certExpired")certs=expired;
+  else if(activeTab==="certSoon")certs=[...soon30,...soon90];
+  else if(activeTab==="certOk")certs=ok;
+
+  const alerts=[
+    ...expired.map(c=>{const w=getWorker(c.workerId);return`<div class="alert red">🔴 ${esc(w?.name||"?")} — ${esc(CERT_LABELS[c.certType]||c.certType)} 已过期</div>`}),
+    ...soon30.map(c=>{const w=getWorker(c.workerId);const d=daysUntil(c.expiry);return`<div class="alert amber">⚠️ ${esc(w?.name||"?")} — ${esc(CERT_LABELS[c.certType]||c.certType)} 还有 ${d} 天到期</div>`}),
+  ];
+  $("#certAlerts").innerHTML=alerts.join("");
+
+  $("#certsTable").innerHTML=certs.map(c=>{
+    const w=getWorker(c.workerId);
+    return`<tr>
+      <td><strong>${esc(w?.name||"?")}</strong></td>
+      <td>${esc(CERT_LABELS[c.certType]||c.certType)}</td>
+      <td><span class="muted">${esc(c.certNumber||"—")}</span></td>
+      <td>${c.expiry?fmtDmy(c.expiry):"—"}</td>
+      <td>${certBadge(c)}</td>
+      <td><div class="table-actions">
+        <button class="secondary-btn" data-edit-cert="${c.id}" type="button">编辑</button>
+        <button class="danger-btn" data-delete-cert="${c.id}" type="button">删除</button>
+      </div></td>
+    </tr>`;
+  }).join("")||`<tr><td colspan="6" class="muted">暂无证书记录</td></tr>`;
+}
+
+// ── Reports ───────────────────────────────────────────────────
 function renderReports(){
   const total=totals();
   $("#totalHours").textContent=num(total.hours);
@@ -552,23 +905,41 @@ function renderReports(){
   }).join("")||`<tr><td colspan="9" class="muted">本周暂无日报</td></tr>`;
 }
 
-function renderAll(){renderSettings();renderOptions();renderWorkers();renderSites();renderWorkerSummary();renderReports();updatePreview()}
-function updatePreview(){const h=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);$("#entryHoursPreview").textContent=`${num(h)} h`}
+function renderAll(){
+  renderSettings();renderOptions();renderWorkers();renderSites();
+  renderWorkerSummary();renderReports();renderPersonnel();renderCerts();
+  updatePreview();
+}
 
+function updatePreview(){
+  const h=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
+  $("#entryHoursPreview").textContent=`${num(h)} h`;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  FORM RESETS
+// ══════════════════════════════════════════════════════════════
 function resetEntryForm(){
   $("#entryForm").reset();$("#entryId").value="";
   $("#entryDate").value=isoDate(today);$("#entryStart").value="05:00";$("#entryEnd").value="15:00";
   $("#entryBreak").value=0;$("#entryAllowance").value=0;
   if(state.workers[0])$("#entryWorker").value=state.workers[0].id;
-  renderSiteOptions();$("#entrySubmitLabel").textContent="保存日报 / Save entry";updatePreview();
+  renderSiteOptions();$("#entrySubmitLabel").textContent="保存日报 / Save Entry";updatePreview();
 }
-function resetWorkerForm(){$("#workerForm").reset();$("#workerId").value="";$("#workerPayRate").value=55;$("#workerCostRate").value=62}
+function resetWorkerForm(){
+  $("#workerForm").reset();$("#workerId").value="";
+  $("#workerPayRate").value=55;$("#workerCostRate").value=62;
+  $("#workerRole").value="labourer";$("#workerStatus").value="active";
+}
 function resetSiteForm(){$("#siteForm").reset();$("#siteId").value="";$("#siteBillRate").value=55;$("#siteTaxRate").value=10}
+function resetCertForm(){$("#certForm").reset();$("#certId").value="";if(state.workers[0])$("#certWorker").value=state.workers[0].id}
 
-// ── Form handlers ─────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+//  FORM HANDLERS
+// ══════════════════════════════════════════════════════════════
 function handleEntrySubmit(e){
   e.preventDefault();
-  if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在Admin添加工人和工地。");return}
+  if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在管理设置添加工人和工地。");return}
   const hours=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
   const id=$("#entryId").value||uid("entry");
   const entry={id,workerId:$("#entryWorker").value,date:$("#entryDate").value,
@@ -594,7 +965,12 @@ function handleWorkerSubmit(e){
   const id=$("#workerId").value||uid("w");
   const worker={id,name:$("#workerName").value.trim(),phone:$("#workerPhone").value.trim(),
     payRate:Number($("#workerPayRate").value||0),costRate:Number($("#workerCostRate").value||0),
-    notes:$("#workerNotes").value.trim()};
+    notes:$("#workerNotes").value.trim(),role:$("#workerRole").value,
+    status:$("#workerStatus").value,
+    emergencyName:$("#workerEmergencyName").value.trim(),
+    emergencyPhone:$("#workerEmergencyPhone").value.trim(),
+    whiteCard:$("#workerWhiteCard").value.trim(),
+    whiteCardExp:$("#workerWhiteCardExp").value};
   const idx=state.workers.findIndex(x=>x.id===id);
   if(idx>=0)state.workers[idx]=worker;else state.workers.push(worker);
   save();resetWorkerForm();renderAll();
@@ -603,19 +979,30 @@ function handleWorkerSubmit(e){
 function handleSiteSubmit(e){
   e.preventDefault();
   const id=$("#siteId").value||uid("s");
-  const site={id,
-    clientShort:$("#siteClientShort").value.trim().toUpperCase(),
-    client:$("#siteClient").value.trim(),
-    clientAbn:$("#siteClientAbn").value.trim(),
-    clientEmail:$("#siteClientEmail").value.trim(),
-    name:$("#siteName").value.trim(),
-    billRate:Number($("#siteBillRate").value||0),
-    taxRate:Number($("#siteTaxRate").value||10)};
+  const site={id,clientShort:$("#siteClientShort").value.trim().toUpperCase(),
+    client:$("#siteClient").value.trim(),clientAbn:$("#siteClientAbn").value.trim(),
+    clientEmail:$("#siteClientEmail").value.trim(),name:$("#siteName").value.trim(),
+    billRate:Number($("#siteBillRate").value||0),taxRate:Number($("#siteTaxRate").value||10)};
   const idx=state.sites.findIndex(x=>x.id===id);
   if(idx>=0)state.sites[idx]=site;else state.sites.push(site);
   save();resetSiteForm();renderAll();
 }
 
+function handleCertSubmit(e){
+  e.preventDefault();
+  const id=$("#certId").value||uid("cert");
+  const cert={id,workerId:$("#certWorker").value,certType:$("#certType").value,
+    certNumber:$("#certNumber").value.trim(),issuer:$("#certIssuer").value.trim(),
+    issueDate:$("#certIssueDate").value,expiry:$("#certExpiry").value,
+    notes:$("#certNotes").value.trim()};
+  const idx=state.certs.findIndex(x=>x.id===id);
+  if(idx>=0)state.certs[idx]=cert;else state.certs.push(cert);
+  save();$("#certModal").hidden=true;resetCertForm();renderAll();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  NAVIGATION & EDIT HELPERS
+// ══════════════════════════════════════════════════════════════
 function switchView(id){
   $$(".view").forEach(v=>v.classList.toggle("active",v.id===id));
   $$(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
@@ -624,9 +1011,47 @@ function switchView(id){
 function editWorker(id){
   const w=getWorker(id);if(!w)return;
   $("#workerId").value=w.id;$("#workerName").value=w.name;$("#workerPhone").value=w.phone||"";
-  $("#workerPayRate").value=w.payRate;$("#workerCostRate").value=w.costRate;$("#workerNotes").value=w.notes||"";
+  $("#workerPayRate").value=w.payRate;$("#workerCostRate").value=w.costRate;
+  $("#workerNotes").value=w.notes||"";$("#workerRole").value=w.role||"labourer";
+  $("#workerStatus").value=w.status||"active";
+  $("#workerEmergencyName").value=w.emergencyName||"";$("#workerEmergencyPhone").value=w.emergencyPhone||"";
+  $("#workerWhiteCard").value=w.whiteCard||"";$("#workerWhiteCardExp").value=w.whiteCardExp||"";
   switchView("adminView");
 }
+
+function viewWorkerModal(id){
+  const w=getWorker(id);if(!w)return;
+  const certs=workerCerts(id);
+  const wh=weeklyEntries().filter(e=>e.workerId===id).reduce((s,e)=>s+e.hours,0);
+  const statusColors={active:"green",leave:"amber",inactive:"grey"};
+  const roleColors={labourer:"grey",leading_hand:"blue",foreman:"purple",pm:"purple"};
+  $("#workerModalTitle").textContent=`👷 ${w.name}`;
+  $("#workerModalBody").innerHTML=`
+    <div class="form-grid" style="margin-bottom:14px">
+      <div><span class="eyebrow">职位 Role</span><br/><span class="badge ${roleColors[w.role]||"grey"}">${ROLE_LABELS[w.role]||w.role||"—"}</span></div>
+      <div><span class="eyebrow">状态 Status</span><br/><span class="badge ${statusColors[w.status]||"grey"}">${STATUS_LABELS[w.status]||w.status}</span></div>
+      <div><span class="eyebrow">电话 Phone</span><br/><strong>${esc(w.phone||"—")}</strong></div>
+      <div><span class="eyebrow">本周工时</span><br/><strong>${num(wh)} h</strong></div>
+      <div><span class="eyebrow">时薪 Pay Rate</span><br/><strong>${money(w.payRate)}/hr</strong></div>
+      <div><span class="eyebrow">真实成本</span><br/><strong>${money(w.costRate)}/hr</strong></div>
+    </div>
+    ${w.emergencyName?`<div style="padding:10px;border-radius:8px;background:#fff7ed;margin-bottom:12px">
+      <div class="eyebrow" style="margin-bottom:4px">🆘 紧急联系人</div>
+      <strong>${esc(w.emergencyName)}</strong> &nbsp; ${esc(w.emergencyPhone||"")}
+    </div>`:""}
+    ${w.notes?`<div style="margin-bottom:12px"><div class="eyebrow" style="margin-bottom:4px">备注</div><div style="font-size:.9rem">${esc(w.notes)}</div></div>`:""}
+    <div class="eyebrow" style="margin-bottom:8px">证书记录（${certs.length}）</div>
+    ${certs.length?certs.map(c=>`
+      <div class="cert-row">
+        <div><strong>${esc(CERT_LABELS[c.certType]||c.certType)}</strong>
+          <div class="muted" style="font-size:.78rem">${esc(c.certNumber||"")} ${c.issuer?`· ${esc(c.issuer)}`:""}</div>
+        </div>
+        <div style="text-align:right">${certBadge(c)}<div class="muted" style="font-size:.75rem">${c.expiry?fmtDmy(c.expiry):""}</div></div>
+      </div>`).join(""):`<div class="muted" style="font-size:.85rem">暂无证书记录</div>`}`;
+  $("#editWorkerFromModal").dataset.workerId=id;
+  $("#workerModal").hidden=false;
+}
+
 function editSite(id){
   const s=state.sites.find(x=>x.id===id);if(!s)return;
   $("#siteId").value=s.id;$("#siteClientShort").value=s.clientShort||"";$("#siteClient").value=s.client;
@@ -634,6 +1059,7 @@ function editSite(id){
   $("#siteName").value=s.name;$("#siteBillRate").value=s.billRate;$("#siteTaxRate").value=s.taxRate;
   switchView("adminView");
 }
+
 function editEntry(id){
   const e=state.entries.find(x=>x.id===id);if(!e)return;
   $("#entryId").value=e.id;$("#entryWorker").value=e.workerId;$("#entryDate").value=e.date;
@@ -644,17 +1070,38 @@ function editEntry(id){
   updatePreview();switchView("workerView");$("#entryForm").scrollIntoView({behavior:"smooth"});
 }
 
-// ── CSV Export ────────────────────────────────────────────────────────────────
+function editCert(id){
+  const c=state.certs.find(x=>x.id===id);if(!c)return;
+  $("#certId").value=c.id;$("#certWorker").value=c.workerId;$("#certType").value=c.certType;
+  $("#certNumber").value=c.certNumber||"";$("#certIssuer").value=c.issuer||"";
+  $("#certIssueDate").value=c.issueDate||"";$("#certExpiry").value=c.expiry||"";
+  $("#certNotes").value=c.notes||"";
+  $("#certModalTitle").textContent="编辑证书";
+  $("#certModal").hidden=false;
+}
+
+function openAddCertModal(workerId){
+  resetCertForm();
+  if(workerId)$("#certWorker").value=workerId;
+  $("#certModalTitle").textContent="添加证书";
+  $("#certModal").hidden=false;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CSV EXPORT
+// ══════════════════════════════════════════════════════════════
 function exportCsv(){
   const headers=["日期","工人","客户","工地","上班","下班","休息(分钟)","工时","补贴","收入","成本","利润","备注"];
   const rows=weeklyEntries().map(e=>{const r=getRates(e);return[e.date,r.worker?.name||"",e.client,e.site,e.start,e.end,e.breakMinutes,num(e.hours),num(e.allowance),num(r.revenue),num(r.cost),num(r.profit),e.notes||""]});
   const csv=([headers,...rows]).map(r=>r.map(c=>{const v=String(c??"");return/[",\n]/.test(v)?`"${v.replaceAll('"','""')}"`:(v)}).join(",")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const blob=new Blob(["﻿"+csv],{type:"text/csv;charset=utf-8"});
   const url=URL.createObjectURL(blob);const a=document.createElement("a");
   a.href=url;a.download=`labourflow-${currentWeekStart()}.csv`;document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);
 }
 
-// ── Timesheet ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+//  TIMESHEET & INVOICE PRINT
+// ══════════════════════════════════════════════════════════════
 function daysOfWeek(){
   const{start}=weekRange();
   return["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((label,i)=>({label,iso:isoDate(addDays(start,i))}));
@@ -669,7 +1116,6 @@ function groupForTimesheet(entries){
     day.starts.push(e.start);day.ends.push(e.end);day.hours+=e.hours;
     item.rate=r.billRate||item.rate;item.days[e.date]=day;m.set(key,item);
   });
-  // Sort by worker name order in state.workers
   const order=state.workers.map(w=>w.id);
   return Array.from(m.entries()).sort((a,b)=>{
     const ia=order.indexOf(a[0]);const ib=order.indexOf(b[0]);
@@ -714,20 +1160,15 @@ function printTimesheet(){
   const workers=groupForTimesheet(srcEntries);
   const blocks=workers.map(w=>timesheetWorkerBlock(w,days)).join("");
   const dayCounts=days.map(day=>{
-    const ws=new Set(srcEntries.filter(e=>e.date===day.iso).map(e=>e.workerId));
-    return ws.size||"";
+    const ws=new Set(srcEntries.filter(e=>e.date===day.iso).map(e=>e.workerId));return ws.size||"";
   });
   const totalRev=siteData.reduce((s,i)=>s+i.revenue,0);
-
-  // Split long names for header display
-  function splitName(v){return String(v||"").replaceAll(" ","\n")}
-
   openPrintWindow("Weekly Time Sheet",`
     <section class="template-page">
       <div class="ts-header">
         <div>WEEKLY TIME SHEET OF H3<br>Interior (Frank)</div>
-        <div>${esc(splitName(mainSite))}</div>
-        <div>${esc(splitName(mainClientShort?mainClient.replace(mainClientShort,"").trim():mainClient))}</div>
+        <div>${esc(mainSite)}</div>
+        <div>${esc(mainClient)}</div>
       </div>
       <div class="period-row">
         <span class="period-label">Working period</span>
@@ -743,37 +1184,28 @@ function printTimesheet(){
     </section>`,"timesheet");
 }
 
-// ── Invoice ───────────────────────────────────────────────────────────────────
 function printInvoice(){
   const range=weekRange();
   const selClient=$("#invoiceClientFilter").value;
   const srcEntries=selClient==="__all"?weeklyEntries():weeklyEntries().filter(e=>e.client===selClient);
   if(!srcEntries.length){alert("本周没有日报数据，无法生成Invoice。");return}
-
   const siteData=groupBySite(srcEntries);
   const mainClient=selClient==="__all"?siteData[0]?.client||"Client":selClient;
   const siteObj=state.sites.find(s=>s.client===mainClient)||{};
   const clientShort=siteObj.clientShort||"INV";
-
-  // Get or use manual invoice number
   const manualNum=$("#invoiceNumber").value.trim();
   const invoiceNum=manualNum?`INV ${clientShort} ${manualNum}`:getNextInvoiceNumber(clientShort);
-
   const issueDate=fmtDmy(range.endIso);
   const dueDate=fmtDmy(isoDate(addDays(parseDate(range.endIso),7)));
   const settings=state.settings;
-
-  // Build line items: one per worker per site
   const workers=groupForTimesheet(srcEntries);
   const siteName=siteData[0]?.site||"";
   const lineItems=workers.map(w=>{
     const hours=Object.values(w.days).reduce((s,d)=>s+d.hours,0);
     return{hours,rate:w.rate,total:hours*w.rate};
   }).filter(x=>x.hours>0);
-
   const totalRev=lineItems.reduce((s,x)=>s+x.total,0);
   const totalGst=totalRev*((siteObj.taxRate||10)/100);
-
   const rows=lineItems.map((item,i)=>`
     <tr>
       <td>${i===0?`Framing in ${esc(siteName)}`:" "}</td>
@@ -781,14 +1213,11 @@ function printInvoice(){
       <td>${money(item.rate)}</td>
       <td>${money(item.total)}</td>
     </tr>`).join("");
-
   openPrintWindow("Invoice",`
     <section class="template-page invoice-page">
       <div class="inv-top-rule"></div>
       <div class="inv-header">
-        <div class="inv-from">
-          <h1>${esc(settings.businessName||"H3 Interior Pty Ltd")}</h1>
-        </div>
+        <div class="inv-from"><h1>${esc(settings.businessName||"H3 Interior Pty Ltd")}</h1></div>
         <dl class="inv-meta">
           <dt>Invoice #</dt><dd>${esc(invoiceNum)}</dd>
           <dt>Issue date</dt><dd>${issueDate}</dd>
@@ -796,22 +1225,17 @@ function printInvoice(){
           <dt>Due date</dt><dd>${dueDate}</dd>
         </dl>
       </div>
-
       <div class="inv-to">
         <span class="inv-to-label">Invoice to</span>
         <span class="inv-to-name">${esc(siteObj.client||mainClient)}</span>
         ${siteObj.clientAbn?`<span>ABN, ${esc(siteObj.clientAbn)}</span>`:""}
         ${siteObj.clientEmail?`<span>email: ${esc(siteObj.clientEmail)}</span>`:""}
       </div>
-
       <table class="inv-table">
-        <thead>
-          <tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Total price</th></tr>
-        </thead>
+        <thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Total price</th></tr></thead>
         <tbody>${rows}</tbody>
         <tfoot><tr><td colspan="3"></td><td>$0.00</td></tr></tfoot>
       </table>
-
       <div class="inv-bottom">
         <div class="inv-notes">
           <strong>Notes,</strong>
@@ -826,17 +1250,15 @@ function printInvoice(){
     </section>`,"invoice");
 }
 
-// ── Print window ──────────────────────────────────────────────────────────────
 function openPrintWindow(title,body,type){
   const tsStyles=`
     body{margin:0;background:#fff;color:#293845;font-family:"Trebuchet MS",Arial,sans-serif}
-    .template-page{width:210mm;min-height:297mm;background:#fff;padding:10mm 10mm}
+    .template-page{width:210mm;min-height:297mm;background:#fff;padding:10mm}
     .ts-header{display:grid;grid-template-columns:2fr 1fr 1.8fr;width:155mm;
       background:#293845;color:#fff;font-size:13px;font-weight:700;line-height:1.2}
     .ts-header>div{padding:4px 5px;min-height:13mm;white-space:pre-line}
     .period-row{display:flex;gap:6mm;margin:3mm 0;width:155mm}
-    .period-label{color:#7d8e50;font-size:10px}
-    .period-value{color:#7d8e50;font-size:10px;font-weight:700}
+    .period-label{color:#7d8e50;font-size:10px}.period-value{color:#7d8e50;font-size:10px;font-weight:700}
     .ts-table{width:155mm;border-collapse:collapse;table-layout:fixed;margin:2mm 0 6mm;font-size:10px}
     .ts-table .col-label{width:32mm}.ts-table .col-day{width:14mm}.ts-table .col-total{width:22mm}
     .ts-table thead th{background:#293845;color:#fff;border:1px solid #293845;height:5mm;padding:1px 3px;text-align:left}
@@ -845,7 +1267,6 @@ function openPrintWindow(title,body,type){
     .amount-table{margin-top:8mm}
     .amount-table td:first-child{background:transparent!important;color:#293845!important;text-align:left!important;font-weight:700}
     @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
-
   const invStyles=`
     body{margin:0;background:#fff;color:#6c6c6c;font-family:Arial,sans-serif;font-size:10px}
     .template-page{width:210mm;min-height:297mm;padding:14mm 13mm}
@@ -864,15 +1285,12 @@ function openPrintWindow(title,body,type){
     .inv-table tbody td:first-child{color:#111}
     .inv-table tfoot td{border-bottom:1mm solid #d4d4d4;background:#f0f0f0;height:7mm;padding:1.5mm 2mm;text-align:right;color:#666}
     .inv-bottom{display:grid;grid-template-columns:1.2fr 1fr;gap:6mm;width:115mm;margin-top:5mm}
-    .inv-notes{display:grid;gap:3mm;color:#8a8a8a;font-size:10px}
-    .inv-notes strong{color:#555}
+    .inv-notes{display:grid;gap:3mm;color:#8a8a8a;font-size:10px}.inv-notes strong{color:#555}
     .inv-total-row{display:grid;grid-template-columns:1fr auto;gap:4mm;margin-bottom:3mm;font-size:10px}
-    .inv-total-row span{color:#3f45d7;font-weight:700}
-    .inv-total-row strong{color:#8a8a8a;text-align:right;min-width:24mm}
+    .inv-total-row span{color:#3f45d7;font-weight:700}.inv-total-row strong{color:#8a8a8a;text-align:right;min-width:24mm}
     .inv-total-row.final span,.inv-total-row.final strong{font-size:13px}
     .inv-total-row.final strong{color:#ff2aa1}
     @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
-
   const html=`<!doctype html><html><head><meta charset="UTF-8"><title>${title}</title>
     <style>${type==="invoice"?invStyles:tsStyles}</style></head>
     <body>${body}</body></html>`;
@@ -881,17 +1299,22 @@ function openPrintWindow(title,body,type){
   $("#printPreview").hidden=false;
 }
 
-// ── Event binding ─────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+//  EVENT BINDING
+// ══════════════════════════════════════════════════════════════
 $$(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));
 ["entryStart","entryEnd","entryBreak"].forEach(id=>$(`#${id}`).addEventListener("input",updatePreview));
 $("#weekStart").addEventListener("change",renderAll);
 $("#workerSummarySelect").addEventListener("change",renderWorkerSummary);
 $("#entryClient").addEventListener("change",()=>{renderSiteOptions();renderReports()});
 $("#invoiceClientFilter").addEventListener("change",renderReports);
+$("#personnelStatusFilter").addEventListener("change",renderPersonnel);
+$("#personnelSearch").addEventListener("input",renderPersonnel);
 $("#entryForm").addEventListener("submit",handleEntrySubmit);
 $("#settingsForm").addEventListener("submit",handleSettingsSubmit);
 $("#workerForm").addEventListener("submit",handleWorkerSubmit);
 $("#siteForm").addEventListener("submit",handleSiteSubmit);
+$("#certForm").addEventListener("submit",handleCertSubmit);
 $("#clearEntryForm").addEventListener("click",resetEntryForm);
 $("#resetWorkerForm").addEventListener("click",resetWorkerForm);
 $("#resetSiteForm").addEventListener("click",resetSiteForm);
@@ -900,24 +1323,174 @@ $("#printTimesheetBtn").addEventListener("click",printTimesheet);
 $("#printInvoiceBtn").addEventListener("click",printInvoice);
 $("#closePrintPreview").addEventListener("click",()=>{$("#printPreview").hidden=true;$("#printFrame").srcdoc=""});
 $("#printPreviewBtn").addEventListener("click",()=>{const fw=$("#printFrame").contentWindow;if(fw){fw.focus();fw.print()}});
+$("#addWorkerCardBtn").addEventListener("click",()=>{resetWorkerForm();switchView("adminView")});
+$("#addCertBtn").addEventListener("click",()=>openAddCertModal());
+$("#closeWorkerModal").addEventListener("click",()=>$("#workerModal").hidden=true);
+$("#closeCertModal").addEventListener("click",()=>{$("#certModal").hidden=true});
+$("#editWorkerFromModal").addEventListener("click",function(){editWorker(this.dataset.workerId);$("#workerModal").hidden=true});
 
+// Tab strip (certs)
+$$(".tab-btn").forEach(b=>b.addEventListener("click",function(){
+  const strip=this.closest(".tab-strip");
+  strip.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+  this.classList.add("active");
+  renderCerts();
+}));
+
+// Delegated clicks
 document.addEventListener("click",e=>{
   const ew=e.target.closest("[data-edit-worker]");const dw=e.target.closest("[data-delete-worker]");
   const es=e.target.closest("[data-edit-site]");const ds=e.target.closest("[data-delete-site]");
   const ee=e.target.closest("[data-edit-entry]");const de=e.target.closest("[data-delete-entry]");
+  const vw=e.target.closest("[data-view-worker]");
+  const ec=e.target.closest("[data-edit-cert]");const dc=e.target.closest("[data-delete-cert]");
+  const acw=e.target.closest("[data-add-cert-worker]");
   if(ew)editWorker(ew.dataset.editWorker);
+  if(vw)viewWorkerModal(vw.dataset.viewWorker);
   if(es)editSite(es.dataset.editSite);
   if(ee)editEntry(ee.dataset.editEntry);
-  if(dw&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);save();renderAll()}
+  if(ec)editCert(ec.dataset.editCert);
+  if(acw)openAddCertModal(acw.dataset.addCertWorker);
+  if(dw&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);state.certs=state.certs.filter(c=>c.workerId!==dw.dataset.deleteWorker);save();renderAll()}
   if(ds&&confirm("确定删除这个工地吗？")){state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);save();renderAll()}
   if(de&&confirm("确定删除这条日报吗？")){state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);save();renderAll()}
+  if(dc&&confirm("确定删除这条证书记录吗？")){state.certs=state.certs.filter(x=>x.id!==dc.dataset.deleteCert);save();renderAll()}
 });
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
+// Close modals on overlay click
+["workerModal","certModal"].forEach(id=>{
+  $(`.modal-overlay#${id}`)?.addEventListener("click",function(e){if(e.target===this)this.hidden=true});
+});
+
+// ══════════════════════════════════════════════════════════════
+//  CLOUD SYNC (GitHub)
+// ══════════════════════════════════════════════════════════════
+const GH={
+  owner:"h3interior",repo:"labourflow",file:"data.json",
+  get token(){return localStorage.getItem("lf_gh_token")||""},
+  get branch(){return"main"},
+};
+let ghSha=null;let syncTimer=null;
+
+async function ghGet(){
+  if(!GH.token)return null;
+  try{
+    const r=await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
+      {headers:{Authorization:`token ${GH.token}`,Accept:"application/vnd.github+json"}});
+    if(r.status===404)return null;if(!r.ok)throw new Error(`${r.status}`);
+    const d=await r.json();ghSha=d.sha;
+    return JSON.parse(atob(d.content.replace(/\n/g,"")));
+  }catch(e){console.warn("GitHub read failed:",e.message);return null;}
+}
+
+async function ghPut(data){
+  if(!GH.token)return false;
+  const body={message:`sync ${new Date().toISOString()}`,
+    content:btoa(unescape(encodeURIComponent(JSON.stringify(data)))),branch:GH.branch};
+  if(ghSha)body.sha=ghSha;
+  const r=await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
+    {method:"PUT",headers:{Authorization:`token ${GH.token}`,"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok){const t=await r.text();throw new Error(`HTTP ${r.status} — ${t.slice(0,200)}`);}
+  const d=await r.json();ghSha=d.content?.sha||ghSha;
+  showSyncStatus("✅ 已同步到云端","#18725f");return true;
+}
+
+function showSyncStatus(msg,color){
+  let el=$("#syncStatus");
+  if(!el){el=document.createElement("div");el.id="syncStatus";
+    Object.assign(el.style,{position:"fixed",bottom:"16px",right:"16px",zIndex:200,
+      padding:"8px 14px",borderRadius:"8px",fontSize:"12px",fontWeight:700,
+      background:"#fff",boxShadow:"0 4px 16px rgba(0,0,0,.15)",transition:"opacity .5s"});
+    document.body.appendChild(el);}
+  el.textContent=msg;el.style.color=color;el.style.opacity="1";
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity="0",3000);
+}
+
+function scheduleSave(){
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(async()=>{
+    localStorage.setItem(KEY,JSON.stringify(state));
+    if(GH.token){showSyncStatus("⏳ 同步中...","#66736c");await ghPut(state);}
+  },2000);
+}
+
+const _origSave=save;
+function save(){localStorage.setItem(KEY,JSON.stringify(state));scheduleSave();}
+
+function showTokenSetup(){
+  let overlay=$("#tokenOverlay");
+  if(overlay){overlay.hidden=false;return;}
+  overlay=document.createElement("div");overlay.id="tokenOverlay";
+  overlay.style.cssText="position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px";
+  overlay.innerHTML=`
+    <div style="background:#fff;border-radius:14px;padding:28px;width:100%;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.25)">
+      <div style="font-size:28px;margin-bottom:10px">☁️</div>
+      <h3 style="margin:0 0 8px;font-size:1.05rem">连接GitHub云存储</h3>
+      <p style="color:#66736c;font-size:.86rem;margin:0 0 16px;line-height:1.6">
+        输入GitHub Personal Access Token，数据将自动同步到云端，任何设备都能访问最新数据。
+      </p>
+      <label style="display:grid;gap:6px;color:#66736c;font-size:.83rem;font-weight:600;margin-bottom:12px">
+        GitHub Token (ghp_ 开头)
+        <input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx"
+          style="min-height:40px;border:1px solid #dce3dc;border-radius:8px;padding:0 12px;font-size:14px;width:100%"/>
+      </label>
+      <div id="tokenError" style="color:#b84132;font-size:.83rem;margin-bottom:10px;display:none"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button id="tokenSkip" style="min-height:38px;border:1px solid #dce3dc;background:#fff;border-radius:8px;padding:0 14px;cursor:pointer;font-weight:700">暂时跳过</button>
+        <button id="tokenSave" style="min-height:38px;border:0;background:#18725f;color:#fff;border-radius:8px;padding:0 16px;cursor:pointer;font-weight:700">保存并同步</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  $("#tokenSave").addEventListener("click",async()=>{
+    const token=$("#tokenInput").value.trim();
+    if(!token){$("#tokenError").style.display="block";$("#tokenError").textContent="请输入Token";return;}
+    localStorage.setItem("lf_gh_token",token);$("#tokenError").style.display="none";
+    $("#tokenSave").textContent="连接中...";
+    try{
+      const remote=await ghGet();
+      if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));renderAll();showSyncStatus("✅ 数据已从云端加载","#18725f");}
+      else{
+        const ok=await ghPut(state);
+        if(!ok)throw new Error("写入失败，请检查Token权限是否勾选了 repo");
+      }
+      overlay.hidden=true;
+    }catch(err){
+      $("#tokenError").style.display="block";
+      $("#tokenError").textContent="❌ 错误："+err.message;
+      $("#tokenSave").textContent="保存并同步";
+      localStorage.removeItem("lf_gh_token");
+    }
+  });
+  $("#tokenSkip").addEventListener("click",()=>{overlay.hidden=true;});
+}
+
+function addSyncButton(){
+  const btn=document.createElement("button");
+  btn.textContent="☁️ 云存储设置";
+  btn.style.cssText="min-height:38px;border:1px solid rgba(255,255,255,.18);background:transparent;color:#f8fbf8;border-radius:8px;cursor:pointer;font-weight:700;font-size:.83rem";
+  btn.addEventListener("click",showTokenSetup);
+  $(".sidebar-stats").before(btn);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════════
 setDefaultDates();
 resetWorkerForm();
 resetSiteForm();
-renderAll();
+resetCertForm();
+addSyncButton();
+
+(async()=>{
+  if(GH.token){
+    showSyncStatus("⏳ 从云端加载数据...","#66736c");
+    const remote=await ghGet();
+    if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
+  } else {
+    // skip auto-prompt, user can click ☁️ button manually
+  }
+  renderAll();
+})();
 </script>
 </body>
 </html>
