@@ -61,6 +61,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0
 .panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);padding:16px}
 .panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.ac-list{position:absolute;left:0;right:0;top:100%;z-index:60;background:#fff;border:1px solid #d5d9e0;border-radius:9px;box-shadow:0 8px 22px rgba(20,30,50,.16);max-height:200px;overflow:auto;margin-top:3px}
+.ac-item{padding:10px 12px;font-size:15px;color:#1f2937;cursor:pointer;border-bottom:1px solid #f0f1f4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-item:last-child{border-bottom:none}
+.ac-item:active{background:#eef0ff}
 .form-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .form-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 .wide{grid-column:1/-1}
@@ -417,19 +421,14 @@ td{font-size:.88rem}
           <div class="panel-head"><div><p class="eyebrow">Client Billing</p><h2>工地与客户收费</h2></div></div>
           <input id="siteId" type="hidden"/>
           <div class="form-grid">
-            <label>客户简称 Short name<input id="siteClientShort" list="dlClientShort" autocomplete="off" placeholder="CB" required/></label>
-            <label>客户全称 Full name<input id="siteClient" list="dlClient" autocomplete="off" placeholder="Citibuild Construction Pty Ltd" required/></label>
-            <label>客户ABN<input id="siteClientAbn" list="dlClientAbn" autocomplete="off" placeholder="25 607 468 315"/></label>
-            <label>客户邮箱<input id="siteClientEmail" list="dlClientEmail" autocomplete="off" placeholder="accounts@example.com"/></label>
-            <label>工地名称 Site name<input id="siteName" list="dlSiteName" autocomplete="off" required/></label>
+            <label>客户简称 Short name<input id="siteClientShort" autocomplete="off" placeholder="CB" required/></label>
+            <label>客户全称 Full name<input id="siteClient" autocomplete="off" placeholder="Citibuild Construction Pty Ltd" required/></label>
+            <label>客户ABN<input id="siteClientAbn" autocomplete="off" placeholder="25 607 468 315"/></label>
+            <label>客户邮箱<input id="siteClientEmail" autocomplete="off" placeholder="accounts@example.com"/></label>
+            <label>工地名称 Site name<input id="siteName" autocomplete="off" required/></label>
             <label>收费时薪 Bill rate ($/hr)<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
             <label>GST %<input id="siteTaxRate" type="number" value="10" min="0" step="0.01"/></label>
           </div>
-          <datalist id="dlClientShort"></datalist>
-          <datalist id="dlClient"></datalist>
-          <datalist id="dlClientAbn"></datalist>
-          <datalist id="dlClientEmail"></datalist>
-          <datalist id="dlSiteName"></datalist>
           <div class="button-row">
             <button class="primary-btn" type="submit">保存 Save</button>
             <button class="secondary-btn" id="resetSiteForm" type="button">新增 New</button>
@@ -776,6 +775,34 @@ function fillClientByKey(field){
   if(m.client)$("#siteClient").value=m.client;
   if(!$("#siteClientAbn").value.trim()&&m.clientAbn)$("#siteClientAbn").value=m.clientAbn;
   if(!$("#siteClientEmail").value.trim()&&m.clientEmail)$("#siteClientEmail").value=m.clientEmail;
+}
+// 自定义历史值下拉(iOS Safari 不支持 datalist，这里自己实现)
+function attachAutocomplete(input,getValues){
+  if(!input)return;
+  const label=input.closest("label")||input.parentElement;
+  label.style.position="relative";
+  const box=document.createElement("div");
+  box.className="ac-list";box.hidden=true;
+  label.appendChild(box);
+  function show(){
+    const q=input.value.trim().toLowerCase();
+    const vals=[...new Set(getValues().map(v=>(v||"").trim()).filter(Boolean))]
+      .filter(v=>v.toLowerCase().includes(q))
+      .sort((a,b)=>a.localeCompare(b)).slice(0,10);
+    if(!vals.length){box.hidden=true;return;}
+    box.innerHTML=vals.map(v=>`<div class="ac-item">${esc(v)}</div>`).join("");
+    box.hidden=false;
+  }
+  input.addEventListener("focus",show);
+  input.addEventListener("input",show);
+  input.addEventListener("blur",()=>setTimeout(()=>{box.hidden=true},180));
+  box.addEventListener("pointerdown",ev=>{
+    const it=ev.target.closest(".ac-item");if(!it)return;
+    ev.preventDefault();
+    input.value=it.textContent;
+    box.hidden=true;
+    input.dispatchEvent(new Event("change",{bubbles:true}));
+  });
 }
 
 function renderWorkerSummary(){
@@ -1267,13 +1294,18 @@ function printInvoice(){
     <section class="template-page invoice-page">
       <div class="inv-top-rule"></div>
       <div class="inv-header">
-        <div class="inv-from"><h1>${esc(settings.businessName||"H3 Interior Pty Ltd")}</h1></div>
-        <dl class="inv-meta">
-          <dt>Invoice #</dt><dd>${esc(invoiceNum)}</dd>
-          <dt>Issue date</dt><dd>${issueDate}</dd>
-          <dt>ABN</dt><dd>${esc(settings.businessAbn||"")}</dd>
-          <dt>Due date</dt><dd>${dueDate}</dd>
-        </dl>
+        <div class="inv-from">
+          <h1>${esc(settings.businessName||"H3 Interior Pty Ltd")}</h1>
+          <div class="inv-company">
+            ${settings.businessAbn?`ABN ${esc(settings.businessAbn)}`:""}
+            ${settings.paymentDetails?`<br>${esc(settings.paymentDetails)}`:""}
+          </div>
+        </div>
+        <div class="inv-meta">
+          <div class="inv-num-line">Invoice # <strong>${esc(invoiceNum)}</strong></div>
+          <div class="inv-meta-row"><span>Issue date</span><span>${issueDate}</span></div>
+          <div class="inv-meta-row"><span>Due date</span><span>${dueDate}</span></div>
+        </div>
       </div>
       <div class="inv-to">
         <span class="inv-to-label">Invoice to</span>
@@ -1287,10 +1319,6 @@ function printInvoice(){
         <tfoot><tr><td colspan="3"></td><td>$0.00</td></tr></tfoot>
       </table>
       <div class="inv-bottom">
-        <div class="inv-notes">
-          <strong>Notes,</strong>
-          <span>${esc(settings.paymentDetails||"")}  ${esc(settings.businessAbn||"")}</span>
-        </div>
         <div class="inv-totals">
           <div class="inv-total-row"><span>Subtotal</span><strong>${money(totalRev)}</strong></div>
           <div class="inv-total-row"><span>GST (${siteObj.taxRate||10}%)</span><strong>${money(totalGst)}</strong></div>
@@ -1323,8 +1351,11 @@ function openPrintWindow(title,body,type){
     .inv-top-rule{width:115mm;height:1.5mm;background:#4438d4;margin-bottom:7mm}
     .inv-header{display:grid;grid-template-columns:1.3fr 1fr;width:115mm;align-items:start;margin-bottom:0}
     .inv-from h1{margin:0;color:#6757ff;font-size:18px;font-family:Arial,sans-serif}
-    dl.inv-meta{display:grid;grid-template-columns:26mm 1fr;gap:1.5mm 5mm;margin:0;font-size:10px;font-weight:700}
-    .inv-meta dt{color:#4c4c4c}.inv-meta dd{margin:0;color:#6c6c6c}
+    .inv-company{margin-top:2mm;font-size:9px;color:#8a8a8a;line-height:1.55;max-width:62mm}
+    .inv-meta{font-size:10px;font-weight:700;text-align:right;justify-self:end;min-width:46mm}
+    .inv-num-line{white-space:nowrap;color:#333;margin-bottom:2mm}
+    .inv-num-line strong{color:#6757ff}
+    .inv-meta-row{display:flex;justify-content:space-between;gap:6mm;color:#6c6c6c;margin-bottom:1mm}
     .inv-to{display:grid;gap:2mm;margin-top:28mm;width:115mm;font-size:10px;color:#8a8a8a}
     .inv-to-label{color:#6f6f6f;font-weight:700}.inv-to-name{color:#333;font-weight:700}
     .inv-table{width:115mm;border-collapse:collapse;margin-top:10mm;font-size:10px}
@@ -1334,8 +1365,7 @@ function openPrintWindow(title,body,type){
     .inv-table tbody tr:nth-child(odd) td{background:#fff}
     .inv-table tbody td:first-child{color:#111}
     .inv-table tfoot td{border-bottom:1mm solid #d4d4d4;background:#f0f0f0;height:7mm;padding:1.5mm 2mm;text-align:right;color:#666}
-    .inv-bottom{display:grid;grid-template-columns:1.2fr 1fr;gap:6mm;width:115mm;margin-top:5mm}
-    .inv-notes{display:grid;gap:3mm;color:#8a8a8a;font-size:10px}.inv-notes strong{color:#555}
+    .inv-bottom{display:flex;justify-content:flex-end;width:115mm;margin-top:5mm}
     .inv-total-row{display:grid;grid-template-columns:1fr auto;gap:4mm;margin-bottom:3mm;font-size:10px}
     .inv-total-row span{color:#3f45d7;font-weight:700}.inv-total-row strong{color:#8a8a8a;text-align:right;min-width:24mm}
     .inv-total-row.final span,.inv-total-row.final strong{font-size:13px}
@@ -1366,6 +1396,11 @@ $("#workerForm").addEventListener("submit",handleWorkerSubmit);
 $("#siteForm").addEventListener("submit",handleSiteSubmit);
 $("#siteClientShort").addEventListener("change",()=>fillClientByKey("clientShort"));
 $("#siteClient").addEventListener("change",()=>fillClientByKey("client"));
+attachAutocomplete($("#siteClientShort"),()=>state.sites.map(s=>s.clientShort));
+attachAutocomplete($("#siteClient"),()=>state.sites.map(s=>s.client));
+attachAutocomplete($("#siteClientAbn"),()=>state.sites.map(s=>s.clientAbn));
+attachAutocomplete($("#siteClientEmail"),()=>state.sites.map(s=>s.clientEmail));
+attachAutocomplete($("#siteName"),()=>state.sites.map(s=>s.name));
 $("#certForm").addEventListener("submit",handleCertSubmit);
 $("#clearEntryForm").addEventListener("click",resetEntryForm);
 $("#resetWorkerForm").addEventListener("click",resetWorkerForm);
