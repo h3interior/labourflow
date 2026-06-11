@@ -417,14 +417,19 @@ td{font-size:.88rem}
           <div class="panel-head"><div><p class="eyebrow">Client Billing</p><h2>工地与客户收费</h2></div></div>
           <input id="siteId" type="hidden"/>
           <div class="form-grid">
-            <label>客户简称 Short name<input id="siteClientShort" placeholder="CB" required/></label>
-            <label>客户全称 Full name<input id="siteClient" placeholder="Citibuild Construction Pty Ltd" required/></label>
-            <label>客户ABN<input id="siteClientAbn" placeholder="25 607 468 315"/></label>
-            <label>客户邮箱<input id="siteClientEmail" placeholder="accounts@example.com"/></label>
-            <label>工地名称 Site name<input id="siteName" required/></label>
+            <label>客户简称 Short name<input id="siteClientShort" list="dlClientShort" autocomplete="off" placeholder="CB" required/></label>
+            <label>客户全称 Full name<input id="siteClient" list="dlClient" autocomplete="off" placeholder="Citibuild Construction Pty Ltd" required/></label>
+            <label>客户ABN<input id="siteClientAbn" list="dlClientAbn" autocomplete="off" placeholder="25 607 468 315"/></label>
+            <label>客户邮箱<input id="siteClientEmail" list="dlClientEmail" autocomplete="off" placeholder="accounts@example.com"/></label>
+            <label>工地名称 Site name<input id="siteName" list="dlSiteName" autocomplete="off" required/></label>
             <label>收费时薪 Bill rate ($/hr)<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
             <label>GST %<input id="siteTaxRate" type="number" value="10" min="0" step="0.01"/></label>
           </div>
+          <datalist id="dlClientShort"></datalist>
+          <datalist id="dlClient"></datalist>
+          <datalist id="dlClientAbn"></datalist>
+          <datalist id="dlClientEmail"></datalist>
+          <datalist id="dlSiteName"></datalist>
           <div class="button-row">
             <button class="primary-btn" type="submit">保存 Save</button>
             <button class="secondary-btn" id="resetSiteForm" type="button">新增 New</button>
@@ -656,6 +661,18 @@ function getNextInvoiceNumber(clientShort){
   state.invoiceCounters[key]=n;save();
   return`INV ${clientShort} ${String(n).padStart(3,"0")}-${year}`;
 }
+// 解析"按工地"筛选：__all=全部；否则只取选中工地(client|||site)
+function selectedInvoiceScope(){
+  const v=$("#invoiceClientFilter")?.value||"__all";
+  if(v==="__all"){
+    const e=weeklyEntries();const sd=groupBySite(e);
+    return{all:true,entries:e,client:sd[0]?.client||"",site:sd[0]?.site||"",
+           siteObj:state.sites.find(s=>s.client===(sd[0]?.client))||{}};
+  }
+  const [client,site]=v.split("|||");
+  return{all:false,client,site,siteObj:getSite(client,site)||{},
+         entries:weeklyEntries().filter(e=>e.client===client&&e.site===site)};
+}
 
 // ══════════════════════════════════════════════════════════════
 //  RENDER
@@ -682,8 +699,19 @@ function renderOptions(){
   if(clients.includes(pc))$("#entryClient").value=pc;
   renderSiteOptions(ps);
   const sel=$("#invoiceClientFilter")?.value||"__all";
-  $("#invoiceClientFilter").innerHTML=[`<option value="__all">全部客户</option>`,...clients.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`)].join("");
-  if(clients.includes(sel)||sel==="__all")$("#invoiceClientFilter").value=sel;
+  const byClient=new Map();
+  state.sites.forEach(s=>{if(!byClient.has(s.client))byClient.set(s.client,[]);byClient.get(s.client).push(s);});
+  let invHtml=`<option value="__all">全部工地 All sites</option>`;
+  byClient.forEach((list,client)=>{
+    const short=list[0].clientShort?list[0].clientShort+" · ":"";
+    invHtml+=`<optgroup label="${esc(short)}${esc(client)}">`+
+      list.map(s=>`<option value="${esc(s.client)}|||${esc(s.name)}">${esc(s.name)}</option>`).join("")+
+      `</optgroup>`;
+  });
+  $("#invoiceClientFilter").innerHTML=invHtml;
+  const hasSel=[...$("#invoiceClientFilter").options].some(o=>o.value===sel);
+  $("#invoiceClientFilter").value=hasSel?sel:"__all";
+  renderSiteDatalists();
 }
 
 function renderSiteOptions(preferred=""){
@@ -726,6 +754,28 @@ function renderSites(){
         <button class="danger-btn" data-delete-site="${s.id}" type="button">删除</button>
       </div></td>
     </tr>`).join("")||`<tr><td colspan="4" class="muted">暂无工地</td></tr>`;
+}
+
+// 用历史输入填充 Client Billing 的各个下拉(datalist)
+function renderSiteDatalists(){
+  const uniq=a=>[...new Set(a.map(x=>(x||"").trim()).filter(Boolean))].sort((p,q)=>p.localeCompare(q));
+  const fill=(id,vals)=>{const el=$(id);if(el)el.innerHTML=vals.map(v=>`<option value="${esc(v)}"></option>`).join("");};
+  fill("#dlClientShort",uniq(state.sites.map(s=>s.clientShort)));
+  fill("#dlClient",uniq(state.sites.map(s=>s.client)));
+  fill("#dlClientAbn",uniq(state.sites.map(s=>s.clientAbn)));
+  fill("#dlClientEmail",uniq(state.sites.map(s=>s.clientEmail)));
+  fill("#dlSiteName",uniq(state.sites.map(s=>s.name)));
+}
+// 选中已存在的客户(简称或全称)时，自动带出该客户的全称/简称/ABN/邮箱
+function fillClientByKey(field){
+  const sel=field==="client"?"#siteClient":"#siteClientShort";
+  const val=$(sel).value.trim().toLowerCase();if(!val)return;
+  const m=state.sites.find(s=>String(s[field]||"").trim().toLowerCase()===val);
+  if(!m)return;
+  if(m.clientShort)$("#siteClientShort").value=m.clientShort;
+  if(m.client)$("#siteClient").value=m.client;
+  if(!$("#siteClientAbn").value.trim()&&m.clientAbn)$("#siteClientAbn").value=m.clientAbn;
+  if(!$("#siteClientEmail").value.trim()&&m.clientEmail)$("#siteClientEmail").value=m.clientEmail;
 }
 
 function renderWorkerSummary(){
@@ -1150,12 +1200,12 @@ function timesheetWorkerBlock(worker,days){
 
 function printTimesheet(){
   const range=weekRange();
-  const selClient=$("#invoiceClientFilter").value;
-  const srcEntries=selClient==="__all"?weeklyEntries():weeklyEntries().filter(e=>e.client===selClient);
+  const scope=selectedInvoiceScope();
+  const srcEntries=scope.entries;
   const siteData=groupBySite(srcEntries);
-  const mainSite=siteData[0]?.site||"Job Site";
-  const mainClient=siteData[0]?.client||"Client";
-  const mainClientShort=state.sites.find(s=>s.client===mainClient)?.clientShort||"";
+  const mainSite=scope.all?(siteData[0]?.site||"Job Site"):scope.site;
+  const mainClient=scope.all?(siteData[0]?.client||"Client"):scope.client;
+  const mainClientShort=(scope.siteObj&&scope.siteObj.clientShort)||state.sites.find(s=>s.client===mainClient)?.clientShort||"";
   const days=daysOfWeek();
   const workers=groupForTimesheet(srcEntries);
   const blocks=workers.map(w=>timesheetWorkerBlock(w,days)).join("");
@@ -1186,12 +1236,12 @@ function printTimesheet(){
 
 function printInvoice(){
   const range=weekRange();
-  const selClient=$("#invoiceClientFilter").value;
-  const srcEntries=selClient==="__all"?weeklyEntries():weeklyEntries().filter(e=>e.client===selClient);
-  if(!srcEntries.length){alert("本周没有日报数据，无法生成Invoice。");return}
+  const scope=selectedInvoiceScope();
+  const srcEntries=scope.entries;
+  if(!srcEntries.length){alert("本周该工地没有日报数据，无法生成Invoice。");return}
   const siteData=groupBySite(srcEntries);
-  const mainClient=selClient==="__all"?siteData[0]?.client||"Client":selClient;
-  const siteObj=state.sites.find(s=>s.client===mainClient)||{};
+  const mainClient=scope.all?(siteData[0]?.client||"Client"):scope.client;
+  const siteObj=scope.all?(state.sites.find(s=>s.client===mainClient)||{}):(scope.siteObj||{});
   const clientShort=siteObj.clientShort||"INV";
   const manualNum=$("#invoiceNumber").value.trim();
   const invoiceNum=manualNum?`INV ${clientShort} ${manualNum}`:getNextInvoiceNumber(clientShort);
@@ -1199,7 +1249,7 @@ function printInvoice(){
   const dueDate=fmtDmy(isoDate(addDays(parseDate(range.endIso),7)));
   const settings=state.settings;
   const workers=groupForTimesheet(srcEntries);
-  const siteName=siteData[0]?.site||"";
+  const siteName=scope.all?(siteData[0]?.site||""):scope.site;
   const lineItems=workers.map(w=>{
     const hours=Object.values(w.days).reduce((s,d)=>s+d.hours,0);
     return{hours,rate:w.rate,total:hours*w.rate};
@@ -1314,6 +1364,8 @@ $("#entryForm").addEventListener("submit",handleEntrySubmit);
 $("#settingsForm").addEventListener("submit",handleSettingsSubmit);
 $("#workerForm").addEventListener("submit",handleWorkerSubmit);
 $("#siteForm").addEventListener("submit",handleSiteSubmit);
+$("#siteClientShort").addEventListener("change",()=>fillClientByKey("clientShort"));
+$("#siteClient").addEventListener("change",()=>fillClientByKey("client"));
 $("#certForm").addEventListener("submit",handleCertSubmit);
 $("#clearEntryForm").addEventListener("click",resetEntryForm);
 $("#resetWorkerForm").addEventListener("click",resetWorkerForm);
