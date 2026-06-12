@@ -646,7 +646,7 @@ const money  = v => new Intl.NumberFormat("en-AU",{style:"currency",currency:"AU
 const num    = v => (Number(v)||0).toFixed(2);
 const esc    = v => String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 const uid    = p => `${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-const isoDate= d => d.toISOString().slice(0,10);
+const isoDate= d => {const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return`${y}-${m}-${day}`}
 const today  = new Date();
 
 function mondayOf(d){const c=new Date(d);const day=c.getDay()||7;c.setDate(c.getDate()-day+1);c.setHours(0,0,0,0);return c}
