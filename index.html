@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>LabourFlow | 工地人员管理</title>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="mobile-web-app-capable" content="yes"/>
@@ -129,6 +129,28 @@ td{font-size:.88rem}
 /* Cert expiry */
 .cert-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:.86rem}
 .cert-row:last-child{border-bottom:none}
+/* Accordion */
+.acc-item{border-bottom:1px solid var(--line)}
+.acc-item:last-child{border-bottom:none}
+.acc-trigger{width:100%;border:0;background:transparent;text-align:left;cursor:pointer;
+  padding:11px 4px;display:flex;align-items:center;gap:10px;font-size:.9rem}
+.acc-trigger:hover{background:var(--surface-2)}
+.acc-trigger .acc-chevron{margin-left:auto;font-size:.75rem;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.acc-trigger.open .acc-chevron{transform:rotate(180deg)}
+.acc-body{display:none;padding:0 0 10px}
+.acc-body.open{display:block}
+.acc-worker-meta{display:flex;flex-wrap:wrap;gap:8px 16px;padding:6px 4px 10px;font-size:.83rem;color:var(--muted)}
+.acc-worker-meta strong{color:var(--text)}
+/* 二级手风琴（日期层） */
+.acc-sub-item{border-top:1px solid var(--line)}
+.acc-sub-trigger{width:100%;border:0;background:var(--surface-2);text-align:left;cursor:pointer;
+  padding:8px 10px 8px 18px;display:flex;align-items:center;gap:8px;font-size:.84rem}
+.acc-sub-trigger:hover{background:#e5ede9}
+.acc-sub-trigger .acc-chevron{margin-left:auto;font-size:.72rem;color:var(--muted);transition:transform .2s}
+.acc-sub-trigger.open .acc-chevron{transform:rotate(180deg)}
+.acc-sub-body{display:none;padding:0 0 4px 0}
+.acc-sub-body.open{display:block}
+
 /* Print */
 .print-preview{position:fixed;inset:0;z-index:50;display:grid;grid-template-rows:auto 1fr;background:rgba(0,0,0,.75)}
 .print-preview[hidden]{display:none}
@@ -156,7 +178,7 @@ td{font-size:.88rem}
 .avail-day.available{background:#e3f5ec;border-color:#9fd4b8}
 .avail-day.unavailable{background:#fde8e6;border-color:#f5bcb8}
 .avail-day.partial{background:#fff3e0;border-color:#ffc97a}
-/* responsive */
+/* ── 响应式：平板 ── */
 @media(max-width:1000px){
   .app-shell{grid-template-columns:1fr}
   .sidebar{position:static;padding:14px}
@@ -165,19 +187,115 @@ td{font-size:.88rem}
   .kpi-grid{grid-template-columns:repeat(2,1fr)}
   .grid.two,.grid.three,.form-grid.four,.form-grid.three{grid-template-columns:1fr}
 }
+
+/* ── 响应式：手机（≤640px） ── */
 @media(max-width:640px){
-  .app-shell{display:block}
-  .sidebar{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,.12)}
+  /* 整体布局 */
+  .app-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+
+  /* 顶部导航栏：固定在顶部，适配 Dynamic Island */
+  .sidebar{
+    position:fixed;top:0;left:0;right:0;bottom:auto;z-index:20;
+    padding:env(safe-area-inset-top) 8px 6px;
+    border-top:none;border-bottom:1px solid rgba(255,255,255,.12);
+  }
   .brand{display:none}
-  .nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+  .nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
   .nav-section{display:none}
-  .nav-btn{justify-content:center;flex-direction:column;min-height:46px;padding:4px;font-size:.65rem;text-align:center;gap:2px}
-  .nav-btn .nav-icon{font-size:1.2rem}
-  .main{padding:12px 12px calc(80px + env(safe-area-inset-bottom))}
-  .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .worker-cards{grid-template-columns:1fr}
-  .form-grid{grid-template-columns:1fr}
-  .panel{padding:12px}
+  .nav-btn{
+    justify-content:center;flex-direction:column;
+    min-height:52px;padding:6px 2px;
+    font-size:.6rem;text-align:center;gap:3px;
+    border-radius:10px;border-color:transparent
+  }
+  .nav-btn .nav-icon{font-size:1.35rem;line-height:1}
+  .nav-btn.active{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+
+  /* 主内容区：顶部留出导航栏高度 + Dynamic Island，底部留出 Home Indicator */
+  .main{
+    padding-top:calc(env(safe-area-inset-top) + 68px);
+    padding-left:14px;
+    padding-right:14px;
+    padding-bottom:calc(env(safe-area-inset-bottom) + 20px);
+    overflow-x:hidden;
+  }
+
+  /* Topbar（页面标题 + 周选择器）竖排 */
+  .topbar{flex-direction:column;align-items:stretch;gap:10px;margin-bottom:14px}
+  .topbar h1{font-size:1.15rem}
+  .topbar h1 small{font-size:.55em}
+  .week-picker{min-width:0;width:100%}
+  .week-picker label{flex-direction:row;align-items:center;gap:8px;font-size:.8rem}
+  .week-picker input{min-height:36px;flex:1}
+
+  /* KPI 格子：2列 */
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .kpi{padding:10px}
+  .kpi strong{font-size:1.2rem}
+  .kpi small,.kpi span{font-size:.7rem}
+
+  /* Panel */
+  .panel{padding:12px;border-radius:10px}
+  .panel-head{flex-direction:column;align-items:stretch;gap:8px}
+  .panel-head .button-row{flex-wrap:wrap;gap:6px}
+  .panel-head select,.panel-head input{min-height:36px;font-size:.85rem}
+
+  /* 表单：单列 */
+  .form-grid,.form-grid.three,.form-grid.four{grid-template-columns:1fr;gap:10px}
+  .grid.two,.grid.three{grid-template-columns:1fr}
+  label{font-size:.82rem;gap:4px}
+  input,select,textarea{min-height:44px;font-size:16px;border-radius:8px}/* 16px防止iOS自动缩放 */
+
+  /* 工人卡片 */
+  .worker-cards{grid-template-columns:1fr;gap:10px}
+  .worker-card{padding:14px}
+  .worker-card-actions{flex-wrap:wrap}
+  .worker-card-actions button{min-height:40px;font-size:.82rem}
+
+  /* 按钮 */
+  .primary-btn,.secondary-btn,.danger-btn,.warn-btn{min-height:40px;font-size:.85rem}
+  .button-row{gap:6px}
+
+  /* 表格：横向滚动 */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{font-size:.8rem;min-width:460px}
+  th,td{padding:7px 6px}
+
+  /* 手风琴 */
+  .acc-trigger{padding:10px 4px;font-size:.85rem}
+  .acc-sub-trigger{padding:8px 10px 8px 14px;font-size:.8rem}
+
+  /* 计算条 */
+  .calculated-strip{padding:8px 10px}
+  .calculated-strip strong{font-size:1.2rem}
+
+  /* Badge/Pill */
+  .badge{font-size:.7rem;height:20px;padding:0 6px}
+  .pill{font-size:.78rem;min-height:22px}
+
+  /* Modal */
+  .modal-overlay{padding:12px;align-items:flex-end}
+  .modal{border-radius:14px 14px 0 0;max-height:88vh;padding:20px 16px}
+
+  /* 打印预览栏 */
+  .print-preview-bar{padding:10px 12px;flex-wrap:wrap;gap:8px}
+  .print-preview-bar .button-row{width:100%;justify-content:flex-end}
+
+  /* 周报利润页 topbar 按钮区 */
+  #reportsView .panel-head .button-row{flex-direction:row;flex-wrap:wrap}
+  #reportsView .panel-head select{flex:1;min-width:120px}
+  #reportsView .panel-head input{width:100px}
+
+  /* 日报表单：让工时预览和提交按钮更突出 */
+  .calculated-strip{margin:10px 0}
+  #entrySubmitLabel{min-height:48px;font-size:1rem;border-radius:10px}
+
+  /* Tab strip */
+  .tab-strip{gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab-btn{min-height:38px;padding:0 10px;font-size:.8rem;white-space:nowrap}
+
+  /* 证书页 */
+  #certsView .panel-head{flex-direction:row;align-items:center}
 }
 </style>
 </head>
@@ -359,24 +477,25 @@ td{font-size:.88rem}
         </div>
       </div>
 
+      <!-- 工人工资周报：手风琴 -->
       <div class="panel" style="margin-top:14px">
-        <div class="panel-head"><div><p class="eyebrow">Worker Pay</p><h2>工人工资周报</h2></div></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>工人</th><th>天数</th><th>工时</th><th>时薪</th><th>工资</th><th>补贴</th><th>应付合计</th><th>真实成本</th></tr></thead>
-            <tbody id="workerPaySummaryTable"></tbody>
-          </table>
+        <div class="panel-head">
+          <div><p class="eyebrow">Worker Pay</p><h2>工人工资周报</h2></div>
+          <button class="secondary-btn" id="payExpandAll" type="button" style="font-size:.82rem">全部展开</button>
         </div>
+        <div id="workerPayAccordion"></div>
       </div>
 
+      <!-- 日报明细：筛选 + 按日期分组折叠 -->
       <div class="panel" style="margin-top:14px">
-        <div class="panel-head"><div><p class="eyebrow">Daily Records</p><h2>日报明细</h2></div></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>日期</th><th>工人</th><th>客户</th><th>工地</th><th>时间</th><th>工时</th><th>收入</th><th>成本</th><th></th></tr></thead>
-            <tbody id="entriesTable"></tbody>
-          </table>
+        <div class="panel-head">
+          <div><p class="eyebrow">Daily Records</p><h2>日报明细</h2></div>
+          <div class="button-row">
+            <select id="entriesWorkerFilter" style="min-width:150px"><option value="__all">全部工地</option></select>
+            <button class="secondary-btn" id="entriesExpandAll" type="button" style="font-size:.82rem">全部展开</button>
+          </div>
         </div>
+        <div id="entriesAccordion"></div>
       </div>
     </section>
 
@@ -445,7 +564,10 @@ td{font-size:.88rem}
           </div>
         </div>
         <div class="panel">
-          <div class="panel-head"><div><p class="eyebrow">Sites</p><h2>工地列表</h2></div></div>
+          <div class="panel-head">
+            <div><p class="eyebrow">Sites</p><h2>工地列表</h2></div>
+            <select id="sitesClientFilter" style="min-width:140px;max-width:180px"><option value="__all">全部客户</option></select>
+          </div>
           <div class="table-wrap compact">
             <table><thead><tr><th>客户</th><th>工地</th><th>收费</th><th></th></tr></thead>
             <tbody id="sitesTable"></tbody></table>
@@ -744,7 +866,18 @@ function renderWorkers(){
 }
 
 function renderSites(){
-  $("#sitesTable").innerHTML=state.sites.map(s=>`
+  // 更新客户筛选下拉（保留已选值）
+  const prev=$("#sitesClientFilter").value||"__all";
+  const clients=[...new Set(state.sites.map(s=>s.client).filter(Boolean))].sort();
+  $("#sitesClientFilter").innerHTML=`<option value="__all">全部客户</option>`+
+    clients.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  if(clients.includes(prev))$("#sitesClientFilter").value=prev;
+  else $("#sitesClientFilter").value="__all";
+
+  const filterClient=$("#sitesClientFilter").value||"__all";
+  const filtered=filterClient==="__all"?state.sites:state.sites.filter(s=>s.client===filterClient);
+
+  $("#sitesTable").innerHTML=filtered.map(s=>`
     <tr>
       <td><strong>${esc(s.clientShort||"")}</strong> ${esc(s.client)}</td>
       <td>${esc(s.name)}</td><td>${money(s.billRate)}/h</td>
@@ -961,25 +1094,151 @@ function renderReports(){
       <td>${money(item.cost)}</td><td><strong>${money(item.profit)}</strong></td>
       <td>${num(margin)}%</td></tr>`;
   }).join("")||`<tr><td colspan="7" class="muted">本周暂无日报</td></tr>`;
-  $("#workerPaySummaryTable").innerHTML=groupByWorker().map(item=>`
-    <tr><td><strong>${esc(item.workerName)}</strong></td><td>${item.days.size}</td>
-    <td>${num(item.hours)}</td><td>${money(item.payRate)}/h</td>
-    <td>${money(item.wage)}</td><td>${money(item.allowance)}</td>
-    <td><strong>${money(item.payable)}</strong></td><td>${money(item.realCost)}</td></tr>
-  `).join("")||`<tr><td colspan="8" class="muted">本周暂无数据</td></tr>`;
-  $("#entriesTable").innerHTML=weeklyEntries().map(e=>{
-    const r=getRates(e);
-    return`<tr>
-      <td>${fmtShortDate(e.date)}</td>
-      <td>${esc(r.worker?.name||"?")}</td>
-      <td>${esc(e.client)}</td><td>${esc(e.site)}</td>
-      <td>${e.start}–${e.end}</td><td>${num(e.hours)}</td>
-      <td>${money(r.revenue)}</td><td>${money(r.cost)}</td>
-      <td><div class="table-actions">
-        <button class="secondary-btn" data-edit-entry="${e.id}" type="button">编辑</button>
-        <button class="danger-btn" data-delete-entry="${e.id}" type="button">删除</button>
-      </div></td></tr>`;
-  }).join("")||`<tr><td colspan="9" class="muted">本周暂无日报</td></tr>`;
+
+  // ── 工人工资周报：手风琴 ──
+  const payData=groupByWorker();
+  const allEntries=weeklyEntries();
+  if(!payData.length){
+    $("#workerPayAccordion").innerHTML=`<div class="muted" style="padding:14px 4px;font-size:.88rem">本周暂无数据</div>`;
+  }else{
+    $("#workerPayAccordion").innerHTML=payData.map((item,i)=>{
+      // 该工人本周每天明细
+      const wEntries=allEntries.filter(e=>{
+        const w=getWorker(e.workerId);return(w?.name||"")=== item.workerName;
+      }).sort((a,b)=>a.date.localeCompare(b.date));
+      const dayRows=wEntries.map(e=>`
+        <tr>
+          <td>${fmtShortDate(e.date)}</td>
+          <td>${esc(e.site)}</td>
+          <td>${e.start}–${e.end}</td>
+          <td>${num(e.hours)} h</td>
+          <td>${money(e.hours*item.payRate)}</td>
+          <td>${money(Number(e.allowance||0))}</td>
+        </tr>`).join("");
+      return`
+      <div class="acc-item">
+        <button class="acc-trigger" data-acc="pay-${i}" type="button">
+          <span class="pill" style="background:#e9f2ef;color:#0d5c37;font-size:.82rem">${esc(item.workerName)}</span>
+          <span style="color:var(--muted);font-size:.82rem">${item.days.size}天 · ${num(item.hours)}h</span>
+          <span style="margin-left:4px;font-weight:800">${money(item.payable)}</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-body" id="pay-${i}">
+          <div class="acc-worker-meta">
+            <span>时薪 <strong>${money(item.payRate)}/h</strong></span>
+            <span>工资 <strong>${money(item.wage)}</strong></span>
+            <span>补贴 <strong>${money(item.allowance)}</strong></span>
+            <span>应付合计 <strong style="color:var(--primary)">${money(item.payable)}</strong></span>
+            <span>真实成本 <strong>${money(item.realCost)}</strong></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>日期</th><th>工地</th><th>时间</th><th>工时</th><th>工资</th><th>补贴</th></tr></thead>
+              <tbody>${dayRows||`<tr><td colspan="6" class="muted">无记录</td></tr>`}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  // ── 日报明细：工地筛选 + 按工地分组折叠 ──
+  // 更新筛选下拉（保留已选值）
+  const prevFilter=$("#entriesWorkerFilter").value||"__all";
+  const siteKeys=[...new Set(allEntries.map(e=>`${e.client}|||${e.site}`))].sort();
+  $("#entriesWorkerFilter").innerHTML=`<option value="__all">全部工地</option>`+
+    siteKeys.map(k=>{const[c,s]=k.split("|||");return`<option value="${esc(k)}">${esc(s)} (${esc(c)})</option>`}).join("");
+  if(siteKeys.includes(prevFilter))$("#entriesWorkerFilter").value=prevFilter;
+  else $("#entriesWorkerFilter").value="__all";
+
+  renderEntriesAccordion();
+}
+
+function renderEntriesAccordion(){
+  const filterKey=$("#entriesWorkerFilter").value||"__all";
+  const filtered=weeklyEntries().filter(e=>{
+    if(filterKey==="__all")return true;
+    const[fc,fs]=filterKey.split("|||");
+    return e.client===fc&&e.site===fs;
+  });
+
+  if(!filtered.length){
+    $("#entriesAccordion").innerHTML=`<div class="muted" style="padding:14px 4px;font-size:.88rem">暂无日报记录</div>`;
+    return;
+  }
+
+  // 一级：按工地分组
+  const bySite=new Map();
+  filtered.forEach(e=>{
+    const key=`${e.client}|||${e.site}`;
+    if(!bySite.has(key))bySite.set(key,[]);
+    bySite.get(key).push(e);
+  });
+
+  $("#entriesAccordion").innerHTML=[...bySite.entries()].map(([siteKey,siteEntries],si)=>{
+    const[client,site]=siteKey.split("|||");
+    const siteHours=siteEntries.reduce((s,e)=>s+e.hours,0);
+    const siteRev=siteEntries.reduce((s,e)=>s+getRates(e).revenue,0);
+
+    // 二级：按日期分组
+    const byDate=new Map();
+    siteEntries.forEach(e=>{
+      if(!byDate.has(e.date))byDate.set(e.date,[]);
+      byDate.get(e.date).push(e);
+    });
+    const dateSorted=[...byDate.entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+
+    const dateBlocks=dateSorted.map(([date,dayEntries],di)=>{
+      const dayHours=dayEntries.reduce((s,e)=>s+e.hours,0);
+      const dayRev=dayEntries.reduce((s,e)=>s+getRates(e).revenue,0);
+      const subId=`entry-${si}-${di}`;
+      const rows=dayEntries.map(e=>{
+        const r=getRates(e);
+        return`<tr>
+          <td>${esc(r.worker?.name||"?")}</td>
+          <td>${e.start}–${e.end}</td>
+          <td><span class="pill">${num(e.hours)}h</span></td>
+          <td>${money(r.revenue)}</td>
+          <td>${money(r.cost)}</td>
+          <td><div class="table-actions">
+            <button class="secondary-btn" data-edit-entry="${e.id}" type="button">编辑</button>
+            <button class="danger-btn" data-delete-entry="${e.id}" type="button">删除</button>
+          </div></td>
+        </tr>`;
+      }).join("");
+      return`
+      <div class="acc-sub-item">
+        <button class="acc-sub-trigger" data-sub-acc="${subId}" type="button">
+          <span style="font-weight:700;min-width:110px">${fmtShortDate(date)}</span>
+          <span style="color:var(--muted);font-size:.8rem">${dayEntries.length} 人 · ${num(dayHours)}h</span>
+          <span style="font-size:.82rem;color:var(--primary);margin-left:4px">${money(dayRev)}</span>
+          <span class="acc-chevron">▼</span>
+        </button>
+        <div class="acc-sub-body" id="${subId}">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>工人</th><th>时间</th><th>工时</th><th>收入</th><th>成本</th><th></th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+
+    return`
+    <div class="acc-item">
+      <button class="acc-trigger" data-acc="entry-${si}" type="button">
+        <span style="font-weight:800">${esc(site)}</span>
+        <span style="color:var(--muted);font-size:.82rem;margin-left:6px">${esc(client)}</span>
+        <span style="color:var(--muted);font-size:.82rem;margin-left:8px">${siteEntries.length} 条 · ${num(siteHours)}h</span>
+        <span style="margin-left:4px;font-size:.85rem;color:var(--primary)">${money(siteRev)}</span>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body" id="entry-${si}">
+        ${dateBlocks}
+      </div>
+    </div>`;
+  }).join("");
 }
 
 function renderAll(){
@@ -1019,13 +1278,16 @@ function handleEntrySubmit(e){
   if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在管理设置添加工人和工地。");return}
   const hours=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
   const id=$("#entryId").value||uid("entry");
-  const entry={id,workerId:$("#entryWorker").value,date:$("#entryDate").value,
+  const entryDate=$("#entryDate").value;
+  const entry={id,workerId:$("#entryWorker").value,date:entryDate,
     client:$("#entryClient").value.trim(),site:$("#entrySite").value.trim(),
     start:$("#entryStart").value,end:$("#entryEnd").value,
     breakMinutes:Number($("#entryBreak").value||0),allowance:Number($("#entryAllowance").value||0),
     notes:$("#entryNotes").value.trim(),hours};
   const idx=state.entries.findIndex(x=>x.id===id);
   if(idx>=0)state.entries[idx]=entry;else state.entries.push(entry);
+  // 关键修复：把统计周自动对齐到该日报所在周的周一，确保保存后立即能在周报看到数据
+  $("#weekStart").value=isoDate(mondayOf(parseDate(entryDate)));
   save();resetEntryForm();renderAll();switchView("reportsView");
 }
 
@@ -1208,7 +1470,7 @@ function timesheetWorkerBlock(worker,days){
     const rec=worker.days[day.iso];if(!rec)return"";
     if(kind==="start")return fmtTime(rec.starts.sort()[0]);
     if(kind==="finish")return fmtTime(rec.ends.sort().at(-1));
-    if(kind==="hours")return fmtQty(rec.hours);
+    if(kind==="hours")return fmtHours(rec.hours);
     return"";
   };
   const dh=days.map(d=>`<th>${d.label}</th>`).join("");
@@ -1218,9 +1480,9 @@ function timesheetWorkerBlock(worker,days){
     <tbody>
       <tr><td>Start</td>${days.map(d=>`<td>${cell(d,"start")}</td>`).join("")}<td></td></tr>
       <tr><td>Finish</td>${days.map(d=>`<td>${cell(d,"finish")}</td>`).join("")}<td></td></tr>
-      <tr><td>Payment time</td>${days.map(d=>`<td>${cell(d,"hours")}</td>`).join("")}<td>${fmtQty(wkHours)}</td></tr>
-      <tr><td>Rate</td>${days.map(()=>"<td></td>").join("")}<td>${compactMoney(worker.rate)}/hr+GST</td></tr>
-      <tr><td>Total</td>${days.map(()=>"<td></td>").join("")}<td>${compactMoney(wkTotal)}+GST</td></tr>
+      <tr><td>Payment time</td>${days.map(d=>`<td>${cell(d,"hours")}</td>`).join("")}<td>${fmtHours(wkHours)}</td></tr>
+      <tr><td>Rate</td>${days.map(()=>"<td></td>").join("")}<td>$${fmtHours(worker.rate)}/hr+GST</td></tr>
+      <tr><td>Total</td>${days.map(()=>"<td></td>").join("")}<td>${fmtMoneyCompact(wkTotal)}+GST</td></tr>
     </tbody>
   </table>`;
 }
@@ -1232,30 +1494,42 @@ function printTimesheet(){
   const siteData=groupBySite(srcEntries);
   const mainSite=scope.all?(siteData[0]?.site||"Job Site"):scope.site;
   const mainClient=scope.all?(siteData[0]?.client||"Client"):scope.client;
-  const mainClientShort=(scope.siteObj&&scope.siteObj.clientShort)||state.sites.find(s=>s.client===mainClient)?.clientShort||"";
   const days=daysOfWeek();
   const workers=groupForTimesheet(srcEntries);
   const blocks=workers.map(w=>timesheetWorkerBlock(w,days)).join("");
+
+  // Amount 行：每天有多少工人上工
   const dayCounts=days.map(day=>{
-    const ws=new Set(srcEntries.filter(e=>e.date===day.iso).map(e=>e.workerId));return ws.size||"";
+    const ws=new Set(srcEntries.filter(e=>e.date===day.iso).map(e=>e.workerId));
+    return ws.size||"";
   });
   const totalRev=siteData.reduce((s,i)=>s+i.revenue,0);
+
   openPrintWindow("Weekly Time Sheet",`
     <section class="template-page">
-      <div class="ts-header">
-        <div>WEEKLY TIME SHEET OF H3<br>Interior (Frank)</div>
-        <div>${esc(mainSite)}</div>
-        <div>${esc(mainClient)}</div>
+      <!-- 顶部：左边工地+工期，右边H3标题+客户 -->
+      <div class="ts-top">
+        <div class="ts-top-left">
+          <div class="ts-site-name">${esc(mainSite)}</div>
+          <div class="ts-period">Working period ${fmtDmy(range.startIso)}-${fmtDmy(range.endIso)}</div>
+        </div>
+        <div class="ts-top-right">
+          <div class="ts-h3-title">WEEKLY TIME SHEET OF H3<br>Interior (Frank)</div>
+          <div class="ts-client-name">${esc(mainClient)}</div>
+        </div>
       </div>
-      <div class="period-row">
-        <span class="period-label">Working period</span>
-        <span class="period-value">${fmtDmy(range.startIso)}-${fmtDmy(range.endIso)}</span>
-      </div>
+
       ${blocks||"<p>No records this week</p>"}
-      <table class="ts-table amount-table">
-        <colgroup><col class="col-label">${days.map(()=>`<col class="col-day">`).join("")}<col class="col-total"></colgroup>
+
+      <!-- Amount 汇总行 -->
+      <table class="amount-table" style="width:155mm;border-collapse:collapse;table-layout:fixed">
+        <colgroup><col style="width:28mm">${days.map(()=>`<col style="width:16mm">`).join("")}<col style="width:24mm"></colgroup>
         <tbody>
-          <tr><td>Amount</td>${dayCounts.map(c=>`<td>${c}</td>`).join("")}<td>${compactMoney(totalRev)}+GST</td></tr>
+          <tr>
+            <td style="font-weight:700;font-size:9.5px;border:none">Amount</td>
+            ${dayCounts.map(c=>`<td style="border:1px solid #b0b8b0;height:4.5mm;padding:1px 4px;font-size:9.5px;text-align:center;font-weight:700">${c}</td>`).join("")}
+            <td style="border:1px solid #b0b8b0;height:4.5mm;padding:1px 4px;font-size:9.5px;text-align:right;font-weight:700">${fmtMoneyCompact(totalRev)}+GST</td>
+          </tr>
         </tbody>
       </table>
     </section>`,"timesheet");
@@ -1337,19 +1611,35 @@ function openPrintWindow(title,body,type){
   const tsStyles=`
     body{margin:0;background:#fff;color:#293845;font-family:"Trebuchet MS",Arial,sans-serif}
     .template-page{box-sizing:border-box;width:210mm;min-height:297mm;background:#fff;padding:10mm}
-    .ts-header{display:grid;grid-template-columns:2fr 1fr 1.8fr;width:155mm;
-      background:#293845;color:#fff;font-size:13px;font-weight:700;line-height:1.2}
-    .ts-header>div{padding:4px 5px;min-height:13mm;white-space:pre-line}
-    .period-row{display:flex;gap:6mm;margin:3mm 0;width:155mm}
-    .period-label{color:#7d8e50;font-size:10px}.period-value{color:#7d8e50;font-size:10px;font-weight:700}
-    .ts-table{width:155mm;border-collapse:collapse;table-layout:fixed;margin:2mm 0 6mm;font-size:10px}
-    .ts-table .col-label{width:32mm}.ts-table .col-day{width:14mm}.ts-table .col-total{width:22mm}
-    .ts-table thead th{background:#293845;color:#fff;border:1px solid #293845;height:5mm;padding:1px 3px;text-align:left}
-    .ts-table tbody td{border:1px solid #b0b8b0;height:4.5mm;padding:1px 3px;color:#7d8e50;text-align:right}
-    .ts-table tbody td:first-child{background:#f1eeea;color:#293845;text-align:left}
-    .amount-table{margin-top:8mm}
-    .amount-table td:first-child{background:transparent!important;color:#293845!important;text-align:left!important;font-weight:700}
+
+    /* ── 顶部标题区：左边工地/工期，右边H3标题/客户 ── */
+    .ts-top{display:flex;justify-content:space-between;align-items:flex-start;width:155mm;margin-bottom:4mm}
+    .ts-top-left{}
+    .ts-site-name{font-size:15px;font-weight:900;color:#293845;line-height:1.2}
+    .ts-period{font-size:10px;color:#7d8e50;font-weight:700;margin-top:2mm}
+    .ts-top-right{text-align:right}
+    .ts-h3-title{font-size:11px;font-weight:700;color:#293845;line-height:1.4}
+    .ts-client-name{font-size:11px;color:#293845;font-weight:700;margin-top:1mm}
+
+    /* ── 工人表格 ── */
+    .ts-table{width:155mm;border-collapse:collapse;table-layout:fixed;margin:0 0 5mm;font-size:9.5px}
+    .ts-table .col-label{width:28mm}
+    .ts-table .col-day{width:16mm}
+    .ts-table .col-total{width:24mm}
+    .ts-table thead th{background:#293845;color:#fff;border:1px solid #293845;height:5.5mm;padding:1px 4px;text-align:center;font-size:9.5px}
+    .ts-table thead th:first-child{text-align:left}
+    .ts-table tbody td{border:1px solid #b0b8b0;height:4.5mm;padding:1px 4px;color:#293845;text-align:center}
+    .ts-table tbody td:first-child{background:#f1eeea;color:#293845;text-align:left;font-weight:600}
+    .ts-table tbody tr:last-child td{font-weight:700}
+
+    /* ── Amount 汇总行 ── */
+    .amount-table{margin-top:3mm}
+    .amount-table td{border:1px solid #b0b8b0;height:4.5mm;padding:1px 4px;font-size:9.5px;text-align:center;color:#293845;font-weight:700}
+    .amount-table td:first-child{background:transparent;text-align:left;border:none}
+    .amount-table td.total-cell{text-align:right}
+
     @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
+
   const invStyles=`
     body{margin:0;background:#fff;color:#6c6c6c;font-family:Arial,sans-serif;font-size:10px}
     .template-page{box-sizing:border-box;width:210mm;min-height:297mm;padding:14mm 13mm}
@@ -1384,12 +1674,25 @@ function openPrintWindow(title,body,type){
     .inv-tot-tbl tr.final .tl,.inv-tot-tbl tr.final .tv{font-size:13px}
     .inv-tot-tbl tr.final .tv{color:#ff2aa1}
     @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
+
   const html=`<!doctype html><html><head><meta charset="UTF-8"><title>${title}</title>
     <style>${type==="invoice"?invStyles:tsStyles}</style></head>
     <body>${body}</body></html>`;
   $("#printPreviewTitle").textContent=title;
   $("#printFrame").srcdoc=html;
   $("#printPreview").hidden=false;
+}
+
+// 格式化工时数字：整数不显示小数，否则最多2位小数
+function fmtHours(v){
+  const n=Number(v||0);
+  return Number.isInteger(n)?String(n):String(parseFloat(n.toFixed(2)));
+}
+// 格式化金额（不补零，去掉不必要小数）：$1,457.5
+function fmtMoneyCompact(v){
+  const n=Number(v||0);
+  const s=parseFloat(n.toFixed(2)).toLocaleString("en-AU",{minimumFractionDigits:0,maximumFractionDigits:2});
+  return`$${s}`;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1403,6 +1706,7 @@ $("#entryClient").addEventListener("change",()=>{renderSiteOptions();renderRepor
 $("#invoiceClientFilter").addEventListener("change",renderReports);
 $("#personnelStatusFilter").addEventListener("change",renderPersonnel);
 $("#personnelSearch").addEventListener("input",renderPersonnel);
+$("#sitesClientFilter").addEventListener("change",renderSites);
 $("#entryForm").addEventListener("submit",handleEntrySubmit);
 $("#settingsForm").addEventListener("submit",handleSettingsSubmit);
 $("#workerForm").addEventListener("submit",handleWorkerSubmit);
@@ -1428,6 +1732,51 @@ $("#addCertBtn").addEventListener("click",()=>openAddCertModal());
 $("#closeWorkerModal").addEventListener("click",()=>$("#workerModal").hidden=true);
 $("#closeCertModal").addEventListener("click",()=>{$("#certModal").hidden=true});
 $("#editWorkerFromModal").addEventListener("click",function(){editWorker(this.dataset.workerId);$("#workerModal").hidden=true});
+
+// 日报明细筛选器
+$("#entriesWorkerFilter").addEventListener("change",renderEntriesAccordion);
+
+// 手风琴点击（delegated）—— 注意要放在通用 delegated click 之前，避免冒泡干扰
+document.addEventListener("click",e=>{
+  // 二级（日期层）
+  const subTrigger=e.target.closest(".acc-sub-trigger");
+  if(subTrigger){
+    e.stopPropagation();
+    const body=document.getElementById(subTrigger.dataset.subAcc);
+    if(!body)return;
+    const isOpen=body.classList.contains("open");
+    subTrigger.classList.toggle("open",!isOpen);
+    body.classList.toggle("open",!isOpen);
+    return;
+  }
+  // 一级（工地层）
+  const trigger=e.target.closest(".acc-trigger");
+  if(trigger){
+    e.stopPropagation();
+    const bodyId=trigger.dataset.acc;
+    const body=document.getElementById(bodyId);
+    if(!body)return;
+    const isOpen=body.classList.contains("open");
+    trigger.classList.toggle("open",!isOpen);
+    body.classList.toggle("open",!isOpen);
+  }
+});
+
+// 全部展开 / 收起 按钮（同时处理一、二级）
+function toggleAllAcc(containerSelector,btn){
+  const bodies=[...document.querySelectorAll(`${containerSelector} .acc-body`)];
+  const triggers=[...document.querySelectorAll(`${containerSelector} .acc-trigger`)];
+  const subBodies=[...document.querySelectorAll(`${containerSelector} .acc-sub-body`)];
+  const subTriggers=[...document.querySelectorAll(`${containerSelector} .acc-sub-trigger`)];
+  const anyOpen=bodies.some(b=>b.classList.contains("open"));
+  bodies.forEach(b=>b.classList.toggle("open",!anyOpen));
+  triggers.forEach(t=>t.classList.toggle("open",!anyOpen));
+  subBodies.forEach(b=>b.classList.toggle("open",!anyOpen));
+  subTriggers.forEach(t=>t.classList.toggle("open",!anyOpen));
+  btn.textContent=anyOpen?"全部展开":"全部收起";
+}
+$("#payExpandAll").addEventListener("click",function(){toggleAllAcc("#workerPayAccordion",this)});
+$("#entriesExpandAll").addEventListener("click",function(){toggleAllAcc("#entriesAccordion",this)});
 
 // Tab strip (certs)
 $$(".tab-btn").forEach(b=>b.addEventListener("click",function(){
@@ -1509,12 +1858,11 @@ function showSyncStatus(msg,color){
 function scheduleSave(){
   clearTimeout(syncTimer);
   syncTimer=setTimeout(async()=>{
-    localStorage.setItem(KEY,JSON.stringify(state));
     if(GH.token){showSyncStatus("⏳ 同步中...","#66736c");await ghPut(state);}
   },2000);
 }
 
-const _origSave=save;
+// 统一的 save：立即写 localStorage，再异步同步到 GitHub
 function save(){localStorage.setItem(KEY,JSON.stringify(state));scheduleSave();}
 
 function showTokenSetup(){
