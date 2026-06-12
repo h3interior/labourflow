@@ -1293,20 +1293,22 @@ function printInvoice(){
   openPrintWindow("Invoice",`
     <section class="template-page invoice-page">
       <div class="inv-top-rule"></div>
-      <div class="inv-header">
-        <div class="inv-from">
+      <table class="inv-header-tbl"><tr>
+        <td class="inv-from">
           <h1>${esc(settings.businessName||"H3 Interior Pty Ltd")}</h1>
           <div class="inv-company">
-            ${settings.businessAbn?`ABN ${esc(settings.businessAbn)}`:""}
-            ${settings.paymentDetails?`<br>${esc(settings.paymentDetails)}`:""}
+            ${settings.businessEmail?`${esc(settings.businessEmail)}<br>`:""}${settings.businessPhone?`${esc(settings.businessPhone)}<br>`:""}${esc(settings.paymentDetails||"").replace(/ {2,}/g,"<br>").replace(/\n/g,"<br>")}
           </div>
-        </div>
-        <div class="inv-meta">
-          <div class="inv-num-line">Invoice # <strong>${esc(invoiceNum)}</strong></div>
-          <div class="inv-meta-row"><span>Issue date</span><span>${issueDate}</span></div>
-          <div class="inv-meta-row"><span>Due date</span><span>${dueDate}</span></div>
-        </div>
-      </div>
+        </td>
+        <td class="inv-meta-cell">
+          <table class="inv-meta-tbl">
+            <tr><td class="ml">Invoice #</td><td class="mv">${esc(invoiceNum)}</td></tr>
+            <tr><td class="ml">Issue date</td><td class="mv">${issueDate}</td></tr>
+            <tr><td class="ml">ABN</td><td class="mv">${esc(settings.businessAbn||"")}</td></tr>
+            <tr><td class="ml">Due date</td><td class="mv">${dueDate}</td></tr>
+          </table>
+        </td>
+      </tr></table>
       <div class="inv-to">
         <span class="inv-to-label">Invoice to</span>
         <span class="inv-to-name">${esc(siteObj.client||mainClient)}</span>
@@ -1318,20 +1320,23 @@ function printInvoice(){
         <tbody>${rows}</tbody>
         <tfoot><tr><td colspan="3"></td><td>$0.00</td></tr></tfoot>
       </table>
-      <div class="inv-bottom">
-        <div class="inv-totals">
-          <div class="inv-total-row"><span>Subtotal</span><strong>${money(totalRev)}</strong></div>
-          <div class="inv-total-row"><span>GST (${siteObj.taxRate||10}%)</span><strong>${money(totalGst)}</strong></div>
-          <div class="inv-total-row final"><span>Total Payment</span><strong>${money(totalRev+totalGst)}</strong></div>
-        </div>
-      </div>
+      <table class="inv-bottom-tbl"><tr>
+        <td class="inv-notes-cell">Notes,</td>
+        <td class="inv-totals-cell">
+          <table class="inv-tot-tbl">
+            <tr><td class="tl">Subtotal</td><td class="tv">${money(totalRev)}</td></tr>
+            <tr><td class="tl">GST (${siteObj.taxRate||10}%)</td><td class="tv">${money(totalGst)}</td></tr>
+            <tr class="final"><td class="tl">Total Payment</td><td class="tv">${money(totalRev+totalGst)}</td></tr>
+          </table>
+        </td>
+      </tr></table>
     </section>`,"invoice");
 }
 
 function openPrintWindow(title,body,type){
   const tsStyles=`
     body{margin:0;background:#fff;color:#293845;font-family:"Trebuchet MS",Arial,sans-serif}
-    .template-page{width:210mm;min-height:297mm;background:#fff;padding:10mm}
+    .template-page{box-sizing:border-box;width:210mm;min-height:297mm;background:#fff;padding:10mm}
     .ts-header{display:grid;grid-template-columns:2fr 1fr 1.8fr;width:155mm;
       background:#293845;color:#fff;font-size:13px;font-weight:700;line-height:1.2}
     .ts-header>div{padding:4px 5px;min-height:13mm;white-space:pre-line}
@@ -1347,15 +1352,18 @@ function openPrintWindow(title,body,type){
     @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
   const invStyles=`
     body{margin:0;background:#fff;color:#6c6c6c;font-family:Arial,sans-serif;font-size:10px}
-    .template-page{width:210mm;min-height:297mm;padding:14mm 13mm}
+    .template-page{box-sizing:border-box;width:210mm;min-height:297mm;padding:14mm 13mm}
     .inv-top-rule{width:115mm;height:1.5mm;background:#4438d4;margin-bottom:7mm}
-    .inv-header{display:grid;grid-template-columns:1.3fr 1fr;width:115mm;align-items:start;margin-bottom:0}
+    .inv-header-tbl{width:115mm;border-collapse:collapse;table-layout:fixed}
+    .inv-header-tbl>tbody>tr>td{vertical-align:top;padding:0}
+    .inv-from{width:52%}
     .inv-from h1{margin:0;color:#6757ff;font-size:18px;font-family:Arial,sans-serif}
-    .inv-company{margin-top:2mm;font-size:9px;color:#8a8a8a;line-height:1.55;max-width:62mm}
-    .inv-meta{font-size:10px;font-weight:700;text-align:right;justify-self:end;min-width:46mm}
-    .inv-num-line{white-space:nowrap;color:#333;margin-bottom:2mm}
-    .inv-num-line strong{color:#6757ff}
-    .inv-meta-row{display:flex;justify-content:space-between;gap:6mm;color:#6c6c6c;margin-bottom:1mm}
+    .inv-company{margin-top:2.5mm;font-size:10px;color:#555;line-height:1.7}
+    .inv-meta-cell{width:48%}
+    .inv-meta-tbl{border-collapse:collapse;font-size:10px;font-weight:700;width:100%}
+    .inv-meta-tbl td{padding:0 0 1.6mm 0;vertical-align:top}
+    .inv-meta-tbl .ml{color:#4c4c4c;text-align:left;white-space:nowrap}
+    .inv-meta-tbl .mv{color:#6c6c6c;text-align:right;white-space:nowrap}
     .inv-to{display:grid;gap:2mm;margin-top:28mm;width:115mm;font-size:10px;color:#8a8a8a}
     .inv-to-label{color:#6f6f6f;font-weight:700}.inv-to-name{color:#333;font-weight:700}
     .inv-table{width:115mm;border-collapse:collapse;margin-top:10mm;font-size:10px}
@@ -1365,11 +1373,16 @@ function openPrintWindow(title,body,type){
     .inv-table tbody tr:nth-child(odd) td{background:#fff}
     .inv-table tbody td:first-child{color:#111}
     .inv-table tfoot td{border-bottom:1mm solid #d4d4d4;background:#f0f0f0;height:7mm;padding:1.5mm 2mm;text-align:right;color:#666}
-    .inv-bottom{display:flex;justify-content:flex-end;width:115mm;margin-top:5mm}
-    .inv-total-row{display:grid;grid-template-columns:1fr auto;gap:4mm;margin-bottom:3mm;font-size:10px}
-    .inv-total-row span{color:#3f45d7;font-weight:700}.inv-total-row strong{color:#8a8a8a;text-align:right;min-width:24mm}
-    .inv-total-row.final span,.inv-total-row.final strong{font-size:13px}
-    .inv-total-row.final strong{color:#ff2aa1}
+    .inv-bottom-tbl{width:115mm;border-collapse:collapse;margin-top:5mm;table-layout:fixed}
+    .inv-bottom-tbl>tbody>tr>td{vertical-align:top}
+    .inv-notes-cell{color:#8a8a8a;font-size:10px;width:55%}
+    .inv-totals-cell{text-align:right}
+    .inv-tot-tbl{border-collapse:collapse;margin-left:auto;font-size:10px}
+    .inv-tot-tbl td{padding:0 0 3mm 0}
+    .inv-tot-tbl .tl{color:#3f45d7;font-weight:700;padding-right:8mm;white-space:nowrap;text-align:right}
+    .inv-tot-tbl .tv{color:#8a8a8a;font-weight:700;text-align:right;white-space:nowrap;min-width:24mm}
+    .inv-tot-tbl tr.final .tl,.inv-tot-tbl tr.final .tv{font-size:13px}
+    .inv-tot-tbl tr.final .tv{color:#ff2aa1}
     @media print{@page{size:A4 portrait;margin:0}button{display:none}}`;
   const html=`<!doctype html><html><head><meta charset="UTF-8"><title>${title}</title>
     <style>${type==="invoice"?invStyles:tsStyles}</style></head>
