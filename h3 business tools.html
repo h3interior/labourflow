@@ -593,7 +593,6 @@ let state = {
 };
 
 function load(){try{const d=localStorage.getItem(KEY);if(d)state=JSON.parse(d);}catch(e){}}
-function save(){localStorage.setItem(KEY,JSON.stringify(state));}
 load();
 
 // ══════════════════════════════════════════════════
@@ -1147,11 +1146,194 @@ ps.textContent=`@media print{.shell,.doc-bar,.sb-btn{display:none!important}.doc
 document.head.appendChild(ps);
 
 // ══════════════════════════════════════════════════
+//  CLOUD SYNC (GitHub) — 与 LabourFlow 共用同一个 Token
+//  数据文件独立：h3_biz_data.json（不影响 LabourFlow 的 data.json）
+// ══════════════════════════════════════════════════
+const GH = {
+  get owner(){ return localStorage.getItem('h3_gh_owner') || ''; },
+  get repo(){  return localStorage.getItem('h3_gh_repo')  || ''; },
+  file: 'h3_biz_data.json',
+  get token(){ return localStorage.getItem('lf_gh_token') || ''; }, // 与 LabourFlow 共用同一个 Token
+  branch: 'main'
+};
+let ghSha = null;
+let syncTimer = null;
+
+async function ghGet(){
+  if(!GH.token || !GH.owner || !GH.repo) return null;
+  try{
+    const r = await fetch(
+      `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
+      {headers:{Authorization:`token ${GH.token}`,Accept:'application/vnd.github+json'}}
+    );
+    if(r.status===404) return null;
+    if(!r.ok) throw new Error(`${r.status}`);
+    const d = await r.json();
+    ghSha = d.sha;
+    return JSON.parse(atob(d.content.replace(/\n/g,'')));
+  }catch(e){ console.warn('GitHub read failed:',e.message); return null; }
+}
+
+async function ghPut(data){
+  if(!GH.token || !GH.owner || !GH.repo) return false;
+  const body = {
+    message: `sync ${new Date().toISOString()}`,
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(data)))),
+    branch: GH.branch
+  };
+  if(ghSha) body.sha = ghSha;
+  const r = await fetch(
+    `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
+    {method:'PUT', headers:{Authorization:`token ${GH.token}`,'Content-Type':'application/json'}, body:JSON.stringify(body)}
+  );
+  if(!r.ok){ const t=await r.text(); throw new Error(`HTTP ${r.status} — ${t.slice(0,200)}`); }
+  const d = await r.json();
+  ghSha = d.content?.sha || ghSha;
+  showSyncStatus('✅ Synced to cloud 已同步','#1a7a4a');
+  return true;
+}
+
+function showSyncStatus(msg, color){
+  let el = document.getElementById('h3SyncStatus');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'h3SyncStatus';
+    Object.assign(el.style,{
+      position:'fixed',bottom:'16px',right:'16px',zIndex:'999',
+      padding:'8px 14px',borderRadius:'8px',fontSize:'12px',fontWeight:'700',
+      background:'#fff',boxShadow:'0 4px 16px rgba(0,0,0,.15)',transition:'opacity .5s',
+      color:'#1a2332'
+    });
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.color = color;
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>{ el.style.opacity='0'; }, 3000);
+}
+
+function scheduleSave(){
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(async()=>{
+    if(GH.token && GH.owner && GH.repo){
+      showSyncStatus('⏳ Syncing... 同步中','#6b7d8f');
+      try{ await ghPut(state); }
+      catch(e){ showSyncStatus('❌ Sync failed: '+e.message,'#b83232'); }
+    }
+  }, 2000);
+}
+
+// 覆盖 save()：本地存储 + 异步同步 GitHub
+function save(){
+  localStorage.setItem(KEY, JSON.stringify(state));
+  scheduleSave();
+}
+
+// ── 云同步设置弹窗 ──
+function showSyncSetup(){
+  let overlay = document.getElementById('h3SyncOverlay');
+  if(overlay){ overlay.style.display='flex'; return; }
+  overlay = document.createElement('div');
+  overlay.id = 'h3SyncOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(26,35,50,.6);display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:12px;padding:28px;width:100%;max-width:460px;box-shadow:0 24px 60px rgba(0,0,0,.25)">
+      <div style="font-size:28px;margin-bottom:10px">☁️</div>
+      <h3 style="margin:0 0 6px;font-size:1.05rem;color:#1a2332">GitHub Cloud Sync 云端同步</h3>
+      <p style="color:#6b7d8f;font-size:.84rem;margin:0 0 18px;line-height:1.7">
+        使用与 LabourFlow <strong>相同的 GitHub Token</strong>，只需填入你的 GitHub 用户名和仓库名，数据将保存到同一个仓库的独立文件（<code>h3_biz_data.json</code>）。
+      </p>
+      <div style="display:grid;gap:10px;margin-bottom:14px">
+        <label style="display:grid;gap:5px;font-size:.8rem;font-weight:700;color:#6b7d8f">
+          GitHub Username 用户名
+          <input id="ghOwnerInput" type="text" placeholder="e.g. frankli" value="${GH.owner}"
+            style="min-height:40px;border:1px solid #dde3ea;border-radius:6px;padding:0 12px;font-size:14px;width:100%"/>
+        </label>
+        <label style="display:grid;gap:5px;font-size:.8rem;font-weight:700;color:#6b7d8f">
+          Repository Name 仓库名
+          <input id="ghRepoInput" type="text" placeholder="e.g. labourflow" value="${GH.repo}"
+            style="min-height:40px;border:1px solid #dde3ea;border-radius:6px;padding:0 12px;font-size:14px;width:100%"/>
+        </label>
+        <label style="display:grid;gap:5px;font-size:.8rem;font-weight:700;color:#6b7d8f">
+          GitHub Token <span style="font-weight:400;color:#9aa5b0">(ghp_ 开头，与 LabourFlow 相同)</span>
+          <input id="ghTokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx" value="${GH.token}"
+            style="min-height:40px;border:1px solid #dde3ea;border-radius:6px;padding:0 12px;font-size:14px;width:100%"/>
+        </label>
+      </div>
+      <div id="ghSyncError" style="color:#b83232;font-size:.83rem;margin-bottom:10px;display:none"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button id="ghSyncSkip" style="min-height:38px;border:1px solid #dde3ea;background:#fff;border-radius:6px;padding:0 14px;cursor:pointer;font-weight:700;font-size:.86rem">暂时跳过</button>
+        <button id="ghSyncSave" style="min-height:38px;border:0;background:#c8860a;color:#fff;border-radius:6px;padding:0 18px;cursor:pointer;font-weight:700;font-size:.86rem">Connect & Sync 连接</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  document.getElementById('ghSyncSave').addEventListener('click', async()=>{
+    const owner = document.getElementById('ghOwnerInput').value.trim();
+    const repo  = document.getElementById('ghRepoInput').value.trim();
+    const token = document.getElementById('ghTokenInput').value.trim();
+    const errEl = document.getElementById('ghSyncError');
+    if(!owner||!repo||!token){ errEl.style.display='block'; errEl.textContent='请填写所有字段'; return; }
+    localStorage.setItem('h3_gh_owner', owner);
+    localStorage.setItem('h3_gh_repo',  repo);
+    localStorage.setItem('lf_gh_token', token); // 同时更新共用 Token
+    errEl.style.display='none';
+    document.getElementById('ghSyncSave').textContent='Connecting...';
+    try{
+      const remote = await ghGet();
+      if(remote){
+        Object.assign(state, remote);
+        localStorage.setItem(KEY, JSON.stringify(state));
+        renderDash(); renderQuotes(); renderInvoices(); renderClients(); updateSidebar();
+        showSyncStatus('✅ Data loaded from cloud 数据已从云端加载','#1a7a4a');
+      } else {
+        await ghPut(state);
+      }
+      overlay.style.display='none';
+    }catch(err){
+      errEl.style.display='block';
+      errEl.textContent='❌ '+err.message+' — 请检查用户名、仓库名和 Token 权限（需勾选 repo）';
+      document.getElementById('ghSyncSave').textContent='Connect & Sync 连接';
+      localStorage.removeItem('lf_gh_token');
+    }
+  });
+  document.getElementById('ghSyncSkip').addEventListener('click', ()=>{ overlay.style.display='none'; });
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.style.display='none'; });
+}
+
+// ── 在侧边栏底部加云同步按钮 ──
+function addSyncButton(){
+  const btn = document.createElement('button');
+  btn.innerHTML = '☁️ Cloud Sync 云同步';
+  btn.style.cssText = 'width:100%;min-height:36px;margin-top:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(232,237,242,.75);border-radius:6px;cursor:pointer;font-weight:700;font-size:.82rem;';
+  btn.addEventListener('mouseenter',()=>{ btn.style.background='rgba(255,255,255,.08)'; btn.style.color='#fff'; });
+  btn.addEventListener('mouseleave',()=>{ btn.style.background='transparent'; btn.style.color='rgba(232,237,242,.75)'; });
+  btn.addEventListener('click', showSyncSetup);
+  document.querySelector('.sb-footer').appendChild(btn);
+}
+
+// ══════════════════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════════════════
-populateClientDropdowns();
-renderDash();
-updateSidebar();
+addSyncButton();
+
+(async()=>{
+  if(GH.token && GH.owner && GH.repo){
+    showSyncStatus('⏳ Loading from cloud... 加载中','#6b7d8f');
+    try{
+      const remote = await ghGet();
+      if(remote){
+        Object.assign(state, remote);
+        localStorage.setItem(KEY, JSON.stringify(state));
+        showSyncStatus('✅ Data loaded from cloud','#1a7a4a');
+      }
+    }catch(e){ console.warn('Boot sync failed:',e.message); }
+  }
+  populateClientDropdowns();
+  renderDash();
+  updateSidebar();
+})();
 </script>
 </body>
 </html>
