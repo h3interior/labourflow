@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>H3 Interior — 5年脱身路线图</title>
+<style>
+:root{
+  --steel:#1C2B3A;--steel-mid:#2D4156;--steel-light:#3D5570;
+  --concrete:#8A9BAD;--concrete-light:#C2CDD8;--concrete-pale:#EEF2F5;
+  --amber:#E08B2A;--amber-light:#F5C670;--amber-pale:#FDF5E6;
+  --white:#FFFFFF;--offwhite:#F7F9FB;
+  --green:#1E7A4E;--green-bg:#E6F4ED;
+  --red:#C0392B;--red-bg:#FDECEA;
+  --border:#DDE4EA;
+  --shadow:0 2px 12px rgba(28,43,58,.08);
+  --shadow-lg:0 8px 32px rgba(28,43,58,.13);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;background:var(--offwhite);color:var(--steel);line-height:1.5;font-size:14px}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--steel) 0%,var(--steel-mid) 60%,var(--steel-light) 100%);padding:40px 48px 36px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;right:-40px;top:-40px;width:320px;height:320px;border-radius:50%;border:1.5px solid rgba(255,255,255,.06)}
+.header::after{content:'';position:absolute;right:60px;top:60px;width:180px;height:180px;border-radius:50%;border:1px solid rgba(224,139,42,.12)}
+.header-eyebrow{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--amber-light);margin-bottom:12px}
+.header h1{font-size:30px;font-weight:800;color:var(--white);line-height:1.2;margin-bottom:6px}
+.header-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:28px}
+.header-stats{display:flex;gap:28px;flex-wrap:wrap}
+.hs-item{display:flex;flex-direction:column}
+.hs-val{font-size:22px;font-weight:800;color:var(--amber-light)}
+.hs-label{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px;letter-spacing:.3px}
+.hs-div{width:1px;background:rgba(255,255,255,.1);align-self:stretch}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:36px 28px 60px}
+
+/* SECTION TITLE */
+.sec-title{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* CRITICAL BOX */
+.critical-box{background:var(--red-bg);border-left:4px solid var(--red);border-radius:8px;padding:16px 20px;margin-bottom:32px;display:flex;gap:12px}
+.critical-icon{font-size:20px;flex-shrink:0}
+.critical-title{font-weight:800;color:var(--red);font-size:14px;margin-bottom:4px}
+.critical-body{font-size:13px;color:#5a1a14;line-height:1.6}
+
+/* TABS */
+.tabs{display:flex;gap:3px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:4px;width:fit-content;margin-bottom:24px}
+.tab{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;color:var(--concrete);border:none;background:transparent;transition:all .2s}
+.tab.active{background:var(--steel);color:var(--white)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* TIMELINE */
+.timeline{position:relative;margin-bottom:40px}
+.tl-track{position:absolute;left:130px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--amber),var(--steel-light));border-radius:2px}
+
+.tl-phase{margin-bottom:6px}
+.tl-row{display:flex;align-items:flex-start;gap:0}
+.tl-time{width:118px;text-align:right;padding-right:22px;flex-shrink:0;padding-top:14px}
+.tl-year{font-size:12px;font-weight:800;color:var(--steel)}
+.tl-age{font-size:11px;color:var(--concrete);margin-top:1px}
+.tl-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;margin-top:14px;margin-right:18px;position:relative;z-index:2;border:3px solid var(--white);box-shadow:0 0 0 2px var(--amber)}
+.tl-dot.now{background:var(--red);box-shadow:0 0 0 2px var(--red);animation:ping 2s infinite}
+.tl-dot.y1{background:var(--amber)}
+.tl-dot.y2{background:var(--amber)}
+.tl-dot.y3{background:var(--steel-light)}
+.tl-dot.y4{background:var(--steel-light)}
+.tl-dot.y5{background:var(--green);box-shadow:0 0 0 2px var(--green);animation:ping 2s infinite}
+@keyframes ping{0%,100%{box-shadow:0 0 0 2px currentColor}50%{box-shadow:0 0 0 6px rgba(0,0,0,.1)}}
+
+.tl-card{flex:1;background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:6px;transition:box-shadow .2s}
+.tl-card:hover{box-shadow:var(--shadow-lg)}
+.tl-card-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.tl-card-head.now{background:linear-gradient(90deg,var(--red-bg),var(--white));border-left:4px solid var(--red)}
+.tl-card-head.y1{background:linear-gradient(90deg,#FDF5E6,var(--white));border-left:4px solid var(--amber)}
+.tl-card-head.y2{background:linear-gradient(90deg,#FDF5E6,var(--white));border-left:4px solid var(--amber)}
+.tl-card-head.y3{background:linear-gradient(90deg,var(--concrete-pale),var(--white));border-left:4px solid var(--steel-light)}
+.tl-card-head.y4{background:linear-gradient(90deg,var(--concrete-pale),var(--white));border-left:4px solid var(--steel-light)}
+.tl-card-head.y5{background:linear-gradient(90deg,var(--green-bg),var(--white));border-left:4px solid var(--green)}
+.tl-head-left{display:flex;align-items:center;gap:10px}
+.tl-emoji{font-size:18px}
+.tl-phase-name{font-size:15px;font-weight:800;color:var(--steel)}
+.tl-phase-sub{font-size:12px;color:var(--concrete);margin-top:2px}
+.tl-toggle{font-size:11px;color:var(--concrete);transition:transform .2s;flex-shrink:0}
+.tl-toggle.open{transform:rotate(180deg)}
+
+.tl-body{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .2s}
+.tl-body.open{max-height:900px;padding:0 18px 18px}
+
+/* ACTION ITEMS */
+.action-list{list-style:none;margin-top:10px}
+.action-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.action-item:last-child{border-bottom:none}
+.action-badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:2px;letter-spacing:.3px}
+.badge-ops{background:#E8F0FB;color:#1a5fa8}
+.badge-sales{background:#FDF5E6;color:#7a5000}
+.badge-hr{background:#E6F4ED;color:#1E7A4E}
+.badge-fin{background:#F3E5F5;color:#6A1B9A}
+.badge-sys{background:var(--concrete-pale);color:var(--steel-mid)}
+.badge-qbcc{background:#FFF3E0;color:#E65100}
+.action-content{flex:1}
+.action-text{font-size:13.5px;color:var(--steel);line-height:1.5}
+.action-who{font-size:11px;color:var(--concrete);margin-top:3px}
+.action-money{font-weight:700;color:var(--green)}
+.action-cost{font-weight:700;color:var(--amber)}
+
+.tl-connector{display:flex;margin:0}
+.tl-spacer{width:118px;flex-shrink:0}
+.tl-line{width:3px;height:10px;background:var(--border);margin-left:8px}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.metric{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:18px;position:relative;overflow:hidden}
+.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.metric.amber::before{background:var(--amber)}
+.metric.green::before{background:var(--green)}
+.metric.blue::before{background:#1a5fa8}
+.metric.red::before{background:var(--red)}
+.metric-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--concrete);margin-bottom:8px}
+.metric-val{font-size:24px;font-weight:900;line-height:1}
+.metric-val.amber{color:var(--amber)}
+.metric-val.green{color:var(--green)}
+.metric-val.blue{color:#1a5fa8}
+.metric-val.red{color:var(--red)}
+.metric-sub{font-size:11px;color:var(--concrete);margin-top:4px}
+
+/* RISK BOX */
+.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.risk-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:18px}
+.risk-title{font-size:13px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.risk-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start}
+.risk-item:last-child{border-bottom:none}
+.risk-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+
+/* STRATEGY CARDS */
+.strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.strategy-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px}
+.strategy-icon{font-size:26px;margin-bottom:10px}
+.strategy-name{font-size:13px;font-weight:800;margin-bottom:6px}
+.strategy-desc{font-size:12px;color:var(--concrete);line-height:1.6}
+.strategy-highlight{margin-top:12px;padding:9px 12px;border-radius:6px;font-size:12px;font-weight:700}
+.sh-amber{background:var(--amber-pale);color:#7a5000}
+.sh-green{background:var(--green-bg);color:var(--green)}
+.sh-blue{background:#E8F0FB;color:#1a5fa8}
+.sh-red{background:var(--red-bg);color:var(--red)}
+.sh-steel{background:var(--concrete-pale);color:var(--steel-mid)}
+
+/* REVENUE TABLE */
+.rev-table{width:100%;border-collapse:collapse;margin-top:8px}
+.rev-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--concrete);padding:8px 12px;border-bottom:2px solid var(--border);text-align:left;background:#fafbfc}
+.rev-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px}
+.rev-table tr:last-child td{border-bottom:none;font-weight:800;background:#fafbfc}
+.rev-table tr:hover td{background:#f8f9fb}
+
+/* SUMMARY */
+.summary-box{background:var(--steel);border-radius:10px;padding:24px 28px;margin-bottom:32px;text-align:center}
+.summary-box p{font-size:15px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.8}
+.summary-box strong{color:var(--amber-light)}
+
+/* PROGRESS BAR */
+.progress-section{margin-top:16px}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:5px}
+.progress-label span:first-child{color:var(--concrete)}
+.progress-label span:last-child{color:var(--amber);font-weight:800}
+.progress-track{height:8px;background:var(--concrete-pale);border-radius:4px;overflow:hidden;margin-bottom:10px}
+.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--amber),var(--amber-light))}
+
+/* FOOTER */
+.footer-note{font-size:12px;color:var(--concrete);text-align:center;padding:20px;border-top:1px solid var(--border);line-height:1.7;margin-top:16px}
+
+@media(max-width:768px){
+  .header{padding:28px 20px}
+  .header h1{font-size:22px}
+  .main{padding:24px 16px}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .risk-grid,.strategy-grid{grid-template-columns:1fr}
+  .tl-track{left:100px}
+  .tl-time{width:88px}
+  .tl-spacer{width:88px}
+  .tabs{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">H3 Interior Pty Ltd · Brisbane QLD</div>
+  <h1>5年公司脱身路线图<br/>Business Exit Strategy 2026–2031</h1>
+  <div class="header-sub">从一人扛起所有 → 公司自主运营 · Frank自由支配时间</div>
+  <div class="header-stats">
+    <div class="hs-item"><span class="hs-val">$240万</span><span class="hs-label">当前年营业额</span></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><span class="hs-val">23人</span><span class="hs-label">当前员工规模</span></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><span class="hs-val">$360万+</span><span class="hs-label">5年后目标营业额</span></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><span class="hs-val">3–5小时</span><span class="hs-label">5年后每周投入时间</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- CRITICAL WARNING -->
+  <div class="critical-box">
+    <div class="critical-icon">🚨</div>
+    <div>
+      <div class="critical-title">最大风险：一个客户占70%营业额</div>
+      <div class="critical-body">目前最大客户占营业额约$168万/年。一旦流失，H3利润归零甚至亏损，直接冲击你的房产投资现金流和退休计划。<strong>客户分散化是整个5年计划的前提，必须与脱身策略同步推进。</strong></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('timeline')">📅 时间路线图</button>
+    <button class="tab" onclick="switchTab('strategy')">🎯 五大策略</button>
+    <button class="tab" onclick="switchTab('revenue')">📊 营收预测</button>
+    <button class="tab" onclick="switchTab('risks')">⚠️ 风险管理</button>
+  </div>
+
+  <!-- TAB: TIMELINE -->
+  <div id="tab-timeline" class="tab-content active">
+    <div class="sec-title">执行时间线</div>
+
+    <div class="timeline">
+      <div class="tl-track"></div>
+
+      <!-- NOW -->
+      <div class="tl-phase">
+        <div class="tl-row">
+          <div class="tl-time"><div class="tl-year">现在</div><div class="tl-age">2026年</div></div>
+          <div class="tl-dot now" style="background:var(--red)"></div>
+          <div class="tl-card" onclick="togglePhase('p0')">
+            <div class="tl-card-head now">
+              <div class="tl-head-left">
+                <span class="tl-emoji">🚨</span>
+                <div>
+                  <div class="tl-phase-name">立即行动：QBCC License + 客户风险</div>
+                  <div class="tl-phase-sub">拿到License是升级业务模式的关键，同时开始降低客户集中度</div>
+                </div>
+              </div>
+              <div class="tl-toggle" id="toggle-p0">▼</div>
+            </div>
+            <div class="tl-body" id="body-p0">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-qbcc">QBCC</span>
+                  <div class="action-content">
+                    <div class="action-text">跟进QBCC License申请进度，预计<strong>2个月内拿到</strong>。拿到后立即更新公司资料、名片、报价单抬头，向Builder市场展示资质</div>
+                    <div class="action-who">→ 自行跟进 QBCC申请</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-sales">销售</span>
+                  <div class="action-content">
+                    <div class="action-text">请最大客户帮忙<strong>转介绍1–2个新Builder客户</strong>。合作3年以上，这个请求很合理。目标：将70%客户集中度降至60%以内</div>
+                    <div class="action-who">→ Frank亲自沟通 &nbsp;|&nbsp; <span class="action-money">潜在新增营业额$30万–$50万</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-fin">财务</span>
+                  <div class="action-content">
+                    <div class="action-text">招聘兼职<strong>Bookkeeper</strong>（记账员），使用Xero云端会计软件，把财务日常工作从Frank手里移交出去</div>
+                    <div class="action-who">→ 找：会计公司推荐或Seek.com.au &nbsp;|&nbsp; <span class="action-cost">费用$15,000–$20,000/年</span> &nbsp;|&nbsp; <span class="action-money">每周省10小时</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-qbcc">QBCC</span>
+                  <div class="action-content">
+                    <div class="action-text">License拿到后，开始<strong>陌生拜访Builder客户</strong>，从合同总价不超过$30万的小项目起步，积累直接承包经验</div>
+                    <div class="action-who">→ Frank主导，目标2026年底签下第一份直接承包合同</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-connector"><div class="tl-spacer"></div><div class="tl-line"></div></div>
+
+      <!-- YEAR 1 -->
+      <div class="tl-phase">
+        <div class="tl-row">
+          <div class="tl-time"><div class="tl-year">第一年</div><div class="tl-age">2026–2027</div></div>
+          <div class="tl-dot y1"></div>
+          <div class="tl-card" onclick="togglePhase('p1')">
+            <div class="tl-card-head y1">
+              <div class="tl-head-left">
+                <span class="tl-emoji">🏗️</span>
+                <div>
+                  <div class="tl-phase-name">打地基：财务脱身 + 培养核心人</div>
+                  <div class="tl-phase-sub">预算$50,000 · 目标：每周工时从60小时降至40小时</div>
+                </div>
+              </div>
+              <div class="tl-toggle" id="toggle-p1">▼</div>
+            </div>
+            <div class="tl-body" id="body-p1">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-fin">财务</span>
+                  <div class="action-content">
+                    <div class="action-text">Bookkeeper正式上岗，Xero系统跑顺。建立<strong>标准化财务流程</strong>：报价模板、发票流程、工资计算、月度利润报表。Frank只需每周看一次报表、审批付款</div>
+                    <div class="action-who"><span class="action-money">财务时间投入：每周20小时 → 5小时</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-hr">人员</span>
+                  <div class="action-content">
+                    <div class="action-text">建立<strong>员工手册（Employee Handbook）</strong>：请假流程、行为准则、安全规范。使用Deputy排班软件（$5/人/月），工人自己打卡，Frank手机上审批</div>
+                    <div class="action-who"><span class="action-money">HR时间投入：每周15小时 → 3小时</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-hr">人员</span>
+                  <div class="action-content">
+                    <div class="action-text">从4个Leading Hand里<strong>选出最强1–2人</strong>开始系统培养：带他们参加工地会议→让他们主导甲方沟通→完全移交工人排班。给他们加薪$5,000–$10,000/年，留住人才</div>
+                    <div class="action-who">→ Frank亲自带 &nbsp;|&nbsp; <span class="action-cost">加薪成本$10,000–$20,000/年</span> &nbsp;|&nbsp; <span class="action-money">目标：6个月后能独立管工地</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-qbcc">QBCC</span>
+                  <div class="action-content">
+                    <div class="action-text">直接承包业务起步：争取<strong>2–3个Builder客户</strong>，合同金额$10万–$30万。材料自己采购，建立供应商关系（Drywall、Ceiling Grid、螺丝等）</div>
+                    <div class="action-who"><span class="action-money">目标新增直接承包营业额：$30万–$60万</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-sales">销售</span>
+                  <div class="action-content">
+                    <div class="action-text">客户分散化继续推进，加入<strong>Queensland Master Builders Association（QMBA）</strong>，参加行业活动拓展Builder人脉。目标大客户占比降至<strong>60%以下</strong></div>
+                    <div class="action-who"><span class="action-cost">QMBA会员费约$1,000–$2,000/年</span></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-connector"><div class="tl-spacer"></div><div class="tl-line"></div></div>
+
+      <!-- YEAR 2 -->
+      <div class="tl-phase">
+        <div class="tl-row">
+          <div class="tl-time"><div class="tl-year">第二年</div><div class="tl-age">2027–2028</div></div>
+          <div class="tl-dot y2"></div>
+          <div class="tl-card" onclick="togglePhase('p2')">
+            <div class="tl-card-head y2">
+              <div class="tl-head-left">
+                <span class="tl-emoji">👔</span>
+                <div>
+                  <div class="tl-phase-name">核心一步：招聘Operations Manager</div>
+                  <div class="tl-phase-sub">预算$100,000 · 目标：每周工时从40小时降至20小时</div>
+                </div>
+              </div>
+              <div class="tl-toggle" id="toggle-p2">▼</div>
+            </div>
+            <div class="tl-body" id="body-p2">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-ops">运营</span>
+                  <div class="action-content">
+                    <div class="action-text">招聘或内部提升<strong>Operations Manager（OM）</strong>：负责工地协调、工人管理、客户日常联系、日常问题处理。建筑行业背景，英文流利，管理过10人以上团队</div>
+                    <div class="action-who"><span class="action-cost">薪资$80,000–$100,000/年（含Super）</span> &nbsp;|&nbsp; 3个月试用期，明确KPI</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-ops">运营</span>
+                  <div class="action-content">
+                    <div class="action-text">OM的<strong>关键KPI</strong>：工地准时完工率>90%、工人出勤率>95%、客户投诉<2次/季度、工程返工率<5%、成本控制在预算±5%以内</div>
+                    <div class="action-who">→ 每月一次管理会议（Frank参与，1–2小时）</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-sales">销售</span>
+                  <div class="action-content">
+                    <div class="action-text">Frank带OM去见大客户，介绍他为"公司运营负责人"，逐步让OM成为客户<strong>日常联系人</strong>。Frank从"执行者"变成"关系守护者"</div>
+                    <div class="action-who"><span class="action-money">目标：大客户占比降至50%以下</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-qbcc">QBCC</span>
+                  <div class="action-content">
+                    <div class="action-text">直接承包业务扩大：合同金额提升至<strong>$30万–$100万</strong>，开始布局奥运会相关项目（Brisbane 2032）。目标新增4–6个Builder客户</div>
+                    <div class="action-who"><span class="action-money">目标直接承包营业额：$80万–$120万</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-sys">系统</span>
+                  <div class="action-content">
+                    <div class="action-text">与最大客户签订<strong>长期框架协议（12–24个月）</strong>，锁定关系，合同里明确服务标准和响应时间，降低人身依赖风险</div>
+                    <div class="action-who">→ 找：Solicitor起草合同</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-connector"><div class="tl-spacer"></div><div class="tl-line"></div></div>
+
+      <!-- YEAR 3 -->
+      <div class="tl-phase">
+        <div class="tl-row">
+          <div class="tl-time"><div class="tl-year">第三年</div><div class="tl-age">2028–2029</div></div>
+          <div class="tl-dot y3"></div>
+          <div class="tl-card" onclick="togglePhase('p3')">
+            <div class="tl-card-head y3">
+              <div class="tl-head-left">
+                <span class="tl-emoji">📈</span>
+                <div>
+                  <div class="tl-phase-name">业务开发脱身 + 奥运会布局</div>
+                  <div class="tl-phase-sub">预算$150,000 · 目标：每周工时从20小时降至10–15小时</div>
+                </div>
+              </div>
+              <div class="tl-toggle" id="toggle-p3">▼</div>
+            </div>
+            <div class="tl-body" id="body-p3">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-sales">销售</span>
+                  <div class="action-content">
+                    <div class="action-text">招聘<strong>Business Development Manager（BDM）</strong>：基本薪资$70,000–$90,000 + 新客户首年营业额2–3%提成。有建筑行业背景，有现成Builder人脉</div>
+                    <div class="action-who"><span class="action-money">目标：BDM每年新增$50万–$100万营业额</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-sys">系统</span>
+                  <div class="action-content">
+                    <div class="action-text">建立<strong>公司品牌</strong>（而非Frank个人品牌）：专业网站展示项目案例、QBCC资质、团队介绍。申请相关行业认证，提升公司资质等级</div>
+                    <div class="action-who"><span class="action-cost">网站建设约$5,000–$10,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-qbcc">奥运</span>
+                  <div class="action-content">
+                    <div class="action-text">积极布局<strong>Brisbane 2032奥运会建设项目</strong>：通过BDM和行业人脉，接触承建奥运场馆、配套设施的大型Builder。目标在2029–2031年吃到这一波红利高峰</div>
+                    <div class="action-who"><span class="action-money">目标单个合同金额：$100万–$300万</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-ops">运营</span>
+                  <div class="action-content">
+                    <div class="action-text">员工规模扩大至<strong>35–45人</strong>，OM完全独立管理日常运营，Frank只参与重大决策。建立清晰的<strong>决策授权框架</strong>：哪些OM自己决定，哪些需要Frank批准</div>
+                    <div class="action-who"><span class="action-money">大客户占比目标：40%以下</span></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-connector"><div class="tl-spacer"></div><div class="tl-line"></div></div>
+
+      <!-- YEAR 4 -->
+      <div class="tl-phase">
+        <div class="tl-row">
+          <div class="tl-time"><div class="tl-year">第四年</div><div class="tl-age">2029–2030</div></div>
+          <div class="tl-dot y4"></div>
+          <div class="tl-card" onclick="togglePhase('p4')">
+            <div class="tl-card-head y4">
+              <div class="tl-head-left">
+                <span class="tl-emoji">🔧</span>
+                <div>
+                  <div class="tl-phase-name">系统完善 + 奥运红利高峰</div>
+                  <div class="tl-phase-sub">预算$150,000 · 目标：Frank离开1个月公司正常运转</div>
+                </div>
+              </div>
+              <div class="tl-toggle" id="toggle-p4">▼</div>
+            </div>
+            <div class="tl-body" id="body-p4">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-sys">系统</span>
+                  <div class="action-content">
+                    <div class="action-text">部署完整管理系统：<strong>Procore或Buildxact</strong>项目管理、CRM客户管理、Deputy排班、Xero财务。所有数据实时可见，Frank手机随时看报表</div>
+                    <div class="action-who"><span class="action-cost">系统费用约$15,000–$25,000/年</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-qbcc">奥运</span>
+                  <div class="action-content">
+                    <div class="action-text">奥运会相关项目进入<strong>施工高峰期</strong>（2030–2032年预计是Brisbane建设最旺盛阶段）。H3凭借QBCC资质、团队规模和行业口碑，争取$500万+级别的合同</div>
+                    <div class="action-who"><span class="action-money">目标年营业额：$400万–$500万</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-ops">运营</span>
+                  <div class="action-content">
+                    <div class="action-text"><strong>关键测试：Frank去旅行1个月，公司不出问题。</strong> 如果测试通过，说明公司已经具备自主运营能力，脱身计划成功</div>
+                    <div class="action-who">→ 建议在2030年第一季度进行这个测试</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-fin">财务</span>
+                  <div class="action-content">
+                    <div class="action-text">开始评估<strong>公司出售或引入合伙人</strong>的可能性。一家年利润$80万–$100万、能自主运营的劳务承包公司，市场估值约$240万–$400万（3–4倍PE）</div>
+                    <div class="action-who">→ 找：Business Broker评估 &nbsp;|&nbsp; 开始整理财务记录和运营文档</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-connector"><div class="tl-spacer"></div><div class="tl-line"></div></div>
+
+      <!-- YEAR 5 -->
+      <div class="tl-phase">
+        <div class="tl-row">
+          <div class="tl-time"><div class="tl-year">第五年</div><div class="tl-age">2030–2031</div></div>
+          <div class="tl-dot y5" style="background:var(--green)"></div>
+          <div class="tl-card" onclick="togglePhase('p5')">
+            <div class="tl-card-head y5">
+              <div class="tl-head-left">
+                <span class="tl-emoji">🎯</span>
+                <div>
+                  <div class="tl-phase-name">真正脱身：从经营者变成股东</div>
+                  <div class="tl-phase-sub">每周3–5小时 · 年利润$54万+ · 自由支配时间</div>
+                </div>
+              </div>
+              <div class="tl-toggle" id="toggle-p5">▼</div>
+            </div>
+            <div class="tl-body" id="body-p5">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-ops">角色</span>
+                  <div class="action-content">
+                    <div class="action-text">Frank的新角色：<strong>每月一次董事会议（2小时）→ 每季度一次重要客户拜访 → 年度战略方向决定 → 财务报表审阅</strong>。其他所有事情由OM和BDM负责</div>
+                    <div class="action-who"><span class="action-money">每周投入时间：3–5小时</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-fin">财务</span>
+                  <div class="action-content">
+                    <div class="action-text">公司年营业额$360万+，年利润$54万+，完全靠团队产生，不依赖Frank个人。H3公司利润通过合理税务结构（家族信托或公司留存）流入Frank的退休资产池</div>
+                    <div class="action-who"><span class="action-money">退休路线图联动：H3利润成为退休收入来源之一</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-sales">选项</span>
+                  <div class="action-content">
+                    <div class="action-text"><strong>出售选项：</strong>如果决定完全退出，一家能自主运营、年利润$54万的公司，估值约<strong>$160万–$270万</strong>（3–5倍PE）。这笔钱可直接注入退休资产，加速退休计划</div>
+                    <div class="action-who">→ 找：Business Broker + Tax Accountant（CGT规划）</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB: STRATEGY -->
+  <div id="tab-strategy" class="tab-content">
+    <div class="sec-title">五大核心策略</div>
+    <div class="strategy-grid">
+      <div class="strategy-card">
+        <div class="strategy-icon">💰</div>
+        <div class="strategy-name">财务脱身（第一年优先）</div>
+        <div class="strategy-desc">找兼职Bookkeeper接管日常记账、工资、发票、GST申报。用Xero云端软件，Frank只需每周看报表审批付款。这是所有脱身里最快见效的一步。</div>
+        <div class="strategy-highlight sh-amber">每周省10小时 · 费用$15,000–$20,000/年</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-icon">👷</div>
+        <div class="strategy-name">培养核心人才（第一至二年）</div>
+        <div class="strategy-desc">从4个Leading Hand里选出最强1–2人，6–12个月系统培养成能独立管工地、直接跟甲方沟通的人。给他们看到上升通道和加薪，留住人才是关键。</div>
+        <div class="strategy-highlight sh-green">加薪$5,000–$10,000/人 · 替换$350,000/年的Frank价值</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-icon">👔</div>
+        <div class="strategy-name">Operations Manager（第二年核心）</div>
+        <div class="strategy-desc">整个5年计划最关键的一步。OM接管日常运营后，Frank的工时从40小时降至20小时。选错人比没有OM更糟糕——三个月试用期，KPI必须清晰。</div>
+        <div class="strategy-highlight sh-blue">薪资$80,000–$100,000/年 · ROI：释放Frank时间价值</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-icon">🏗️</div>
+        <div class="strategy-name">QBCC直接承包（升级盈利模式）</div>
+        <div class="strategy-desc">从劳务分包（利润率16%）升级为直接承包（利润率25–35%）。2个月内拿到License后，从小合同起步，逐步提高合同金额，2032年奥运会前吃到红利高峰。</div>
+        <div class="strategy-highlight sh-amber">目标：5年后直接承包占总营业额60%+</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-icon">🏟️</div>
+        <div class="strategy-name">奥运会布局（2028–2032）</div>
+        <div class="strategy-desc">Brisbane 2032奥运会是H3历史上最大的单次增长机会。需要提前3–4年建立与大型Builder的关系，凭借QBCC资质和良好记录，争取参与场馆及配套设施项目。</div>
+        <div class="strategy-highlight sh-steel">目标单个合同：$100万–$300万</div>
+      </div>
+      <div class="strategy-card" style="background:var(--steel);border-color:var(--steel-mid)">
+        <div class="strategy-icon">⚠️</div>
+        <div class="strategy-name" style="color:var(--amber-light)">脱身最大陷阱</div>
+        <div class="strategy-desc" style="color:rgba(255,255,255,.65);font-size:13px;line-height:1.8;margin-top:8px">找到了OM，系统也建好了，但还是每天忍不住插手每个决定——这是最常见的失败原因。<br/><br/><strong style="color:var(--amber-light)">OM做决定可能跟你做的不一样，但只要结果在合理范围内，就让他去做。完美是自主运营的敌人。</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: REVENUE -->
+  <div id="tab-revenue" class="tab-content">
+    <div class="sec-title">营收与利润预测</div>
+    <div class="metrics-grid">
+      <div class="metric amber"><div class="metric-label">当前营业额</div><div class="metric-val amber">$240万</div><div class="metric-sub">劳务分包为主</div></div>
+      <div class="metric blue"><div class="metric-label">第三年目标</div><div class="metric-val blue">$310万</div><div class="metric-sub">劳务+直接承包混合</div></div>
+      <div class="metric green"><div class="metric-label">第五年目标</div><div class="metric-val green">$360万+</div><div class="metric-sub">含奥运会红利</div></div>
+      <div class="metric amber"><div class="metric-label">Frank每周工时</div><div class="metric-val amber">3–5小时</div><div class="metric-sub">第五年目标</div></div>
+    </div>
+
+    <div class="panel" style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:24px">
+      <div style="font-size:13px;font-weight:800;margin-bottom:14px">年度营收与利润预测</div>
+      <table class="rev-table">
+        <thead>
+          <tr>
+            <th>年份</th>
+            <th>管理投入</th>
+            <th>预计营业额</th>
+            <th>预计利润</th>
+            <th>利润率</th>
+            <th>Frank每周工时</th>
+            <th>员工人数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>现在（2026）</td><td>—</td><td>$240万</td><td>$40万</td><td>16.7%</td><td>60小时 🔴</td><td>23–24人</td></tr>
+          <tr><td>第一年（2027）</td><td>$5万</td><td>$250万</td><td>$38万</td><td>15.2%</td><td>40小时</td><td>25–28人</td></tr>
+          <tr><td>第二年（2028）</td><td>$10万</td><td>$270万</td><td>$42万</td><td>15.6%</td><td>20小时</td><td>28–35人</td></tr>
+          <tr><td>第三年（2029）</td><td>$15万</td><td>$310万</td><td>$46万</td><td>14.8%</td><td>15小时</td><td>35–45人</td></tr>
+          <tr><td>第四年（2030）</td><td>$15万</td><td>$400万</td><td>$60万</td><td>15.0%</td><td>8小时</td><td>45–60人</td></tr>
+          <tr><td>第五年（2031）</td><td>$10万</td><td>$360万+</td><td>$54万+</td><td>15.0%+</td><td>3–5小时 🟢</td><td>40–55人</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:11px;color:var(--concrete);margin-top:10px">⚠️ 第四年营业额因奥运会项目高峰可能达到$400万–$500万，第五年奥运高峰过后回归正常水平$360万+。以上为保守估算。</div>
+    </div>
+
+    <div class="panel" style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:20px">
+      <div style="font-size:13px;font-weight:800;margin-bottom:14px">Frank工时减少路径</div>
+      <div class="progress-section">
+        <div class="progress-label"><span>现在：60小时/周</span><span>100%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="progress-label"><span>第一年：40小时/周（Bookkeeper + HR系统）</span><span>67%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:67%"></div></div>
+        <div class="progress-label"><span>第二年：20小时/周（Operations Manager上岗）</span><span>33%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:33%"></div></div>
+        <div class="progress-label"><span>第三年：15小时/周（BDM接管业务开发）</span><span>25%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:25%"></div></div>
+        <div class="progress-label"><span>第四年：8小时/周（系统完善）</span><span>13%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:13%"></div></div>
+        <div class="progress-label"><span>第五年：3–5小时/周 🎉</span><span style="color:var(--green)">5–8%</span></div>
+        <div class="progress-track"><div class="progress-fill" style="width:8%;background:linear-gradient(90deg,var(--green),#4CAF50)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: RISKS -->
+  <div id="tab-risks" class="tab-content">
+    <div class="sec-title">风险识别与应对</div>
+    <div class="risk-grid">
+      <div class="risk-card">
+        <div class="risk-title" style="color:var(--red)">🔴 高风险</div>
+        <div class="risk-item">
+          <span class="risk-icon">💔</span>
+          <div><strong>大客户流失（70%营业额）</strong><br/><span style="color:var(--concrete);font-size:12px">应对：签长期框架协议 + 每年新增2–3个客户，3年内将单一客户占比降至30%以下</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">👤</span>
+          <div><strong>OM选错人</strong><br/><span style="color:var(--concrete);font-size:12px">应对：3个月试用期，KPI清晰，先从内部Leading Hand提升试点，降低风险</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">📉</span>
+          <div><strong>建筑行业周期性下滑</strong><br/><span style="color:var(--concrete);font-size:12px">应对：直接承包利润率更高，多元化客户类型（住宅+商业+政府），降低单一市场风险</span></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-title" style="color:var(--amber)">🟡 中等风险</div>
+        <div class="risk-item">
+          <span class="risk-icon">💸</span>
+          <div><strong>直接承包材料成本控制</strong><br/><span style="color:var(--concrete);font-size:12px">应对：从小合同起步积累经验，建立稳定供应商关系，合同里加入材料价格波动条款</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">👷</span>
+          <div><strong>Leading Hand不达预期</strong><br/><span style="color:var(--concrete);font-size:12px">应对：同时培养2人，有备选。如内部无合适人选，提前在市场上寻找外部候选人</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">📋</span>
+          <div><strong>QBCC合规风险</strong><br/><span style="color:var(--concrete);font-size:12px">应对：保持License有效，所有项目严格按AS标准施工，建立质量检查流程</span></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-title" style="color:var(--green)">🟢 已有优势</div>
+        <div class="risk-item">
+          <span class="risk-icon">✅</span>
+          <div><strong>大客户关系稳固（3年+）</strong><br/><span style="color:var(--concrete);font-size:12px">换掉H3会影响他们的业务，议价能力强，是谈长期框架协议的好时机</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">✅</span>
+          <div><strong>23人团队已有规模</strong><br/><span style="color:var(--concrete);font-size:12px">不是从零开始，已有一定人员基础，直接承包项目有足够工人支撑</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">✅</span>
+          <div><strong>H3 Business Tools已部署</strong><br/><span style="color:var(--concrete);font-size:12px">报价单和发票系统已就绪，直接承包业务可以立即开始专业报价</span></div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-title" style="color:var(--steel)">💡 关键决策提醒</div>
+        <div class="risk-item">
+          <span class="risk-icon">🧠</span>
+          <div><strong>脱身最大敌人是自己</strong><br/><span style="color:var(--concrete);font-size:12px">找到OM后忍不住插手 → 员工失去信心 → 脱身失败。必须学会"放手让结果说话"</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">📅</span>
+          <div><strong>奥运会窗口期有限</strong><br/><span style="color:var(--concrete);font-size:12px">2028–2032年是Brisbane建设高峰，2026–2027年就要开始布局Builder关系，错过了就是错过了</span></div>
+        </div>
+        <div class="risk-item">
+          <span class="risk-icon">🔗</span>
+          <div><strong>H3与退休计划联动</strong><br/><span style="color:var(--concrete);font-size:12px">H3公司利润是退休收入的重要来源之一。脱身≠放弃，而是让公司持续产生利润，Frank不需要亲自干活</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-box">
+    <p>
+      <strong>5年脱身路线，一句话总结：</strong><br/>
+      <strong>Bookkeeper接管财务（第一年）</strong> → <strong>Operations Manager接管运营（第二年）</strong><br/>
+      → <strong>BDM接管业务开发（第三年）</strong> → <strong>系统完善（第四年）</strong> → <strong>Frank变成股东（第五年）</strong><br/>
+      同步推进：<strong>QBCC直接承包升级利润率</strong> + <strong>2032奥运会红利布局</strong> + <strong>客户集中度分散</strong>
+    </p>
+  </div>
+
+  <div class="footer-note">
+    ⚠️ 本路线图基于H3 Interior当前经营状况制作，所有数字为合理估算，实际结果因市场变化而异。涉及劳动法（员工合同、薪资结构）、税务（公司结构、Super）、QBCC合规的具体操作，须分别咨询 HR Consultant、Tax Accountant、QBCC持牌顾问。公司出售涉及Business Broker + Tax Accountant（CGT规划）。
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id){
+  const body=document.getElementById('body-'+id);
+  const toggle=document.getElementById('toggle-'+id);
+  const isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  if(toggle)toggle.classList.toggle('open',!isOpen);
+}
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+// Open first phase by default
+togglePhase('p0');
+</script>
+</body>
+</html>
