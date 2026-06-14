@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frank 房产投资策略路线图 2026–2036</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C87A;
+    --gold-pale: #FDF6E3;
+    --dark: #1A1A2E;
+    --dark-mid: #16213E;
+    --slate: #2D3561;
+    --slate-light: #3D4A7A;
+    --white: #FFFFFF;
+    --offwhite: #F8F6F1;
+    --green: #2E7D52;
+    --green-light: #E8F5EE;
+    --red: #C0392B;
+    --red-light: #FDECEA;
+    --orange: #E67E22;
+    --orange-light: #FEF3E8;
+    --blue: #1565C0;
+    --blue-light: #E8F0FE;
+    --text-main: #1A1A2E;
+    --text-muted: #5A6080;
+    --border: #E0D9C8;
+  }
+
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', BlinkMacSystemFont, sans-serif;
+    background: var(--offwhite);
+    color: var(--text-main);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--slate) 100%);
+    padding: 40px 48px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 2px solid rgba(201,168,76,0.15);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 40%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 28px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold-light);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .stat-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+    align-self: stretch;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ALERT BOX */
+  .alert {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 20px; flex-shrink: 0; }
+  .alert-content { font-size: 14px; line-height: 1.6; }
+  .alert-title { font-weight: 700; color: var(--red); margin-bottom: 4px; font-size: 15px; }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    margin-bottom: 48px;
+  }
+  .timeline-track {
+    position: absolute;
+    left: 120px;
+    top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--gold), var(--slate-light));
+    border-radius: 2px;
+  }
+
+  .timeline-phase {
+    margin-bottom: 8px;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+  .phase-time {
+    width: 108px;
+    text-align: right;
+    padding-right: 24px;
+    flex-shrink: 0;
+  }
+  .phase-year {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--slate);
+  }
+  .phase-age {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .phase-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid var(--white);
+    box-shadow: 0 0 0 2px var(--gold);
+    flex-shrink: 0;
+    z-index: 2;
+    background: var(--gold);
+    margin-right: 20px;
+    position: relative;
+  }
+  .phase-dot.urgent { background: var(--red); box-shadow: 0 0 0 2px var(--red); }
+  .phase-dot.active { background: var(--orange); box-shadow: 0 0 0 2px var(--orange); }
+  .phase-dot.growth { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .phase-dot.retire { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 2px var(--gold); }
+    50% { box-shadow: 0 0 0 6px rgba(201,168,76,0.3); }
+  }
+
+  .phase-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .phase-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+  .phase-card-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .phase-card-header.urgent { background: linear-gradient(90deg, var(--red-light), var(--white)); border-left: 4px solid var(--red); }
+  .phase-card-header.active { background: linear-gradient(90deg, var(--orange-light), var(--white)); border-left: 4px solid var(--orange); }
+  .phase-card-header.growth { background: linear-gradient(90deg, var(--green-light), var(--white)); border-left: 4px solid var(--green); }
+  .phase-card-header.retire { background: linear-gradient(90deg, var(--gold-pale), var(--white)); border-left: 4px solid var(--gold); }
+
+  .phase-title-row { display: flex; align-items: center; gap: 10px; }
+  .phase-emoji { font-size: 18px; }
+  .phase-name { font-size: 15px; font-weight: 700; color: var(--text-main); }
+  .phase-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .phase-toggle { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; }
+  .phase-toggle.open { transform: rotate(180deg); }
+
+  .phase-body {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.2s;
+  }
+  .phase-body.open {
+    max-height: 800px;
+    padding: 0 20px 20px;
+  }
+
+  .action-list { list-style: none; margin-top: 12px; }
+  .action-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+  .badge-a { background: #E3F2FD; color: #1565C0; }
+  .badge-b { background: #F3E5F5; color: #6A1B9A; }
+  .badge-c { background: #E8F5E9; color: #2E7D32; }
+  .badge-d { background: #FFF3E0; color: #E65100; }
+  .badge-e { background: #FCE4EC; color: #880E4F; }
+  .badge-urgent { background: var(--red-light); color: var(--red); }
+
+  .action-text { color: var(--text-main); }
+  .action-who {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .action-money {
+    font-weight: 700;
+    color: var(--green);
+  }
+  .action-money.cost { color: var(--red); }
+
+  /* CONNECTOR LINE between phases */
+  .phase-connector {
+    display: flex;
+    margin: 0;
+  }
+  .connector-spacer { width: 108px; flex-shrink: 0; }
+  .connector-line {
+    width: 3px;
+    height: 12px;
+    background: var(--border);
+    margin-left: 7.5px;
+  }
+
+  /* METRICS GRID */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .metric-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .metric-card.gold::before { background: var(--gold); }
+  .metric-card.green::before { background: var(--green); }
+  .metric-card.blue::before { background: var(--blue); }
+  .metric-card.red::before { background: var(--red); }
+
+  .metric-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .metric-value { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .metric-value.gold { color: var(--gold); }
+  .metric-value.green { color: var(--green); }
+  .metric-value.blue { color: var(--blue); }
+  .metric-value.red { color: var(--red); }
+  .metric-sub { font-size: 12px; color: var(--text-muted); }
+
+  /* STRATEGY CARDS */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .strategy-card {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+  .strategy-icon { font-size: 28px; margin-bottom: 10px; }
+  .strategy-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .strategy-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .strategy-highlight {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .strategy-highlight.green { background: var(--green-light); color: var(--green); }
+  .strategy-highlight.gold { background: var(--gold-pale); color: #8B6914; }
+  .strategy-highlight.blue { background: var(--blue-light); color: var(--blue); }
+  .strategy-highlight.red { background: var(--red-light); color: var(--red); }
+  .strategy-highlight.orange { background: var(--orange-light); color: var(--orange); }
+  .strategy-highlight.purple { background: #F3E5F5; color: #6A1B9A; }
+
+  /* RETIREMENT PROJECTION */
+  .projection-box {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--slate) 100%);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 40px;
+    color: var(--white);
+  }
+  .projection-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .projection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .proj-col-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .proj-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 13.5px;
+  }
+  .proj-row:last-child { border-bottom: none; }
+  .proj-key { color: rgba(255,255,255,0.65); }
+  .proj-val { font-weight: 700; color: var(--gold-light); }
+  .proj-val.green { color: #69DB9C; }
+  .proj-val.red { color: #FF8A80; }
+  .proj-val.white { color: var(--white); }
+
+  /* INCOME BREAKDOWN */
+  .income-bars {
+    margin-top: 16px;
+  }
+  .income-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .income-bar-label { font-size: 12px; color: rgba(255,255,255,0.6); width: 140px; flex-shrink: 0; }
+  .income-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .income-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .income-bar-amount { font-size: 12px; font-weight: 700; color: var(--gold-light); width: 70px; text-align: right; flex-shrink: 0; }
+
+  /* ONE LINE SUMMARY */
+  .summary-box {
+    background: var(--gold-pale);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .summary-box p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #5C3D00;
+    line-height: 1.7;
+  }
+  .summary-box strong { color: var(--dark); }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    line-height: 1.7;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    width: fit-content;
+  }
+  .tab {
+    padding: 8px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+  }
+  .tab.active {
+    background: var(--dark);
+    color: var(--white);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* PRIORITY BADGE */
+  .priority-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .priority-row:last-child { border-bottom: none; }
+  .priority-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .p1 { background: var(--red-light); color: var(--red); }
+  .p2 { background: var(--orange-light); color: var(--orange); }
+  .p3 { background: var(--blue-light); color: var(--blue); }
+  .p4 { background: var(--green-light); color: var(--green); }
+  .priority-text { flex: 1; }
+  .priority-action { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .priority-detail { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .priority-impact { font-size: 13px; font-weight: 700; text-align: right; white-space: nowrap; }
+
+  @media (max-width: 768px) {
+    .header { padding: 28px 20px; }
+    .header h1 { font-size: 22px; }
+    .main { padding: 24px 16px; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .strategy-grid { grid-template-columns: 1fr; }
+    .projection-grid { grid-template-columns: 1fr; }
+    .timeline-track { left: 90px; }
+    .phase-time { width: 78px; }
+    .connector-spacer { width: 78px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-label">Frank · 房产投资策略路线图</div>
+  <h1>从$120万净资产<br>到$200,000/年税后被动收入</h1>
+  <div class="header-sub">10年执行路线图 · 2026–2036 · Brisbane, QLD</div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="stat-value">$1.2M</span>
+      <span class="stat-label">当前总净资产</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value">$5M+</span>
+      <span class="stat-label">退休目标净资产</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value">50岁</span>
+      <span class="stat-label">目标退休年龄</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value">$200K</span>
+      <span class="stat-label">税后年度目标收入</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- CRITICAL ALERT -->
+  <div class="alert">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-content">
+      <div class="alert-title">最重要的战略约束：Super锁定期</div>
+      你40岁，计划50岁退休，但Super要到<strong>65岁才能提取</strong>。退休后的<strong>15年空白期</strong>（50–65岁）内，$200,000/年税后收入必须100%来自房产租金 + ETF + H3公司分红，与Super完全无关。这是整个退休计划的核心约束。
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('timeline')">📅 时间路线图</button>
+    <button class="tab" onclick="switchTab('priorities')">🎯 优先行动</button>
+    <button class="tab" onclick="switchTab('projection')">📊 退休测算</button>
+    <button class="tab" onclick="switchTab('strategy')">🗺️ 五大策略</button>
+  </div>
+
+  <!-- TAB: TIMELINE -->
+  <div id="tab-timeline" class="tab-content active">
+    <div class="section-title">执行时间线</div>
+
+    <div class="timeline">
+      <div class="timeline-track"></div>
+
+      <!-- PHASE 1 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">本周内</div>
+            <div class="phase-age">2026年6月</div>
+          </div>
+          <div class="phase-dot urgent"></div>
+          <div class="phase-card" onclick="togglePhase('p1')">
+            <div class="phase-card-header urgent">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">🚨</span>
+                  <span class="phase-name">立即行动：启动Super供款</span>
+                </div>
+                <div class="phase-subtitle">每年节税$19,200 · 零风险 · 现在就能做</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p1">▼</div>
+            </div>
+            <div class="phase-body" id="body-p1">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">联系会计，通过H3公司为Frank和配偶各启动<strong>Concessional Super供款$30,000/年</strong></div>
+                    <div class="action-who">→ 找：Tax Accountant &nbsp;|&nbsp; <span class="action-money">每年节税$19,200</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">问清楚5个关键问题：取钱方式（Salary/Dividend）、公司实际税负、Super SGC合规性、最优供款方式、South Ripley出售税务规划</div>
+                    <div class="action-who">→ 找：Tax Accountant &nbsp;|&nbsp; 发邮件预约会议</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 2 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">6月底前</div>
+            <div class="phase-age">2026年6月</div>
+          </div>
+          <div class="phase-dot urgent"></div>
+          <div class="phase-card" onclick="togglePhase('p2')">
+            <div class="phase-card-header urgent">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">🏗️</span>
+                  <span class="phase-name">Slacks Creek：联系Town Planner</span>
+                </div>
+                <div class="phase-subtitle">一个问题决定所有后续策略：能不能细分？</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p2">▼</div>
+            </div>
+            <div class="phase-body" id="body-p2">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">联系有Logan City Council经验的Town Planner（推荐Steffan Harries），评估<strong>1,037sqm / 18m临街面是否可做Front-and-Rear细分</strong></div>
+                    <div class="action-who">→ 找：Town Planner &nbsp;|&nbsp; <span class="action-money cost">费用约$500–$2,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">同步联系白蚁防治公司，处理后院<strong>活跃白蚁</strong>（检测报告已确认），在翻新前必须完成</div>
+                    <div class="action-who">→ 找：持牌白蚁防治公司 &nbsp;|&nbsp; <span class="action-money cost">费用约$2,000–$5,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-b">B板块</span>
+                  <div>
+                    <div class="action-text">让会计开始计算South Ripley（$745,000买入，2025年2月）的<strong>CGT模拟</strong>，确定最优出售财年</div>
+                    <div class="action-who">→ 找：Tax Accountant</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 3 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">7月</div>
+            <div class="phase-age">2026年7月</div>
+          </div>
+          <div class="phase-dot active"></div>
+          <div class="phase-card" onclick="togglePhase('p3')">
+            <div class="phase-card-header active">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">🔍</span>
+                  <span class="phase-name">Slacks Creek：租客离开后全面检查</span>
+                </div>
+                <div class="phase-subtitle">租约到期 → 立即启动侵入性检查，确认实际翻新成本</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p3">▼</div>
+            </div>
+            <div class="phase-body" id="body-p3">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">委托Flynn Fang（0413 314 888）进行<strong>侵入性白蚁检查</strong>，确认屋顶内部（因净空太低未能检查）是否有隐患</div>
+                    <div class="action-who">→ 找：Australian Home Inspection Services &nbsp;|&nbsp; <span class="action-money cost">约$1,000–$2,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">同步安排<strong>电气、水管、防水、屋顶</strong>四项专项检查（建筑报告明确要求），确认$10万预算是否足够</div>
+                    <div class="action-who">→ 找：各专项检查公司 &nbsp;|&nbsp; <span class="action-money cost">约$2,000–$4,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">根据Town Planner答案决策：<br>
+                    <strong>能细分 →</strong> 委托提交DA申请，启动细分流程（18–30个月）<br>
+                    <strong>不能细分 →</strong> 立即启动翻新+Granny Flat建设审批（BA申请）</div>
+                    <div class="action-who">→ 找：Town Planner / Builder &nbsp;|&nbsp; Bank of China贷款经理（mortgagee consent）</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 4 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">6个月内</div>
+            <div class="phase-age">2026年底</div>
+          </div>
+          <div class="phase-dot active"></div>
+          <div class="phase-card" onclick="togglePhase('p4')">
+            <div class="phase-card-header active">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">🏦</span>
+                  <span class="phase-name">设立家族信托 + 税务结构优化</span>
+                </div>
+                <div class="phase-subtitle">为未来ETF投资和收入分配建好容器</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p4">▼</div>
+            </div>
+            <div class="phase-body" id="body-p4">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">设立<strong>家族信托（Family Trust）</strong>，受托人为独立公司（Corporate Trustee）。受益人：Frank、配偶、女儿（18岁后）。用于承接South Ripley出售后的ETF投资资金</div>
+                    <div class="action-who">→ 找：Solicitor + Tax Accountant &nbsp;|&nbsp; <span class="action-money cost">设立约$5,500–$9,000，每年管理$2,000–$4,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">审查配偶在H3公司的实质性工作职责，确认收入分配合理性（ATO合规），优化薪资结构降低家庭整体税率</div>
+                    <div class="action-who">→ 找：Tax Accountant</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">利用<strong>Carry-forward Concessional规则</strong>，补供过去5年未用的Super额度（估算每人约$162,500可追赶）</div>
+                    <div class="action-who">→ 找：Tax Accountant确认可用额度 &nbsp;|&nbsp; <span class="action-money">节税效果巨大</span></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 5 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">2027–2028</div>
+            <div class="phase-age">41–42岁</div>
+          </div>
+          <div class="phase-dot growth"></div>
+          <div class="phase-card" onclick="togglePhase('p5')">
+            <div class="phase-card-header growth">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">💰</span>
+                  <span class="phase-name">出售South Ripley · 资金重新部署</span>
+                </div>
+                <div class="phase-subtitle">最优出售窗口 · 净到手约$280,000–$320,000</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p5">▼</div>
+            </div>
+            <div class="phase-body" id="body-p5">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-b">B板块</span>
+                  <div>
+                    <div class="action-text"><strong>出售South Ripley</strong>（目前持有约2–3年，享CGT 50%折扣）。出售时机由会计确认，选择H3公司利润较低的财年，最大化节税效果</div>
+                    <div class="action-who">→ 找：Tax Accountant + Real Estate Agent &nbsp;|&nbsp; <span class="action-money">预计净到手$280,000–$320,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-d">D板块</span>
+                  <div>
+                    <div class="action-text">出售所得分配：<br>
+                    • <strong>$220,000</strong> → Non-concessional Super供款（夫妻各$110,000，3年bring-forward）<br>
+                    • <strong>$60,000–$100,000</strong> → 家族信托ETF投资</div>
+                    <div class="action-who">→ <span class="action-money">Super余额跳升，ETF投资启动</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">同期：Slacks Creek翻新完成或Granny Flat建设中，租金收入从$685/周提升至$850+/周（主屋）+ $500+/周（Granny Flat）</div>
+                    <div class="action-who">→ <span class="action-money">Slacks Creek年租金：$70,000–$75,000</span></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 6 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">2028–2033</div>
+            <div class="phase-age">42–47岁</div>
+          </div>
+          <div class="phase-dot growth"></div>
+          <div class="phase-card" onclick="togglePhase('p6')">
+            <div class="phase-card-header growth">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">📈</span>
+                  <span class="phase-name">全力积累阶段</span>
+                </div>
+                <div class="phase-subtitle">Super供款 + ETF增长 + H3留存 + Slacks Creek稳定租金</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p6">▼</div>
+            </div>
+            <div class="phase-body" id="body-p6">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-d">D板块</span>
+                  <div>
+                    <div class="action-text">每年持续Concessional Super供款$60,000（夫妻合计），坚持5–6年不间断。Super内7%年回报复利增长</div>
+                    <div class="action-who">→ <span class="action-money">预计2036年Super余额：$1,500,000–$2,000,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-e">E板块</span>
+                  <div>
+                    <div class="action-text">家族信托持续买入多元化ETF（建议：澳洲VAS + 全球VGS，降低当前AI科技股集中度）。长期复利增长</div>
+                    <div class="action-who">→ <span class="action-money">预计2036年ETF余额：$800,000–$1,000,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">H3公司每年留存$50,000–$100,000利润（公司税率25%），退休后以低税率分批取出。女儿18岁后（2031年）成为信托受益人，享受免税额度分配</div>
+                    <div class="action-who">→ 找：Tax Accountant每年优化 &nbsp;|&nbsp; <span class="action-money">累计留存$300,000–$500,000</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-a">A板块</span>
+                  <div>
+                    <div class="action-text">若Slacks Creek细分成功（2028–2029年），后地块建新房出租，成为实质上的第四套投资房。年租金收入进一步提升</div>
+                    <div class="action-who">→ <span class="action-money">最优情况：年总租金$100,000+</span></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 7 -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">2033–2036</div>
+            <div class="phase-age">47–50岁</div>
+          </div>
+          <div class="phase-dot growth"></div>
+          <div class="phase-card" onclick="togglePhase('p7')">
+            <div class="phase-card-header growth">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">🎯</span>
+                  <span class="phase-name">退休前3年：精细调整</span>
+                </div>
+                <div class="phase-subtitle">降低工作收入 · 最大化Super · 规划退休收入结构</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p7">▼</div>
+            </div>
+            <div class="phase-body" id="body-p7">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-c">C板块</span>
+                  <div>
+                    <div class="action-text">逐步降低个人薪资收入，增加Super供款（包括最后的Catch-up Contributions追赶）。考虑H3公司是否出售、转型或引入职业经理人</div>
+                    <div class="action-who">→ 找：Financial Adviser + Tax Accountant</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-e">E板块</span>
+                  <div>
+                    <div class="action-text">与Financial Adviser制定<strong>退休收入提取计划</strong>：房租40% + ETF分红20% + H3公司留存分批提取40%。确保退休初期（50–65岁）税后$200,000/年可持续</div>
+                    <div class="action-who">→ 找：Licensed Financial Adviser</div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-e">E板块</span>
+                  <div>
+                    <div class="action-text">评估Pallara自住房策略：是否降级换房，释放部分Equity投入ETF，提升退休初期流动资产规模</div>
+                    <div class="action-who">→ 找：Financial Adviser + Tax Accountant</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-connector"><div class="connector-spacer"></div><div class="connector-line"></div></div>
+
+      <!-- PHASE 8: RETIREMENT -->
+      <div class="timeline-phase">
+        <div class="phase-header">
+          <div class="phase-time">
+            <div class="phase-year">2036</div>
+            <div class="phase-age">50岁 🎉</div>
+          </div>
+          <div class="phase-dot retire"></div>
+          <div class="phase-card" onclick="togglePhase('p8')">
+            <div class="phase-card-header retire">
+              <div>
+                <div class="phase-title-row">
+                  <span class="phase-emoji">🏖️</span>
+                  <span class="phase-name">退休 · 目标达成</span>
+                </div>
+                <div class="phase-subtitle">税后$200,000/年被动收入 · 每年增长3% · 净资产$5,000,000+</div>
+              </div>
+              <div class="phase-toggle" id="toggle-p8">▼</div>
+            </div>
+            <div class="phase-body" id="body-p8">
+              <ul class="action-list">
+                <li class="action-item">
+                  <span class="action-badge badge-e">E板块</span>
+                  <div>
+                    <div class="action-text"><strong>房产租金收入</strong>：Slacks Creek（主屋+Granny Flat或细分后两套）年租金$85,000–$100,000，税后约$65,000–$75,000</div>
+                    <div class="action-who"><span class="action-money">占退休收入约35%</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-e">E板块</span>
+                  <div>
+                    <div class="action-text"><strong>ETF分红</strong>（家族信托，约$800,000–$1,000,000规模，4%回报率）：年分红$32,000–$40,000，信托分配后税后约$26,000–$32,000</div>
+                    <div class="action-who"><span class="action-money">占退休收入约15%</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-e">E板块</span>
+                  <div>
+                    <div class="action-text"><strong>H3公司留存利润分批提取</strong>：每年$100,000–$150,000，通过低税率分红方式取出（退休后个人收入降低，边际税率约19%–32.5%）</div>
+                    <div class="action-who"><span class="action-money">占退休收入约50%</span></div>
+                  </div>
+                </li>
+                <li class="action-item">
+                  <span class="action-badge badge-d">D板块</span>
+                  <div>
+                    <div class="action-text"><strong>65岁Super解锁</strong>（2051年）：届时Super余额预计$3,000,000–$4,000,000，可免税提取，每年额外增加$120,000–$160,000免税收入，退休后期生活质量大幅提升</div>
+                    <div class="action-who"><span class="action-money">退休后期总收入可达$350,000+/年（免税）</span></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end timeline -->
+  </div>
+
+  <!-- TAB: PRIORITIES -->
+  <div id="tab-priorities" class="tab-content">
+    <div class="section-title">最高优先级行动清单</div>
+    <div style="background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;">
+
+      <div class="priority-row">
+        <div class="priority-num p1">1</div>
+        <div class="priority-text">
+          <div class="priority-action">🏦 本周：联系会计，启动Super供款</div>
+          <div class="priority-detail">H3公司为Frank和配偶各供$30,000/年 · 进Super税率15% vs 个人税率47% · 零风险零复杂度</div>
+        </div>
+        <div class="priority-impact" style="color:var(--green)">每年节税<br>$19,200</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p1">2</div>
+        <div class="priority-text">
+          <div class="priority-action">🏗️ 6月底：联系Town Planner评估Slacks Creek细分</div>
+          <div class="priority-detail">7月租约到期，每月烧$4,698 · 一个答案决定所有后续开发路径 · 推荐Steffan Harries</div>
+        </div>
+        <div class="priority-impact" style="color:var(--orange)">决定开发<br>路线</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p2">3</div>
+        <div class="priority-text">
+          <div class="priority-action">🐛 6月底：联系白蚁防治公司处理活跃白蚁</div>
+          <div class="priority-detail">检测报告已确认后院有活跃白蚁 · 翻新前必须处理 · 否则新材料成为白蚁食物</div>
+        </div>
+        <div class="priority-impact" style="color:var(--red)">费用<br>$2,000–5,000</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p2">4</div>
+        <div class="priority-text">
+          <div class="priority-action">📊 3个月内：会计计算South Ripley CGT，确定卖出时机</div>
+          <div class="priority-detail">购入$745,000（2025年2月）· 现估值$950,000 · 账面增值$205,000 · 选对财年可节税$10,000–$25,000</div>
+        </div>
+        <div class="priority-impact" style="color:var(--blue)">净到手<br>~$300,000</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p3">5</div>
+        <div class="priority-text">
+          <div class="priority-action">🏛️ 6个月内：设立家族信托</div>
+          <div class="priority-detail">不转移现有房产 · 承接South Ripley出售后ETF投资资金 · 女儿18岁后（2031年）加入受益人</div>
+        </div>
+        <div class="priority-impact" style="color:var(--blue)">设立费<br>~$7,000</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p3">6</div>
+        <div class="priority-text">
+          <div class="priority-action">🔍 7月：Slacks Creek侵入性检查（4项）</div>
+          <div class="priority-detail">电气 + 水管 + 防水 + 屋顶检查 · 屋顶内部未能检查存在隐患 · 确认$10万预算是否足够</div>
+        </div>
+        <div class="priority-impact" style="color:var(--orange)">费用<br>~$4,000</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p4">7</div>
+        <div class="priority-text">
+          <div class="priority-action">💹 2027年底：出售South Ripley，资金注入Super+ETF</div>
+          <div class="priority-detail">$220,000进Non-concessional Super · $80,000进家族信托ETF · 消除每年$11,494现金流缺口</div>
+        </div>
+        <div class="priority-impact" style="color:var(--green)">净到手<br>~$300,000</div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num p4">8</div>
+        <div class="priority-text">
+          <div class="priority-action">📱 现在：ETF组合多元化（降低AI集中度）</div>
+          <div class="priority-detail">当前QQQ 40% + 英伟达30%集中度极高 · 建议逐步转换为VAS（澳洲） + VGS（全球）组合</div>
+        </div>
+        <div class="priority-impact" style="color:var(--text-muted)">风险<br>管理</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB: PROJECTION -->
+  <div id="tab-projection" class="tab-content">
+    <div class="section-title">退休财务测算</div>
+
+    <!-- KEY METRICS -->
+    <div class="metrics-grid" style="margin-bottom:24px;">
+      <div class="metric-card gold">
+        <div class="metric-label">当前总净资产</div>
+        <div class="metric-value gold">$1.2M</div>
+        <div class="metric-sub">房产$857K + 现金$200K + 其他$40K</div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-label">10年后预计净资产</div>
+        <div class="metric-value green">$5–6.5M</div>
+        <div class="metric-sub">按全力执行策略估算</div>
+      </div>
+      <div class="metric-card blue">
+        <div class="metric-label">退休目标年收入</div>
+        <div class="metric-value blue">$200K</div>
+        <div class="metric-sub">税后 · 每年增长3%</div>
+      </div>
+      <div class="metric-card red">
+        <div class="metric-label">当前年度现金流缺口</div>
+        <div class="metric-value red">-$40K</div>
+        <div class="metric-sub">两套投资房合计亏损</div>
+      </div>
+    </div>
+
+    <div class="projection-box">
+      <div class="projection-title">退休时（2036年，50岁）收入来源测算</div>
+      <div class="projection-grid">
+        <div>
+          <div class="proj-col-title">50–65岁退休初期（Super锁定）</div>
+          <div class="income-bars">
+            <div class="income-bar-row">
+              <div class="income-bar-label">房产租金（税后）</div>
+              <div class="income-bar-track"><div class="income-bar-fill" style="width:35%;background:linear-gradient(90deg,#C9A84C,#E8C87A)"></div></div>
+              <div class="income-bar-amount">$70,000</div>
+            </div>
+            <div class="income-bar-row">
+              <div class="income-bar-label">ETF分红（信托）</div>
+              <div class="income-bar-track"><div class="income-bar-fill" style="width:15%;background:linear-gradient(90deg,#1565C0,#5C9CE1)"></div></div>
+              <div class="income-bar-amount">$28,000</div>
+            </div>
+            <div class="income-bar-row">
+              <div class="income-bar-label">H3公司留存提取</div>
+              <div class="income-bar-track"><div class="income-bar-fill" style="width:50%;background:linear-gradient(90deg,#2E7D52,#66BB8A)"></div></div>
+              <div class="income-bar-amount">$102,000</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
+            <div class="proj-row">
+              <span class="proj-key">税后总收入</span>
+              <span class="proj-val green">约$200,000/年 ✅</span>
+            </div>
+            <div class="proj-row">
+              <span class="proj-key">Super状态</span>
+              <span class="proj-val red">锁定（65岁解锁）</span>
+            </div>
+            <div class="proj-row">
+              <span class="proj-key">女儿年龄</span>
+              <span class="proj-val white">24岁（已大学毕业）</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="proj-col-title">65岁后（Super解锁，2051年）</div>
+          <div class="proj-row">
+            <span class="proj-key">预计Super余额</span>
+            <span class="proj-val">$3,000,000–$4,000,000</span>
+          </div>
+          <div class="proj-row">
+            <span class="proj-key">Super年提取（免税）</span>
+            <span class="proj-val green">$120,000–$160,000</span>
+          </div>
+          <div class="proj-row">
+            <span class="proj-key">房产租金（持续）</span>
+            <span class="proj-val">$80,000–$100,000</span>
+          </div>
+          <div class="proj-row">
+            <span class="proj-key">ETF分红</span>
+            <span class="proj-val">$40,000–$60,000</span>
+          </div>
+          <div class="proj-row">
+            <span class="proj-key" style="font-weight:700;color:rgba(255,255,255,0.9)">税后总收入</span>
+            <span class="proj-val green" style="font-size:16px">$300,000–$350,000/年 🎉</span>
+          </div>
+          <div style="margin-top:16px;padding:12px;background:rgba(201,168,76,0.1);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;">
+            ⚠️ 以上为估算值，基于Brisbane房价年增5–7%、ETF年回报7%、Super年回报7%。实际结果因市场变化而异。请咨询持牌财务顾问（Licensed Financial Adviser）获取个人化建议。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPER PROJECTION -->
+    <div style="background:var(--white);border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:24px;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:16px;">Super余额追赶路径（夫妻合计）</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div style="text-align:center;padding:16px;background:var(--red-light);border-radius:8px;">
+          <div style="font-size:11px;color:var(--red);font-weight:600;margin-bottom:6px;">现在（2026）</div>
+          <div style="font-size:22px;font-weight:800;color:var(--red)">$20K</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">同龄人均$300K</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--orange-light);border-radius:8px;">
+          <div style="font-size:11px;color:var(--orange);font-weight:600;margin-bottom:6px;">2028年</div>
+          <div style="font-size:22px;font-weight:800;color:var(--orange)">$600K+</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">含追赶供款</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--blue-light);border-radius:8px;">
+          <div style="font-size:11px;color:var(--blue);font-weight:600;margin-bottom:6px;">退休时（2036）</div>
+          <div style="font-size:22px;font-weight:800;color:var(--blue)">$1.5–2M</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">持续供款+复利</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:var(--green-light);border-radius:8px;">
+          <div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:6px;">65岁时（2051）</div>
+          <div style="font-size:22px;font-weight:800;color:var(--green)">$3–4M</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">免税提取 🎉</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STRATEGY -->
+  <div id="tab-strategy" class="tab-content">
+    <div class="section-title">五大策略方向一页总览</div>
+    <div class="strategy-grid">
+      <div class="strategy-card">
+        <div class="strategy-icon">🏗️</div>
+        <div class="strategy-title">A. Slacks Creek开发策略</div>
+        <div class="strategy-desc">1,037sqm大地块，18m临街面，Logan City Council管辖。活跃白蚁已确认，租约7月到期。</div>
+        <div class="strategy-highlight green">✅ 核心结论：先找Town Planner。能细分走Subdivision（18–30个月），不能细分走翻新+Granny Flat（6–12个月）</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">
+          翻新后租金：$850+/周<br>
+          +Granny Flat：额外$500+/周<br>
+          Subdivision：后地块价值$350,000–$450,000
+        </div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-icon">🏠</div>
+        <div class="strategy-title">B. 房产买/持/卖决策</div>
+        <div class="strategy-desc">South Ripley买入$745,000（2025年2月），Slacks Creek买入$1,128,000（2026年3月）。两套情况完全不同。</div>
+        <div class="strategy-highlight purple">✅ 核心结论：2027–2028年卖South Ripley（净到手~$300K），保留并开发Slacks Creek，不新增第四套</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">
+          Slacks Creek才买3个月，不能卖<br>
+          South Ripley CGT需会计精确计算<br>
+          选H3利润低的财年出售节税
+        </div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-icon">🏦</div>
+        <div class="strategy-title">C. 税务结构优化</div>
+        <div class="strategy-desc">现有三套房不转移（触发CGT+Stamp Duty）。H3公司利润$400K，优化空间巨大。</div>
+        <div class="strategy-highlight blue">✅ 核心结论：立即启动Super供款（节税$19,200/年），6个月内设立家族信托，H3利润合理留存</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">
+          Super税率15% vs 个人47%<br>
+          家族信托承接ETF投资<br>
+          6年累计节税约$170,000–$220,000
+        </div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-icon">💰</div>
+        <div class="strategy-title">D. Super追赶策略</div>
+        <div class="strategy-desc">夫妻合计Super仅$20,000，比同龄人少$280,000。但Super要65岁才能提取，退休初期用不上。</div>
+        <div class="strategy-highlight orange">✅ 核心结论：Super是65岁后的"第二人生保障"，不是退休初期收入来源。全力追赶，但不要过度依赖</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">
+          Concessional：$60,000/年（夫妻）<br>
+          Carry-forward追赶：每人约$162,500<br>
+          Non-concessional：South Ripley卖出后$220,000
+        </div>
+      </div>
+
+      <div class="strategy-card">
+        <div class="strategy-icon">🏖️</div>
+        <div class="strategy-title">E. 退休被动收入路线图</div>
+        <div class="strategy-desc">目标50岁退休，税后$200,000/年。6年退休现金流不够，10年退休基本可达目标。</div>
+        <div class="strategy-highlight gold">✅ 核心结论：建议10年退休（50岁）。退休初期收入：房租40% + ETF 15% + H3公司分红45%</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">
+          需要退休资产约$5,000,000<br>
+          6年退休缺口约$42,000–$77,000/年<br>
+          10年退休基本达标✅
+        </div>
+      </div>
+
+      <div class="strategy-card" style="background:var(--dark);color:var(--white);border-color:var(--slate);">
+        <div class="strategy-icon">⚡</div>
+        <div class="strategy-title" style="color:var(--gold-light);">一句话总结</div>
+        <div class="strategy-desc" style="color:rgba(255,255,255,0.7);font-size:15px;line-height:1.8;margin-top:8px;">
+          <strong style="color:var(--gold-light);">卖掉South Ripley</strong><br>
+          → 钱进Super和ETF<br>
+          <strong style="color:var(--gold-light);">开发Slacks Creek</strong><br>
+          → 提升租金收入<br>
+          <strong style="color:var(--gold-light);">H3公司利润留存</strong><br>
+          → 退休后低税率取出<br>
+          <strong style="color:var(--gold-light);">10年后50岁退休</strong><br>
+          → $200,000/年税后收入 ✅
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-box">
+    <p>
+      📌 <strong>最重要的三个行动：</strong><br>
+      <strong>① 本周</strong> → 联系会计，启动Super供款（每年节税$19,200，现在就能做）<br>
+      <strong>② 6月底</strong> → 联系Town Planner，评估Slacks Creek能否细分（一个答案决定所有开发路径）<br>
+      <strong>③ 3个月内</strong> → 会计计算South Ripley CGT，确定最优出售财年（净到手~$300,000）
+    </p>
+  </div>
+
+  <div class="footer-note">
+    ⚠️ 本路线图基于Frank提供的财务信息制作，仅供参考。所有涉及税务（CGT、Super、公司结构）、法律（信托、产权）、规划（细分、Granny Flat）的具体操作，须分别咨询持牌 Tax Accountant、Financial Adviser、Solicitor/Conveyancer、Town Planner。市场估算基于当前数据，实际结果因市场变化而异。本文件不构成专业财务或法律建议。
+  </div>
+
+</div>
+
+<script>
+function togglePhase(id) {
+  const body = document.getElementById('body-' + id);
+  const toggle = document.getElementById('toggle-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (toggle) toggle.classList.toggle('open', !isOpen);
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Open first phase by default
+togglePhase('p1');
+</script>
+</body>
+</html>
