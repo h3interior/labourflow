@@ -250,6 +250,7 @@ tr:hover td{background:#fafbfc}
     <div class="sb-label">Setup</div>
     <button class="sb-btn" data-view="clientView"><span class="ic">🏢</span>Clients 客户</button>
     <button class="sb-btn" data-view="settingsView"><span class="ic">⚙️</span>Settings 设置</button>
+    <button class="sb-btn" id="syncNavBtn" onclick="showSyncSetup()" style="border-color:rgba(200,134,10,.4);color:#e8a830"><span class="ic">☁️</span>Cloud Sync 云同步</button>
   </nav>
   <div class="sb-footer">
     <div class="sb-stat">
@@ -1303,20 +1304,12 @@ function showSyncSetup(){
 }
 
 // ── 在侧边栏底部加云同步按钮 ──
-function addSyncButton(){
-  const btn = document.createElement('button');
-  btn.innerHTML = '☁️ Cloud Sync 云同步';
-  btn.style.cssText = 'width:100%;min-height:36px;margin-top:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(232,237,242,.75);border-radius:6px;cursor:pointer;font-weight:700;font-size:.82rem;';
-  btn.addEventListener('mouseenter',()=>{ btn.style.background='rgba(255,255,255,.08)'; btn.style.color='#fff'; });
-  btn.addEventListener('mouseleave',()=>{ btn.style.background='transparent'; btn.style.color='rgba(232,237,242,.75)'; });
-  btn.addEventListener('click', showSyncSetup);
-  document.querySelector('.sb-footer').appendChild(btn);
-}
+// sync button is now in HTML nav directly
 
 // ══════════════════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════════════════
-addSyncButton();
+// sync button in HTML nav
 
 (async()=>{
   if(GH.token && GH.owner && GH.repo){
