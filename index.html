@@ -156,7 +156,7 @@ td{font-size:.88rem}
   display:flex;align-items:center;justify-content:center;padding:20px}
 #loginScreen[hidden]{display:none}
 .login-card{background:#fff;border-radius:20px;padding:32px 28px;width:100%;max-width:420px;
-  box-shadow:0 32px 80px rgba(0,0,0,.35);text-align:center}
+  box-shadow:0 32px 80px rgba(0,0,0,.35);text-align:center;overflow:hidden}
 .login-logo{width:64px;height:64px;border-radius:14px;background:#f0b36e;color:#22322b;
   font-weight:900;font-size:22px;display:grid;place-items:center;margin:0 auto 16px}
 .login-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}
@@ -170,16 +170,14 @@ td{font-size:.88rem}
 .role-btn .role-desc{color:#66736c;font-size:.82rem;display:block;margin-top:2px}
 .role-btn.admin-btn{border-color:#e0d4f5}
 .role-btn.admin-btn:hover{border-color:#7a3d8a;background:#f8f3ff}
-#workerSelectStep{display:none}
-#workerSelectStep.active{display:block}
+/* workerSelectStep visibility controlled by showLoginStep() inline style */
 .worker-pick-list{display:grid;gap:8px;max-height:280px;overflow:auto;margin-bottom:16px}
 .worker-pick-btn{border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;
   padding:12px 14px;text-align:left;display:flex;align-items:center;gap:12px;font-size:.95rem;font-weight:700}
 .worker-pick-btn:hover{border-color:var(--primary);background:#f0f8f5}
 .worker-pick-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#18725f,#2d9c82);
   color:#fff;font-weight:800;font-size:.85rem;display:grid;place-items:center;flex-shrink:0}
-#adminPassStep{display:none}
-#adminPassStep.active{display:block}
+/* adminPassStep visibility controlled by showLoginStep() inline style */
 /* Worker mode — hide admin-only nav items */
 body.worker-mode .nav-section,
 body.worker-mode [data-view="reportsView"],
@@ -2131,7 +2129,14 @@ function showLoginScreen(){
 function showLoginStep(stepId){
   ["loginLoadingState","roleSelectStep","workerSelectStep","workerVerifyStep","adminPassStep"].forEach(id=>{
     const el=document.getElementById(id);
-    if(el){el.style.display=(id===stepId)?"block":"none";}
+    if(!el)return;
+    el.style.cssText=el.style.cssText; // force style recalc
+    el.style.display=(id===stepId)?"block":"none";
+    el.style.visibility=(id===stepId)?"visible":"hidden";
+    el.style.height=(id===stepId)?"auto":"0";
+    el.style.overflow=(id===stepId)?"visible":"hidden";
+    el.style.margin=(id===stepId)?"":"0";
+    el.style.padding=(id===stepId)?"":"0";
   });
   if(stepId==="workerSelectStep")buildWorkerPickList();
   if(stepId==="adminPassStep"){
@@ -2189,9 +2194,19 @@ function initLoginEvents(){
     const last2=phone.slice(-2);
     const input=(document.getElementById("workerPhoneVerify").value||"").trim();
     if(!last2){
-      // no phone on file — let admin know, don't let in
-      document.getElementById("verifyError").style.display="block";
-      document.getElementById("verifyError").textContent="⚠️ 该工人未设置电话，请联系管理员 / No phone on file, contact admin";
+      // No phone on file — show toast and go back to worker list
+      showLoginStep("workerSelectStep");
+      // Show inline notice at top of worker list
+      const noticeId="noPhoneNotice";
+      let notice=document.getElementById(noticeId);
+      if(!notice){
+        notice=document.createElement("div");notice.id=noticeId;
+        notice.style.cssText="background:#fff7ed;color:#714414;border:1px solid #f0d4a8;border-radius:8px;padding:10px 12px;font-size:.83rem;font-weight:700;margin-bottom:10px;text-align:left";
+        const list=document.getElementById("workerPickList");
+        if(list)list.parentNode.insertBefore(notice,list);
+      }
+      notice.textContent="⚠️ "+w.name+" 未设置手机号，请管理员在工人档案补填后再试。";
+      setTimeout(()=>{if(notice)notice.remove();},5000);
       return;
     }
     if(input===last2){
