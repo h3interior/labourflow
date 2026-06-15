@@ -151,6 +151,54 @@ td{font-size:.88rem}
 .acc-sub-body{display:none;padding:0 0 4px 0}
 .acc-sub-body.open{display:block}
 
+/* ── Role / Login System ── */
+#loginScreen{position:fixed;inset:0;z-index:200;background:linear-gradient(135deg,#22322b 0%,#18725f 100%);
+  display:flex;align-items:center;justify-content:center;padding:20px}
+#loginScreen[hidden]{display:none}
+.login-card{background:#fff;border-radius:20px;padding:32px 28px;width:100%;max-width:420px;
+  box-shadow:0 32px 80px rgba(0,0,0,.35);text-align:center}
+.login-logo{width:64px;height:64px;border-radius:14px;background:#f0b36e;color:#22322b;
+  font-weight:900;font-size:22px;display:grid;place-items:center;margin:0 auto 16px}
+.login-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}
+.login-sub{color:#66736c;font-size:.88rem;margin-bottom:24px}
+.role-grid{display:grid;gap:12px;margin-bottom:20px}
+.role-btn{border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;
+  padding:18px 16px;text-align:left;transition:all .15s;display:flex;align-items:center;gap:14px}
+.role-btn:hover{border-color:var(--primary);background:#f0f8f5}
+.role-btn .role-icon{font-size:2rem;width:48px;text-align:center;flex-shrink:0}
+.role-btn .role-label{font-weight:800;font-size:1rem;display:block}
+.role-btn .role-desc{color:#66736c;font-size:.82rem;display:block;margin-top:2px}
+.role-btn.admin-btn{border-color:#e0d4f5}
+.role-btn.admin-btn:hover{border-color:#7a3d8a;background:#f8f3ff}
+#workerSelectStep{display:none}
+#workerSelectStep.active{display:block}
+.worker-pick-list{display:grid;gap:8px;max-height:280px;overflow:auto;margin-bottom:16px}
+.worker-pick-btn{border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;
+  padding:12px 14px;text-align:left;display:flex;align-items:center;gap:12px;font-size:.95rem;font-weight:700}
+.worker-pick-btn:hover{border-color:var(--primary);background:#f0f8f5}
+.worker-pick-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#18725f,#2d9c82);
+  color:#fff;font-weight:800;font-size:.85rem;display:grid;place-items:center;flex-shrink:0}
+#adminPassStep{display:none}
+#adminPassStep.active{display:block}
+/* Worker mode — hide admin-only nav items */
+body.worker-mode .nav-section,
+body.worker-mode [data-view="reportsView"],
+body.worker-mode [data-view="personnelView"],
+body.worker-mode [data-view="certsView"],
+body.worker-mode [data-view="adminView"]{display:none!important}
+body.worker-mode #reportsView,
+body.worker-mode #personnelView,
+body.worker-mode #certsView,
+body.worker-mode #adminView{display:none!important}
+body.worker-mode .sidebar-stats{display:none}
+/* Worker mode topbar role badge */
+.role-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;
+  font-size:.78rem;font-weight:700;background:rgba(255,255,255,.12);color:#f8fbf8;cursor:pointer}
+.role-badge:hover{background:rgba(255,255,255,.2)}
+/* Admin confirm panel in worker view (hidden for workers) */
+body.worker-mode .admin-only{display:none!important}
+/* Pending / confirmed row styling */
+tr.entry-pending td:first-child::after{content:'';} /* handled inline */
 /* Print */
 .print-preview{position:fixed;inset:0;z-index:50;display:grid;grid-template-rows:auto 1fr;background:rgba(0,0,0,.75)}
 .print-preview[hidden]{display:none}
@@ -342,6 +390,49 @@ td{font-size:.88rem}
 </style>
 </head>
 <body>
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">H3</div>
+    <div class="login-title">LabourFlow</div>
+    <div class="login-sub">H3 Interior Pty Ltd · Brisbane<br/>请选择身份 / Select your role</div>
+
+    <!-- Step 1: choose role -->
+    <div id="roleSelectStep">
+      <div class="role-grid">
+        <button class="role-btn" id="workerRoleBtn" type="button">
+          <span class="role-icon">👷</span>
+          <span><span class="role-label">工人 Worker</span>
+          <span class="role-desc">填写每日上工记录<br/>Submit daily work record</span></span>
+        </button>
+        <button class="role-btn admin-btn" id="adminRoleBtn" type="button">
+          <span class="role-icon">🔐</span>
+          <span><span class="role-label">管理员 Admin (Frank)</span>
+          <span class="role-desc">查看全部数据 · 核对确认日报<br/>Full access · Review &amp; approve</span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2a: worker pick -->
+    <div id="workerSelectStep">
+      <p style="font-weight:700;margin-bottom:12px">请选择你的名字 / Select your name</p>
+      <div class="worker-pick-list" id="workerPickList"></div>
+      <button class="secondary-btn" id="backToRoleBtn" type="button" style="width:100%">← 返回 Back</button>
+    </div>
+
+    <!-- Step 2b: admin password -->
+    <div id="adminPassStep">
+      <p style="font-weight:700;margin-bottom:10px">管理员密码 Admin Password</p>
+      <input id="adminPassInput" type="password" placeholder="输入密码..." style="margin-bottom:10px;font-size:16px"/>
+      <div id="adminPassError" style="color:#b84132;font-size:.83rem;margin-bottom:8px;display:none">❌ 密码错误 Wrong password</div>
+      <div style="display:grid;gap:8px">
+        <button class="primary-btn" id="adminPassConfirm" type="button" style="width:100%;min-height:44px">进入管理后台 Enter Admin</button>
+        <button class="secondary-btn" id="backToRoleBtn2" type="button" style="width:100%">← 返回 Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="app-shell">
   <aside class="sidebar">
     <div class="brand">
@@ -378,13 +469,21 @@ td{font-size:.88rem}
         <p class="eyebrow">H3 Interior Pty Ltd · Brisbane</p>
         <h1>LabourFlow 工地管理系统<br/><small>Worksite Personnel & Timesheet System</small></h1>
       </div>
-      <div class="week-picker">
-        <label for="weekStart">统计周 Week start<input id="weekStart" type="date"/></label>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <button class="role-badge" id="switchRoleBtn" type="button">👤 <span id="currentRoleLabel">—</span> · 切换身份</button>
+        <div class="week-picker">
+          <label for="weekStart">统计周 Week start<input id="weekStart" type="date"/></label>
+        </div>
       </div>
     </header>
 
     <!-- ═══ WORKER VIEW (日报上报) ═══ -->
     <section id="workerView" class="view active">
+      <!-- Worker mode greeting (shown in worker mode only) -->
+      <div id="workerGreeting" style="display:none;background:linear-gradient(135deg,#18725f,#2d9c82);color:#fff;border-radius:12px;padding:16px 18px;margin-bottom:16px">
+        <div style="font-weight:800;font-size:1.05rem">👋 你好 / Hello, <span id="workerGreetingName"></span>!</div>
+        <div style="font-size:.84rem;opacity:.85;margin-top:3px">请填写今天的上工记录。提交后管理员将核对确认。<br/>Fill in today's work record. Admin will review &amp; approve.</div>
+      </div>
       <div class="grid two">
         <form id="entryForm" class="panel">
           <div class="panel-head">
@@ -531,8 +630,12 @@ td{font-size:.88rem}
       <!-- 日报明细：筛选 + 按日期分组折叠 -->
       <div class="panel" style="margin-top:14px">
         <div class="panel-head">
-          <div><p class="eyebrow">Daily Records</p><h2>日报明细</h2></div>
+          <div>
+            <p class="eyebrow">Daily Records</p>
+            <h2>日报明细 <span id="pendingBadge" style="display:none;background:#fff7ed;color:#c05820;border:1px solid #f0d4a8;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:20px;vertical-align:middle;margin-left:6px"></span></h2>
+          </div>
           <div class="button-row">
+            <button class="primary-btn admin-only" id="confirmAllBtn" type="button" style="display:none;background:#18725f;font-size:.83rem">✅ 全部确认 Approve All</button>
             <select id="entriesWorkerFilter" style="min-width:150px"><option value="__all">全部工地</option></select>
             <button class="secondary-btn" id="entriesExpandAll" type="button" style="font-size:.82rem">全部展开</button>
           </div>
@@ -737,6 +840,9 @@ state.entries    = state.entries    || [];
 state.certs      = state.certs      || [];
 state.invoiceCounters = state.invoiceCounters || {};
 
+// migrate old entries that lack confirmed field
+state.entries.forEach(e=>{ if(e.confirmed===undefined)e.confirmed=false; });
+
 // migrate old workers that lack new fields
 state.workers.forEach(w=>{
   w.role     = w.role     || "labourer";
@@ -747,7 +853,7 @@ state.workers.forEach(w=>{
   w.whiteCardExp = w.whiteCardExp || "";
 });
 
-function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function _savePlaceholder_replaced_below(){}
 
 // ── Core helpers ──────────────────────────────────────────────
 function getWorker(id){return state.workers.find(w=>w.id===id)}
@@ -981,6 +1087,11 @@ function attachAutocomplete(input,getValues){
 }
 
 function renderWorkerSummary(){
+  // In worker mode, always show current worker
+  if(currentRole==="worker"&&currentWorkerId){
+    const ws=document.getElementById("workerSummarySelect");
+    if(ws)ws.value=currentWorkerId;
+  }
   const wid=$("#workerSummarySelect").value||state.workers[0]?.id;
   const entries=weeklyEntries().filter(e=>e.workerId===wid);
   const hours=entries.reduce((s,e)=>s+e.hours,0);
@@ -1193,6 +1304,16 @@ function renderReports(){
   if(siteKeys.includes(prevFilter))$("#entriesWorkerFilter").value=prevFilter;
   else $("#entriesWorkerFilter").value="__all";
 
+  // 更新待确认徽标
+  const allWeekEntries=weeklyEntries();
+  const pendingCount=allWeekEntries.filter(e=>!e.confirmed).length;
+  const badge=document.getElementById("pendingBadge");
+  const confirmAllBtn=document.getElementById("confirmAllBtn");
+  if(badge){
+    if(pendingCount>0){badge.style.display="inline";badge.textContent=`⏳ ${pendingCount} 条待确认`}
+    else{badge.style.display="none"}
+  }
+  if(confirmAllBtn){confirmAllBtn.style.display=pendingCount>0?"inline-flex":"none"}
   renderEntriesAccordion();
 }
 
@@ -1236,15 +1357,24 @@ function renderEntriesAccordion(){
       const subId=`entry-${si}-${di}`;
       const rows=dayEntries.map(e=>{
         const r=getRates(e);
-        return`<tr>
-          <td>${esc(r.worker?.name||"?")}</td>
+        const isConfirmed=!!e.confirmed;
+        const isAdmin=currentRole==="admin";
+        const submitter=e.submittedBy?getWorker(e.submittedBy):null;
+        const submittedLabel=submitter?`由 ${esc(submitter.name)} 提交`:'';
+        return`<tr style="${isConfirmed?'background:#f0fbf5':'background:#fffbf2'}">
+          <td>${esc(r.worker?.name||"?")}${isConfirmed
+            ?'<span class="badge green" style="margin-left:5px;font-size:.65rem">✅已确认</span>'
+            :'<span class="badge amber" style="margin-left:5px;font-size:.65rem">⏳待确认</span>'}
+            ${submittedLabel?`<div class="muted" style="font-size:.72rem">${submittedLabel}</div>`:''}
+          </td>
           <td>${e.start}–${e.end}</td>
           <td><span class="pill">${num(e.hours)}h</span></td>
-          <td>${money(r.revenue)}</td>
-          <td>${money(r.cost)}</td>
+          <td>${isAdmin?money(r.revenue):'—'}</td>
+          <td>${isAdmin?money(r.cost):'—'}</td>
           <td><div class="table-actions">
-            <button class="secondary-btn" data-edit-entry="${e.id}" type="button">✏️ 编辑</button>
-            <button class="danger-btn" data-delete-entry="${e.id}" type="button">🗑️ 删除</button>
+            ${isAdmin&&!isConfirmed?`<button class="primary-btn" data-confirm-entry="${e.id}" type="button" style="background:#18725f;font-size:.78rem;padding:0 8px">✅ 确认</button>`:''}
+            ${isAdmin?`<button class="secondary-btn" data-edit-entry="${e.id}" type="button">✏️ 编辑</button>`:''}
+            ${isAdmin?`<button class="danger-btn" data-delete-entry="${e.id}" type="button">🗑️ 删除</button>`:''}
           </div></td>
         </tr>`;
       }).join("");
@@ -1315,23 +1445,7 @@ function resetCertForm(){$("#certForm").reset();$("#certId").value="";if(state.w
 // ══════════════════════════════════════════════════════════════
 //  FORM HANDLERS
 // ══════════════════════════════════════════════════════════════
-function handleEntrySubmit(e){
-  e.preventDefault();
-  if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在管理设置添加工人和工地。");return}
-  const hours=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
-  const id=$("#entryId").value||uid("entry");
-  const entryDate=$("#entryDate").value;
-  const entry={id,workerId:$("#entryWorker").value,date:entryDate,
-    client:$("#entryClient").value.trim(),site:$("#entrySite").value.trim(),
-    start:$("#entryStart").value,end:$("#entryEnd").value,
-    breakMinutes:Number($("#entryBreak").value||0),allowance:Number($("#entryAllowance").value||0),
-    notes:$("#entryNotes").value.trim(),hours};
-  const idx=state.entries.findIndex(x=>x.id===id);
-  if(idx>=0)state.entries[idx]=entry;else state.entries.push(entry);
-  // 关键修复：把统计周自动对齐到该日报所在周的周一，确保保存后立即能在周报看到数据
-  $("#weekStart").value=isoDate(mondayOf(parseDate(entryDate)));
-  save();resetEntryForm();renderAll();switchView("reportsView");
-}
+// handleEntrySubmit is defined in the Role/Login System section below (role-aware version)
 
 function handleSettingsSubmit(e){
   e.preventDefault();
@@ -1833,20 +1947,38 @@ document.addEventListener("click",e=>{
   const ew=e.target.closest("[data-edit-worker]");const dw=e.target.closest("[data-delete-worker]");
   const es=e.target.closest("[data-edit-site]");const ds=e.target.closest("[data-delete-site]");
   const ee=e.target.closest("[data-edit-entry]");const de=e.target.closest("[data-delete-entry]");
+  const ce=e.target.closest("[data-confirm-entry]");
   const vw=e.target.closest("[data-view-worker]");
   const ec=e.target.closest("[data-edit-cert]");const dc=e.target.closest("[data-delete-cert]");
   const acw=e.target.closest("[data-add-cert-worker]");
   if(ew)editWorker(ew.dataset.editWorker);
   if(vw)viewWorkerModal(vw.dataset.viewWorker);
   if(es)editSite(es.dataset.editSite);
-  if(ee)editEntry(ee.dataset.editEntry);
+  if(ee){if(currentRole==="admin")editEntry(ee.dataset.editEntry);}
   if(ec)editCert(ec.dataset.editCert);
   if(acw)openAddCertModal(acw.dataset.addCertWorker);
-  if(dw&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);state.certs=state.certs.filter(c=>c.workerId!==dw.dataset.deleteWorker);save();renderAll()}
-  if(ds&&confirm("确定删除这个工地吗？")){state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);save();renderAll()}
-  if(de&&confirm("确定删除这条日报吗？")){state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);save();renderAll()}
-  if(dc&&confirm("确定删除这条证书记录吗？")){state.certs=state.certs.filter(x=>x.id!==dc.dataset.deleteCert);save();renderAll()}
+  if(ce)confirmEntry(ce.dataset.confirmEntry);
+  if(dw&&currentRole==="admin"&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);state.certs=state.certs.filter(c=>c.workerId!==dw.dataset.deleteWorker);save();renderAll()}
+  if(ds&&currentRole==="admin"&&confirm("确定删除这个工地吗？")){state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);save();renderAll()}
+  if(de&&currentRole==="admin"&&confirm("确定删除这条日报吗？")){state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);save();renderAll()}
+  if(dc&&currentRole==="admin"&&confirm("确定删除这条证书记录吗？")){state.certs=state.certs.filter(x=>x.id!==dc.dataset.deleteCert);save();renderAll()}
 });
+
+document.getElementById("confirmAllBtn")?.addEventListener("click",confirmAllEntries);
+
+function showConfirmToast(msg){
+  let el=document.getElementById("confirmToast");
+  if(!el){
+    el=document.createElement("div");el.id="confirmToast";
+    Object.assign(el.style,{position:"fixed",bottom:"80px",left:"50%",transform:"translateX(-50%)",
+      background:"#18725f",color:"#fff",padding:"10px 20px",borderRadius:"20px",
+      fontSize:"13px",fontWeight:"700",whiteSpace:"nowrap",
+      opacity:"0",transition:"opacity .3s",zIndex:200,pointerEvents:"none"});
+    document.body.appendChild(el);
+  }
+  el.textContent=msg;el.style.opacity="1";
+  clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity="0",2500);
+}
 
 // Close modals on overlay click
 ["workerModal","certModal"].forEach(id=>{
@@ -1963,6 +2095,154 @@ function addSyncButton(){
 }
 
 // ══════════════════════════════════════════════════════════════
+//  ROLE / LOGIN SYSTEM
+// ══════════════════════════════════════════════════════════════
+const ADMIN_PASSWORD = "h3admin"; // Frank可在此修改密码
+let currentRole = null;   // "admin" | "worker"
+let currentWorkerId = null;
+
+function enterAdminMode(){
+  currentRole="admin";currentWorkerId=null;
+  document.body.classList.remove("worker-mode");
+  document.body.classList.add("admin-mode");
+  document.getElementById("loginScreen").hidden=true;
+  document.getElementById("currentRoleLabel").textContent="管理员 Admin";
+  // ensure all nav buttons visible
+  $$(".nav-btn").forEach(b=>b.style.display="");
+  $$(".nav-section").forEach(b=>b.style.display="");
+  // default to reports view for admin
+  switchView("reportsView");
+  renderAll();
+}
+
+function enterWorkerMode(workerId){
+  currentRole="worker";currentWorkerId=workerId;
+  document.body.classList.add("worker-mode");
+  document.body.classList.remove("admin-mode");
+  document.getElementById("loginScreen").hidden=true;
+  const w=getWorker(workerId);
+  document.getElementById("currentRoleLabel").textContent=w?.name||"Worker";
+  // show greeting
+  const g=document.getElementById("workerGreeting");
+  const gn=document.getElementById("workerGreetingName");
+  if(g){g.style.display="block";}
+  if(gn){gn.textContent=w?.name||"";}
+  // pre-select this worker in the entry form
+  const workerSel=document.getElementById("entryWorker");
+  if(workerSel){workerSel.value=workerId;workerSel.disabled=true;}
+  switchView("workerView");
+  renderAll();
+}
+
+function showLoginScreen(){
+  currentRole=null;currentWorkerId=null;
+  document.body.classList.remove("worker-mode","admin-mode");
+  document.getElementById("loginScreen").hidden=false;
+  // reset to step 1
+  showLoginStep("roleSelectStep");
+  // hide greeting
+  const g=document.getElementById("workerGreeting");if(g)g.style.display="none";
+  // re-enable worker select
+  const workerSel=document.getElementById("entryWorker");
+  if(workerSel)workerSel.disabled=false;
+}
+
+function showLoginStep(stepId){
+  ["roleSelectStep","workerSelectStep","adminPassStep"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.display=id===stepId?"block":"none";}
+  });
+  if(stepId==="workerSelectStep")buildWorkerPickList();
+  if(stepId==="adminPassStep"){
+    document.getElementById("adminPassInput").value="";
+    document.getElementById("adminPassError").style.display="none";
+    setTimeout(()=>document.getElementById("adminPassInput").focus(),100);
+  }
+}
+
+function buildWorkerPickList(){
+  const list=document.getElementById("workerPickList");
+  if(!list)return;
+  const colors=["#18725f","#2d6fa3","#7a3d8a","#c05820","#1a7a4a"];
+  const activeWorkers=state.workers.filter(w=>w.status!=="inactive");
+  list.innerHTML=activeWorkers.map((w,i)=>`
+    <button class="worker-pick-btn" data-pick-worker="${w.id}" type="button">
+      <div class="worker-pick-avatar" style="background:${colors[i%colors.length]}">${esc(initials(w.name))}</div>
+      <span>${esc(w.name)}</span>
+    </button>`).join("")||`<div class="muted" style="padding:12px;font-size:.88rem">暂无在职工人。请管理员先添加工人。</div>`;
+}
+
+// Login screen event wiring (runs after DOM ready)
+function initLoginEvents(){
+  document.getElementById("workerRoleBtn")?.addEventListener("click",()=>showLoginStep("workerSelectStep"));
+  document.getElementById("adminRoleBtn")?.addEventListener("click",()=>showLoginStep("adminPassStep"));
+  document.getElementById("backToRoleBtn")?.addEventListener("click",()=>showLoginStep("roleSelectStep"));
+  document.getElementById("backToRoleBtn2")?.addEventListener("click",()=>showLoginStep("roleSelectStep"));
+  document.getElementById("workerPickList")?.addEventListener("click",ev=>{
+    const btn=ev.target.closest("[data-pick-worker]");
+    if(btn)enterWorkerMode(btn.dataset.pickWorker);
+  });
+  document.getElementById("adminPassConfirm")?.addEventListener("click",()=>{
+    const val=document.getElementById("adminPassInput").value;
+    if(val===ADMIN_PASSWORD){enterAdminMode();}
+    else{document.getElementById("adminPassError").style.display="block";}
+  });
+  document.getElementById("adminPassInput")?.addEventListener("keydown",ev=>{
+    if(ev.key==="Enter")document.getElementById("adminPassConfirm").click();
+  });
+  document.getElementById("switchRoleBtn")?.addEventListener("click",showLoginScreen);
+}
+
+// Override handleEntrySubmit to mark worker entries as pending
+const _origHandleEntrySubmit = handleEntrySubmit;
+function handleEntrySubmit(e){
+  e.preventDefault();
+  if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在管理设置添加工人和工地。");return}
+  const hours=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
+  const existingId=$("#entryId").value;
+  const existingEntry=existingId?state.entries.find(x=>x.id===existingId):null;
+  const id=existingId||uid("entry");
+  const entryDate=$("#entryDate").value;
+  const entry={id,workerId:$("#entryWorker").value,date:entryDate,
+    client:$("#entryClient").value.trim(),site:$("#entrySite").value.trim(),
+    start:$("#entryStart").value,end:$("#entryEnd").value,
+    breakMinutes:Number($("#entryBreak").value||0),allowance:Number($("#entryAllowance").value||0),
+    notes:$("#entryNotes").value.trim(),hours,
+    // workers always submit as pending; admins editing keep existing confirmed status or set confirmed
+    confirmed: currentRole==="admin" ? (existingEntry?existingEntry.confirmed:false) : false,
+    submittedBy: currentRole==="worker" ? currentWorkerId : (existingEntry?.submittedBy||null),
+    submittedAt: existingEntry?.submittedAt || new Date().toISOString(),
+  };
+  const idx=state.entries.findIndex(x=>x.id===id);
+  if(idx>=0)state.entries[idx]=entry;else state.entries.push(entry);
+  $("#weekStart").value=isoDate(mondayOf(parseDate(entryDate)));
+  save();resetEntryForm();renderAll();
+  if(currentRole==="worker"){
+    // show success message instead of switching to reports
+    alert(`✅ 日报已提交！\nWork record submitted!\n\n等待管理员核对确认。\nAwaiting admin approval.`);
+  } else {
+    switchView("reportsView");
+  }
+}
+
+// Admin: confirm single entry
+function confirmEntry(id){
+  if(currentRole!=="admin"){alert("只有管理员可以确认日报。");return;}
+  const idx=state.entries.findIndex(x=>x.id===id);
+  if(idx>=0){state.entries[idx].confirmed=true;state.entries[idx].confirmedAt=new Date().toISOString();save();renderAll();}
+}
+
+// Admin: confirm all pending in current week
+function confirmAllEntries(){
+  if(currentRole!=="admin"){alert("只有管理员可以确认日报。");return;}
+  const pending=weeklyEntries().filter(e=>!e.confirmed);
+  if(!pending.length){alert("本周没有待确认的日报。");return;}
+  pending.forEach(e=>{e.confirmed=true;e.confirmedAt=new Date().toISOString();});
+  save();renderAll();
+  alert(`✅ 已确认 ${pending.length} 条日报。`);
+}
+
+// ══════════════════════════════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════════════════════════════
 setDefaultDates();
@@ -1970,16 +2250,16 @@ resetWorkerForm();
 resetSiteForm();
 resetCertForm();
 addSyncButton();
+initLoginEvents();
 
 (async()=>{
   if(GH.token){
     showSyncStatus("⏳ 从云端加载数据...","#66736c");
     const remote=await ghGet();
     if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
-  } else {
-    // skip auto-prompt, user can click ☁️ button manually
   }
-  renderAll();
+  // Don't call renderAll here — login screen is shown first
+  // renderAll will be called after role selection
 })();
 </script>
 </body>
