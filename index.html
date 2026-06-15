@@ -192,32 +192,56 @@ td{font-size:.88rem}
 @media(max-width:640px){
   /* 整体布局 */
   .app-shell{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+  .app-shell .main{order:1;flex:1}
+  .app-shell .sidebar{order:2}
 
-  /* 顶部导航栏：固定在顶部，适配 Dynamic Island */
+  /* ── 底部导航栏（Tab Bar）── */
   .sidebar{
-    position:fixed;top:0;left:0;right:0;bottom:auto;z-index:20;
-    padding:env(safe-area-inset-top) 8px 6px;
-    border-top:none;border-bottom:1px solid rgba(255,255,255,.12);
+    position:fixed;
+    bottom:0;left:0;right:0;top:auto;
+    z-index:20;
+    padding:0 4px calc(env(safe-area-inset-bottom) + 4px);
+    border-top:1px solid rgba(255,255,255,.15);
+    border-bottom:none;
+    box-shadow:0 -4px 20px rgba(0,0,0,.25);
   }
   .brand{display:none}
-  .nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+  .nav{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:0;
+  }
   .nav-section{display:none}
   .nav-btn{
-    justify-content:center;flex-direction:column;
-    min-height:52px;padding:6px 2px;
-    font-size:.6rem;text-align:center;gap:3px;
-    border-radius:10px;border-color:transparent
+    justify-content:center;
+    flex-direction:column;
+    min-height:56px;
+    padding:6px 2px 4px;
+    font-size:.6rem;
+    text-align:center;
+    gap:2px;
+    border-radius:0;
+    border-color:transparent;
+    border:none;
+    background:transparent;
   }
-  .nav-btn .nav-icon{font-size:1.35rem;line-height:1}
-  .nav-btn.active{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+  .nav-btn .nav-icon{font-size:1.4rem;line-height:1}
+  .nav-btn.active{
+    background:rgba(255,255,255,.12);
+    border-top:2px solid #f0b36e;
+    color:#f0b36e;
+  }
+  .nav-btn.active .nav-icon{transform:scale(1.1)}
 
-  /* 主内容区：顶部留出导航栏高度 + Dynamic Island，底部留出 Home Indicator */
+  /* ── 主内容区：顶部留出状态栏，底部留出Tab Bar + Home Indicator ── */
   .main{
-    padding-top:calc(env(safe-area-inset-top) + 68px);
+    padding-top:calc(env(safe-area-inset-top) + 16px);
     padding-left:14px;
     padding-right:14px;
-    padding-bottom:calc(env(safe-area-inset-bottom) + 20px);
+    padding-bottom:calc(env(safe-area-inset-bottom) + 80px);
     overflow-x:hidden;
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
 
   /* Topbar（页面标题 + 周选择器）竖排 */
@@ -240,26 +264,44 @@ td{font-size:.88rem}
   .panel-head .button-row{flex-wrap:wrap;gap:6px}
   .panel-head select,.panel-head input{min-height:36px;font-size:.85rem}
 
-  /* 表单：单列 */
+  /* 表单：单列，确保所有输入控件可见 */
   .form-grid,.form-grid.three,.form-grid.four{grid-template-columns:1fr;gap:10px}
   .grid.two,.grid.three{grid-template-columns:1fr}
   label{font-size:.82rem;gap:4px}
-  input,select,textarea{min-height:44px;font-size:16px;border-radius:8px}/* 16px防止iOS自动缩放 */
+  input,select,textarea{
+    min-height:44px;font-size:16px;border-radius:8px;
+    width:100%;max-width:100%;
+  }/* 16px防止iOS自动缩放 */
+  /* 日报表单：让每个字段完整显示 */
+  #workerView .form-grid{gap:12px}
+  #workerView .wide{grid-column:1/-1}
+  /* 时间选择器排成两列 */
+  #workerView .form-grid.time-row{grid-template-columns:1fr 1fr;gap:8px}
 
-  /* 工人卡片 */
+  /* 工人卡片：全宽单列 */
   .worker-cards{grid-template-columns:1fr;gap:10px}
-  .worker-card{padding:14px}
-  .worker-card-actions{flex-wrap:wrap}
-  .worker-card-actions button{min-height:40px;font-size:.82rem}
+  .worker-card{padding:14px;width:100%}
+  .worker-card-top{gap:10px}
+  .worker-card-body{font-size:.82rem}
+  .worker-card-actions{flex-wrap:wrap;gap:6px}
+  .worker-card-actions button{min-height:40px;font-size:.82rem;flex:1}
+  /* 管理设置：panel内容区域可滚动 */
+  #adminView .panel{overflow:visible}
+  #adminView .table-wrap{overflow-x:auto;max-width:100vw}
+  /* 工人档案：防止卡片溢出 */
+  #personnelView .worker-cards{max-width:100%}
 
   /* 按钮 */
   .primary-btn,.secondary-btn,.danger-btn,.warn-btn{min-height:40px;font-size:.85rem}
   .button-row{gap:6px}
 
   /* 表格：横向滚动 */
-  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{font-size:.8rem;min-width:460px}
-  th,td{padding:7px 6px}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;-webkit-overflow-scrolling:touch}
+  table{font-size:.78rem;min-width:380px}
+  th,td{padding:6px 5px}
+  /* 工人卡片表格操作按钮竖排 */
+  .table-actions{flex-direction:column;gap:4px;align-items:flex-end}
+  .table-actions button{min-height:34px;font-size:.75rem;padding:0 8px}
 
   /* 手风琴 */
   .acc-trigger{padding:10px 4px;font-size:.85rem}
