@@ -420,14 +420,14 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
     </div>
 
     <!-- Step 2a: worker pick -->
-    <div id="workerSelectStep">
+    <div id="workerSelectStep" style="display:none">
       <p style="font-weight:700;margin-bottom:12px">请选择你的名字 / Select your name</p>
       <div class="worker-pick-list" id="workerPickList"></div>
       <button class="secondary-btn" id="backToRoleBtn" type="button" style="width:100%">← 返回 Back</button>
     </div>
 
     <!-- Step 2c: worker phone verify -->
-    <div id="workerVerifyStep">
+    <div id="workerVerifyStep" style="display:none">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
         <div id="verifyWorkerAvatar" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#18725f,#2d9c82);color:#fff;font-weight:800;font-size:1rem;display:grid;place-items:center;flex-shrink:0"></div>
         <div>
@@ -438,7 +438,7 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
       <p style="font-size:.88rem;color:#66736c;margin-bottom:10px">输入手机号后2位 / Last 2 digits of your phone</p>
       <input id="workerPhoneVerify" type="tel" inputmode="numeric" maxlength="2"
         placeholder="例如：45"
-        style="font-size:2rem;font-weight:800;text-align:center;letter-spacing:.3em;margin-bottom:8px;border:2px solid #dce3dc;border-radius:10px"/>
+        style="font-size:1.4rem;font-weight:800;text-align:center;letter-spacing:.2em;margin-bottom:8px;border:2px solid #dce3dc;border-radius:10px;min-height:52px"/>
       <div id="verifyError" style="color:#b84132;font-size:.83rem;margin-bottom:8px;display:none">❌ 不匹配，请重试 / Doesn't match, try again</div>
       <div style="display:grid;gap:8px">
         <button class="primary-btn" id="workerVerifyConfirm" type="button" style="width:100%;min-height:44px">确认进入 / Enter</button>
@@ -447,7 +447,7 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
     </div>
 
     <!-- Step 2b: admin password -->
-    <div id="adminPassStep">
+    <div id="adminPassStep" style="display:none">
       <p style="font-weight:700;margin-bottom:10px">管理员密码 Admin Password</p>
       <input id="adminPassInput" type="password" placeholder="输入密码..." style="margin-bottom:10px;font-size:16px"/>
       <div id="adminPassError" style="color:#b84132;font-size:.83rem;margin-bottom:8px;display:none">❌ 密码错误 Wrong password</div>
@@ -2279,7 +2279,6 @@ addSyncButton();
 initLoginEvents();
 
 async function bootLoadData(){
-  // Step 1: sync data from GitHub
   const loadingEl=document.getElementById("loginLoadingState");
   const roleStep=document.getElementById("roleSelectStep");
   if(loadingEl)loadingEl.style.display="block";
@@ -2287,9 +2286,27 @@ async function bootLoadData(){
   if(GH.token){
     showSyncStatus("⏳ 从云端加载数据...","#66736c");
     const remote=await ghGet();
-    if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
+    if(remote){
+      // Merge: keep whichever side has more data for each array, never lose local test data
+      const mergeArr=(localArr,remoteArr,key="id")=>{
+        const map=new Map();
+        (remoteArr||[]).forEach(x=>map.set(x[key],x));
+        // local entries overwrite remote for same id (local edits win)
+        (localArr||[]).forEach(x=>map.set(x[key],x));
+        return Array.from(map.values());
+      };
+      state.workers  = mergeArr(state.workers,  remote.workers);
+      state.sites    = mergeArr(state.sites,     remote.sites);
+      state.entries  = mergeArr(state.entries,   remote.entries);
+      state.certs    = mergeArr(state.certs,     remote.certs);
+      state.settings = Object.assign({},remote.settings,state.settings);
+      state.invoiceCounters = Object.assign({},remote.invoiceCounters,state.invoiceCounters);
+      localStorage.setItem(KEY,JSON.stringify(state));
+      // push merged state back to GitHub so both sides stay in sync
+      await ghPut(state);
+      showSyncStatus("✅ 数据已同步","#18725f");
+    }
   }
-  // Step 2: show role select
   if(loadingEl)loadingEl.style.display="none";
   if(roleStep)roleStep.style.display="block";
 }
@@ -2331,7 +2348,7 @@ function showTokenSetupOnBoot(){
       const remote=await ghGet();
       if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
       else{const ok=await ghPut(state);if(!ok)throw new Error("写入失败，请检查Token权限是否勾选了 repo");}
-      overlay.hidden=true;
+      overlay.remove();
       await bootLoadData();
     }catch(err){
       document.getElementById("tokenError").style.display="block";
@@ -2341,7 +2358,7 @@ function showTokenSetupOnBoot(){
     }
   });
   document.getElementById("tokenSkip").addEventListener("click",async()=>{
-    overlay.hidden=true;
+    overlay.remove();
     await bootLoadData();
   });
   document.getElementById("tokenInput")?.addEventListener("keydown",ev=>{
