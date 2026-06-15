@@ -2037,7 +2037,21 @@ async function ghPut(data){
   if(ghSha)body.sha=ghSha;
   const r=await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
     {method:"PUT",headers:{Authorization:`token ${GH.token}`,"Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok){const t=await r.text();throw new Error(`HTTP ${r.status} — ${t.slice(0,200)}`);}
+  if(!r.ok){
+    const t=await r.text();
+    // If conflict (sha mismatch), refresh sha and retry once
+    if(r.status===409||r.status===422){
+      console.warn("SHA mismatch, refreshing...");
+      await ghGet();
+      body.sha=ghSha;
+      const r2=await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
+        {method:"PUT",headers:{Authorization:`token ${GH.token}`,"Content-Type":"application/json"},body:JSON.stringify({...body,sha:ghSha})});
+      if(!r2.ok){const t2=await r2.text();throw new Error(`HTTP ${r2.status} — ${t2.slice(0,200)}`);}
+      const d2=await r2.json();ghSha=d2.content?.sha||ghSha;
+      showSyncStatus("✅ 已同步到云端","#18725f");return true;
+    }
+    throw new Error(`HTTP ${r.status} — ${t.slice(0,200)}`);
+  }
   const d=await r.json();ghSha=d.content?.sha||ghSha;
   showSyncStatus("✅ 已同步到云端","#18725f");return true;
 }
@@ -2056,7 +2070,17 @@ function showSyncStatus(msg,color){
 function scheduleSave(){
   clearTimeout(syncTimer);
   syncTimer=setTimeout(async()=>{
-    if(GH.token){showSyncStatus("⏳ 同步中...","#66736c");await ghPut(state);}
+    if(!GH.token)return;
+    showSyncStatus("⏳ 同步中...","#66736c");
+    try{
+      // If we don't have the sha yet, fetch it first (required by GitHub API to update existing file)
+      if(!ghSha)await ghGet();
+      const ok=await ghPut(state);
+      if(!ok)showSyncStatus("❌ 同步失败","#b84132");
+    }catch(err){
+      showSyncStatus("❌ 同步失败: "+err.message.slice(0,40),"#b84132");
+      console.error("Save sync error:",err);
+    }
   },2000);
 }
 
