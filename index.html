@@ -397,8 +397,14 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
     <div class="login-title">LabourFlow</div>
     <div class="login-sub">H3 Interior Pty Ltd · Brisbane<br/>请选择身份 / Select your role</div>
 
+    <!-- Loading state -->
+    <div id="loginLoadingState" style="padding:20px 0;text-align:center;color:#66736c;font-size:.9rem">
+      <div style="font-size:1.8rem;margin-bottom:10px">⏳</div>
+      正在同步数据...<br/>Syncing data, please wait...
+    </div>
+
     <!-- Step 1: choose role -->
-    <div id="roleSelectStep">
+    <div id="roleSelectStep" style="display:none">
       <div class="role-grid">
         <button class="role-btn" id="workerRoleBtn" type="button">
           <span class="role-icon">👷</span>
@@ -2138,19 +2144,17 @@ function showLoginScreen(){
   currentRole=null;currentWorkerId=null;
   document.body.classList.remove("worker-mode","admin-mode");
   document.getElementById("loginScreen").hidden=false;
-  // reset to step 1
+  // Data already loaded, go straight to role select
   showLoginStep("roleSelectStep");
-  // hide greeting
   const g=document.getElementById("workerGreeting");if(g)g.style.display="none";
-  // re-enable worker select
   const workerSel=document.getElementById("entryWorker");
   if(workerSel)workerSel.disabled=false;
 }
 
 function showLoginStep(stepId){
-  ["roleSelectStep","workerSelectStep","adminPassStep"].forEach(id=>{
+  ["loginLoadingState","roleSelectStep","workerSelectStep","adminPassStep"].forEach(id=>{
     const el=document.getElementById(id);
-    if(el){el.style.display=id===stepId?"block":"none";}
+    if(el){el.style.display=(id===stepId)?"block":"none";}
   });
   if(stepId==="workerSelectStep")buildWorkerPickList();
   if(stepId==="adminPassStep"){
@@ -2258,8 +2262,11 @@ initLoginEvents();
     const remote=await ghGet();
     if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
   }
-  // Don't call renderAll here — login screen is shown first
-  // renderAll will be called after role selection
+  // Hide loading, show role buttons
+  const loadingEl=document.getElementById("loginLoadingState");
+  const roleStep=document.getElementById("roleSelectStep");
+  if(loadingEl)loadingEl.style.display="none";
+  if(roleStep)roleStep.style.display="block";
 })();
 </script>
 </body>
