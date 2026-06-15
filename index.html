@@ -2302,23 +2302,9 @@ async function bootLoadData(){
     showSyncStatus("⏳ 从云端加载数据...","#66736c");
     const remote=await ghGet();
     if(remote){
-      // Merge: keep whichever side has more data for each array, never lose local test data
-      const mergeArr=(localArr,remoteArr,key="id")=>{
-        const map=new Map();
-        (remoteArr||[]).forEach(x=>map.set(x[key],x));
-        // local entries overwrite remote for same id (local edits win)
-        (localArr||[]).forEach(x=>map.set(x[key],x));
-        return Array.from(map.values());
-      };
-      state.workers  = mergeArr(state.workers,  remote.workers);
-      state.sites    = mergeArr(state.sites,     remote.sites);
-      state.entries  = mergeArr(state.entries,   remote.entries);
-      state.certs    = mergeArr(state.certs,     remote.certs);
-      state.settings = Object.assign({},remote.settings,state.settings);
-      state.invoiceCounters = Object.assign({},remote.invoiceCounters,state.invoiceCounters);
+      // GitHub is the single source of truth — always load remote on boot
+      Object.assign(state,remote);
       localStorage.setItem(KEY,JSON.stringify(state));
-      // push merged state back to GitHub so both sides stay in sync
-      await ghPut(state);
       showSyncStatus("✅ 数据已同步","#18725f");
     }
   }
