@@ -426,6 +426,26 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
       <button class="secondary-btn" id="backToRoleBtn" type="button" style="width:100%">← 返回 Back</button>
     </div>
 
+    <!-- Step 2c: worker phone verify -->
+    <div id="workerVerifyStep">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div id="verifyWorkerAvatar" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#18725f,#2d9c82);color:#fff;font-weight:800;font-size:1rem;display:grid;place-items:center;flex-shrink:0"></div>
+        <div>
+          <div id="verifyWorkerName" style="font-weight:800;font-size:1rem"></div>
+          <div style="color:#66736c;font-size:.82rem">请验证身份 / Verify identity</div>
+        </div>
+      </div>
+      <p style="font-size:.88rem;color:#66736c;margin-bottom:10px">输入手机号后2位 / Last 2 digits of your phone</p>
+      <input id="workerPhoneVerify" type="tel" inputmode="numeric" maxlength="2"
+        placeholder="例如：45"
+        style="font-size:2rem;font-weight:800;text-align:center;letter-spacing:.3em;margin-bottom:8px;border:2px solid #dce3dc;border-radius:10px"/>
+      <div id="verifyError" style="color:#b84132;font-size:.83rem;margin-bottom:8px;display:none">❌ 不匹配，请重试 / Doesn't match, try again</div>
+      <div style="display:grid;gap:8px">
+        <button class="primary-btn" id="workerVerifyConfirm" type="button" style="width:100%;min-height:44px">确认进入 / Enter</button>
+        <button class="secondary-btn" id="backToWorkerListBtn" type="button" style="width:100%">← 返回 Back</button>
+      </div>
+    </div>
+
     <!-- Step 2b: admin password -->
     <div id="adminPassStep">
       <p style="font-weight:700;margin-bottom:10px">管理员密码 Admin Password</p>
@@ -2045,58 +2065,15 @@ function scheduleSave(){
 // 统一的 save：立即写 localStorage，再异步同步到 GitHub
 function save(){localStorage.setItem(KEY,JSON.stringify(state));scheduleSave();}
 
-function showTokenSetup(){
-  let overlay=$("#tokenOverlay");
-  if(overlay){overlay.hidden=false;return;}
-  overlay=document.createElement("div");overlay.id="tokenOverlay";
-  overlay.style.cssText="position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px";
-  overlay.innerHTML=`
-    <div style="background:#fff;border-radius:14px;padding:28px;width:100%;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.25)">
-      <div style="font-size:28px;margin-bottom:10px">☁️</div>
-      <h3 style="margin:0 0 8px;font-size:1.05rem">连接GitHub云存储</h3>
-      <p style="color:#66736c;font-size:.86rem;margin:0 0 16px;line-height:1.6">
-        输入GitHub Personal Access Token，数据将自动同步到云端，任何设备都能访问最新数据。
-      </p>
-      <label style="display:grid;gap:6px;color:#66736c;font-size:.83rem;font-weight:600;margin-bottom:12px">
-        GitHub Token (ghp_ 开头)
-        <input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx"
-          style="min-height:40px;border:1px solid #dce3dc;border-radius:8px;padding:0 12px;font-size:14px;width:100%"/>
-      </label>
-      <div id="tokenError" style="color:#b84132;font-size:.83rem;margin-bottom:10px;display:none"></div>
-      <div style="display:flex;gap:10px;justify-content:flex-end">
-        <button id="tokenSkip" style="min-height:38px;border:1px solid #dce3dc;background:#fff;border-radius:8px;padding:0 14px;cursor:pointer;font-weight:700">暂时跳过</button>
-        <button id="tokenSave" style="min-height:38px;border:0;background:#18725f;color:#fff;border-radius:8px;padding:0 16px;cursor:pointer;font-weight:700">保存并同步</button>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
-  $("#tokenSave").addEventListener("click",async()=>{
-    const token=$("#tokenInput").value.trim();
-    if(!token){$("#tokenError").style.display="block";$("#tokenError").textContent="请输入Token";return;}
-    localStorage.setItem("lf_gh_token",token);$("#tokenError").style.display="none";
-    $("#tokenSave").textContent="连接中...";
-    try{
-      const remote=await ghGet();
-      if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));renderAll();showSyncStatus("✅ 数据已从云端加载","#18725f");}
-      else{
-        const ok=await ghPut(state);
-        if(!ok)throw new Error("写入失败，请检查Token权限是否勾选了 repo");
-      }
-      overlay.hidden=true;
-    }catch(err){
-      $("#tokenError").style.display="block";
-      $("#tokenError").textContent="❌ 错误："+err.message;
-      $("#tokenSave").textContent="保存并同步";
-      localStorage.removeItem("lf_gh_token");
-    }
-  });
-  $("#tokenSkip").addEventListener("click",()=>{overlay.hidden=true;});
-}
-
 function addSyncButton(){
+  // Cloud sync is now handled at boot; sidebar button re-opens token setup for admins
   const btn=document.createElement("button");
   btn.textContent="☁️ 云存储设置";
   btn.style.cssText="min-height:38px;border:1px solid rgba(255,255,255,.18);background:transparent;color:#f8fbf8;border-radius:8px;cursor:pointer;font-weight:700;font-size:.83rem";
-  btn.addEventListener("click",showTokenSetup);
+  btn.addEventListener("click",()=>{
+    localStorage.removeItem("lf_gh_token");
+    showTokenSetupOnBoot();
+  });
   $(".sidebar-stats").before(btn);
 }
 
@@ -2152,7 +2129,7 @@ function showLoginScreen(){
 }
 
 function showLoginStep(stepId){
-  ["loginLoadingState","roleSelectStep","workerSelectStep","adminPassStep"].forEach(id=>{
+  ["loginLoadingState","roleSelectStep","workerSelectStep","workerVerifyStep","adminPassStep"].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.style.display=(id===stepId)?"block":"none";}
   });
@@ -2176,6 +2153,24 @@ function buildWorkerPickList(){
     </button>`).join("")||`<div class="muted" style="padding:12px;font-size:.88rem">暂无在职工人。请管理员先添加工人。</div>`;
 }
 
+function showWorkerVerify(workerId){
+  const w=getWorker(workerId);if(!w)return;
+  const colors=["#18725f","#2d6fa3","#7a3d8a","#c05820","#1a7a4a"];
+  const idx=state.workers.findIndex(x=>x.id===workerId);
+  const av=document.getElementById("verifyWorkerAvatar");
+  const nm=document.getElementById("verifyWorkerName");
+  const btn=document.getElementById("workerVerifyConfirm");
+  const inp=document.getElementById("workerPhoneVerify");
+  const err=document.getElementById("verifyError");
+  if(av){av.textContent=initials(w.name);av.style.background=colors[idx%colors.length];}
+  if(nm)nm.textContent=w.name;
+  if(btn)btn.dataset.pendingWorker=workerId;
+  if(inp)inp.value="";
+  if(err)err.style.display="none";
+  showLoginStep("workerVerifyStep");
+  setTimeout(()=>inp&&inp.focus(),100);
+}
+
 // Login screen event wiring (runs after DOM ready)
 function initLoginEvents(){
   document.getElementById("workerRoleBtn")?.addEventListener("click",()=>showLoginStep("workerSelectStep"));
@@ -2184,8 +2179,35 @@ function initLoginEvents(){
   document.getElementById("backToRoleBtn2")?.addEventListener("click",()=>showLoginStep("roleSelectStep"));
   document.getElementById("workerPickList")?.addEventListener("click",ev=>{
     const btn=ev.target.closest("[data-pick-worker]");
-    if(btn)enterWorkerMode(btn.dataset.pickWorker);
+    if(btn)showWorkerVerify(btn.dataset.pickWorker);
   });
+  document.getElementById("workerVerifyConfirm")?.addEventListener("click",()=>{
+    const wid=document.getElementById("workerVerifyConfirm").dataset.pendingWorker;
+    const w=getWorker(wid);
+    if(!w){return;}
+    const phone=(w.phone||"").replace(/\s/g,"");
+    const last2=phone.slice(-2);
+    const input=(document.getElementById("workerPhoneVerify").value||"").trim();
+    if(!last2){
+      // no phone on file — let admin know, don't let in
+      document.getElementById("verifyError").style.display="block";
+      document.getElementById("verifyError").textContent="⚠️ 该工人未设置电话，请联系管理员 / No phone on file, contact admin";
+      return;
+    }
+    if(input===last2){
+      document.getElementById("verifyError").style.display="none";
+      enterWorkerMode(wid);
+    } else {
+      document.getElementById("verifyError").style.display="block";
+      document.getElementById("verifyError").textContent="❌ 不匹配，请重试 / Doesn't match, try again";
+      document.getElementById("workerPhoneVerify").value="";
+      document.getElementById("workerPhoneVerify").focus();
+    }
+  });
+  document.getElementById("workerPhoneVerify")?.addEventListener("keydown",ev=>{
+    if(ev.key==="Enter")document.getElementById("workerVerifyConfirm").click();
+  });
+  document.getElementById("backToWorkerListBtn")?.addEventListener("click",()=>showLoginStep("workerSelectStep"));
   document.getElementById("adminPassConfirm")?.addEventListener("click",()=>{
     const val=document.getElementById("adminPassInput").value;
     if(val===ADMIN_PASSWORD){enterAdminMode();}
@@ -2256,17 +2278,85 @@ resetCertForm();
 addSyncButton();
 initLoginEvents();
 
-(async()=>{
+async function bootLoadData(){
+  // Step 1: sync data from GitHub
+  const loadingEl=document.getElementById("loginLoadingState");
+  const roleStep=document.getElementById("roleSelectStep");
+  if(loadingEl)loadingEl.style.display="block";
+  if(roleStep)roleStep.style.display="none";
   if(GH.token){
     showSyncStatus("⏳ 从云端加载数据...","#66736c");
     const remote=await ghGet();
     if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
   }
-  // Hide loading, show role buttons
-  const loadingEl=document.getElementById("loginLoadingState");
-  const roleStep=document.getElementById("roleSelectStep");
+  // Step 2: show role select
   if(loadingEl)loadingEl.style.display="none";
   if(roleStep)roleStep.style.display="block";
+}
+
+function showTokenSetupOnBoot(){
+  // Show token setup overlaid on the login screen (login screen stays visible behind)
+  let overlay=document.getElementById("tokenOverlay");
+  if(overlay){overlay.hidden=false;return;}
+  overlay=document.createElement("div");overlay.id="tokenOverlay";
+  overlay.style.cssText="position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:20px";
+  overlay.innerHTML=`
+    <div style="background:#fff;border-radius:16px;padding:28px;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.3)">
+      <div style="font-size:2rem;margin-bottom:10px;text-align:center">☁️</div>
+      <h3 style="margin:0 0 6px;font-size:1.05rem;text-align:center">首次设置云同步</h3>
+      <p style="color:#66736c;font-size:.85rem;margin:0 0 6px;line-height:1.6;text-align:center">First-time Cloud Sync Setup</p>
+      <p style="color:#66736c;font-size:.83rem;margin:0 0 16px;line-height:1.6">
+        输入GitHub Token后，所有设备的数据将自动同步。<br/>
+        <span style="font-size:.78rem">Enter your GitHub Personal Access Token to sync data across all devices.</span>
+      </p>
+      <label style="display:grid;gap:6px;color:#66736c;font-size:.83rem;font-weight:600;margin-bottom:12px">
+        GitHub Token (ghp_ 开头)
+        <input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx"
+          style="min-height:44px;border:1px solid #dce3dc;border-radius:8px;padding:0 12px;font-size:14px;width:100%"/>
+      </label>
+      <div id="tokenError" style="color:#b84132;font-size:.83rem;margin-bottom:10px;display:none"></div>
+      <div style="display:grid;gap:8px">
+        <button id="tokenSave" style="min-height:44px;border:0;background:#18725f;color:#fff;border-radius:8px;padding:0 16px;cursor:pointer;font-weight:700;font-size:.95rem;width:100%">保存并连接 / Save & Connect</button>
+        <button id="tokenSkip" style="min-height:38px;border:1px solid #dce3dc;background:#fff;border-radius:8px;padding:0 14px;cursor:pointer;font-weight:700;font-size:.85rem;color:#66736c;width:100%">暂时跳过 / Skip for now</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.getElementById("tokenSave").addEventListener("click",async()=>{
+    const token=document.getElementById("tokenInput").value.trim();
+    if(!token){document.getElementById("tokenError").style.display="block";document.getElementById("tokenError").textContent="请输入Token";return;}
+    localStorage.setItem("lf_gh_token",token);
+    document.getElementById("tokenError").style.display="none";
+    document.getElementById("tokenSave").textContent="连接中... Connecting...";
+    try{
+      const remote=await ghGet();
+      if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#18725f");}
+      else{const ok=await ghPut(state);if(!ok)throw new Error("写入失败，请检查Token权限是否勾选了 repo");}
+      overlay.hidden=true;
+      await bootLoadData();
+    }catch(err){
+      document.getElementById("tokenError").style.display="block";
+      document.getElementById("tokenError").textContent="❌ "+err.message;
+      document.getElementById("tokenSave").textContent="保存并连接 / Save & Connect";
+      localStorage.removeItem("lf_gh_token");
+    }
+  });
+  document.getElementById("tokenSkip").addEventListener("click",async()=>{
+    overlay.hidden=true;
+    await bootLoadData();
+  });
+  document.getElementById("tokenInput")?.addEventListener("keydown",ev=>{
+    if(ev.key==="Enter")document.getElementById("tokenSave").click();
+  });
+}
+
+(async()=>{
+  if(!GH.token){
+    // No token yet — show setup screen first
+    showTokenSetupOnBoot();
+  } else {
+    // Token exists — load data then show login
+    await bootLoadData();
+  }
 })();
 </script>
 </body>
