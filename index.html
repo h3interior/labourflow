@@ -714,8 +714,20 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
             <label>客户ABN<input id="siteClientAbn" autocomplete="off" placeholder="25 607 468 315"/></label>
             <label>客户邮箱<input id="siteClientEmail" autocomplete="off" placeholder="accounts@example.com"/></label>
             <label>工地名称 Site name<input id="siteName" autocomplete="off" required/></label>
-            <label>收费时薪 Bill rate ($/hr)<input id="siteBillRate" type="number" min="0" step="0.01" required/></label>
             <label>GST %<input id="siteTaxRate" type="number" value="10" min="0" step="0.01"/></label>
+          </div>
+          <!-- 按职位收费时薪 -->
+          <div style="margin:10px 0 6px;padding:10px 12px 4px;background:var(--surface-2);border-radius:var(--radius);border:1px solid var(--line)">
+            <p class="eyebrow" style="margin-bottom:8px">收费时薪 Bill Rate ($/hr) — 按职位</p>
+            <div class="form-grid four" style="gap:8px">
+            <label>Labourer<input id="siteBillRateLabourer" type="number" min="0" step="0.01" placeholder="e.g. 55"/></label>
+            <label>Leading Hand<input id="siteBillRateLeadingHand" type="number" min="0" step="0.01" placeholder="e.g. 62"/></label>
+            <label>Foreman<input id="siteBillRateForeman" type="number" min="0" step="0.01" placeholder="e.g. 70"/></label>
+            <label>Project Manager<input id="siteBillRatePM" type="number" min="0" step="0.01" placeholder="e.g. 80"/></label>
+            </div>
+            <p style="color:var(--muted);font-size:.75rem;margin:6px 0 4px">💡 留空则该职位使用默认（Labourer）时薪</p>
+          </div>
+          <div class="form-grid" style="display:none">
           </div>
           <div class="button-row">
             <button class="primary-btn" type="submit">保存 Save</button>
@@ -738,7 +750,7 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
             <select id="sitesClientFilter" style="min-width:140px;max-width:180px"><option value="__all">全部客户</option></select>
           </div>
           <div class="table-wrap compact">
-            <table><thead><tr><th>客户</th><th>工地</th><th>收费</th><th></th></tr></thead>
+            <table><thead><tr><th>客户</th><th>工地</th><th>Labourer</th><th>LH</th><th>Foreman</th><th>PM</th><th></th></tr></thead>
             <tbody id="sitesTable"></tbody></table>
           </div>
         </div>
@@ -877,6 +889,14 @@ state.workers.forEach(w=>{
   w.whiteCardExp = w.whiteCardExp || "";
 });
 
+// migrate old sites that only have a single billRate — expand to per-role billRates
+state.sites.forEach(s=>{
+  if(!s.billRates){
+    const legacy=s.billRate||0;
+    s.billRates={labourer:legacy,leading_hand:0,foreman:0,pm:0};
+  }
+});
+
 function _savePlaceholder_replaced_below(){}
 
 // ── Core helpers ──────────────────────────────────────────────
@@ -891,7 +911,13 @@ function getRates(entry){
   const worker=getWorker(entry.workerId);
   const site=getSite(entry.client,entry.site);
   const costRate=Number(worker?.costRate||worker?.payRate||0);
-  const billRate=Number(site?.billRate||0);
+  // 按工人职位查找对应 bill rate；旧数据只有 billRate（兼容）
+  const role=worker?.role||"labourer";
+  const billRate=Number(
+    (site?.billRates&&site.billRates[role]&&site.billRates[role]>0)
+      ? site.billRates[role]
+      : (site?.billRate||0)
+  );
   const allowance=Number(entry.allowance||0);
   const revenue=entry.hours*billRate;
   const cost=entry.hours*costRate+allowance;
@@ -1049,15 +1075,24 @@ function renderSites(){
   const filterClient=$("#sitesClientFilter").value||"__all";
   const filtered=filterClient==="__all"?state.sites:state.sites.filter(s=>s.client===filterClient);
 
+  // 辅助：显示某职位的 bill rate，缺省回退到旧 billRate
+  const br=(s,role)=>{
+    const v=s.billRates&&s.billRates[role]&&s.billRates[role]>0?s.billRates[role]:null;
+    return v?`$${v}`:(role==="labourer"?`$${s.billRate||"—"}`:`<span class="muted" style="font-size:.75rem">同 Lab</span>`);
+  };
   $("#sitesTable").innerHTML=filtered.map(s=>`
     <tr>
       <td><strong>${esc(s.clientShort||"")}</strong> ${esc(s.client)}</td>
-      <td>${esc(s.name)}</td><td>${money(s.billRate)}/h</td>
+      <td>${esc(s.name)}</td>
+      <td style="font-size:.82rem">${br(s,"labourer")}</td>
+      <td style="font-size:.82rem">${br(s,"leading_hand")}</td>
+      <td style="font-size:.82rem">${br(s,"foreman")}</td>
+      <td style="font-size:.82rem">${br(s,"pm")}</td>
       <td><div class="table-actions">
         <button class="secondary-btn" data-edit-site="${s.id}" type="button">编辑</button>
         <button class="danger-btn" data-delete-site="${s.id}" type="button">删除</button>
       </div></td>
-    </tr>`).join("")||`<tr><td colspan="4" class="muted">暂无工地</td></tr>`;
+    </tr>`).join("")||`<tr><td colspan="7" class="muted">暂无工地</td></tr>`;
 }
 
 // 用历史输入填充 Client Billing 的各个下拉(datalist)
@@ -1261,9 +1296,15 @@ function renderReports(){
   $("#sidebarProfit").textContent=money(total.profit);
   const range=weekRange();
   $("#sidebarWeek").textContent=`${range.startIso} → ${range.endIso}`;
-  const missing=groupBySite().filter(i=>!i.billRate&&i.hours>0);
-  $("#rateWarning").hidden=!missing.length;
-  if(missing.length)$("#rateWarning").textContent=`有 ${missing.length} 个工地没有设置收费时薪，收入和利润数据不准确。`;
+  // 检查：本周有上工记录但 bill rate=0 的工人（按职位）
+  const missingRateEntries=weeklyEntries().filter(e=>{
+    const r=getRates(e);return e.hours>0&&r.billRate===0;
+  });
+  const missingRoleSites=[...new Set(missingRateEntries.map(e=>{
+    const w=getWorker(e.workerId);return`${e.site}(${ROLE_LABELS[w?.role]||w?.role||"?"})`;
+  }))];
+  $("#rateWarning").hidden=!missingRoleSites.length;
+  if(missingRoleSites.length)$("#rateWarning").textContent=`⚠️ 以下工地/职位未设置收费时薪，收入利润数据不准确：${missingRoleSites.join("、")}`;
   $("#siteSummaryTable").innerHTML=groupBySite().map(item=>{
     const margin=item.revenue?(item.profit/item.revenue)*100:0;
     return`<tr><td>${esc(item.client)}</td><td>${esc(item.site)}</td>
@@ -1446,6 +1487,28 @@ function renderAll(){
 function updatePreview(){
   const h=calcHours($("#entryStart").value,$("#entryEnd").value,$("#entryBreak").value);
   $("#entryHoursPreview").textContent=`${num(h)} h`;
+  // 同步显示当前工人职位对应的 bill rate（帮助管理员核查）
+  const wid=$("#entryWorker").value;
+  const client=$("#entryClient").value;
+  const site=$("#entrySite").value;
+  const worker=getWorker(wid);
+  const siteObj=getSite(client,site);
+  let rateHint="";
+  if(worker&&siteObj){
+    const role=worker.role||"labourer";
+    const br=siteObj.billRates&&siteObj.billRates[role]&&siteObj.billRates[role]>0
+      ?siteObj.billRates[role]:(siteObj.billRate||0);
+    if(br>0)rateHint=`· ${esc(ROLE_LABELS[role]||role)} Bill $${br}/h`;
+    else rateHint=`· ⚠️ 该职位未设收费时薪`;
+  }
+  let hint=document.getElementById("entryRateHint");
+  if(!hint){
+    hint=document.createElement("span");hint.id="entryRateHint";
+    hint.style.cssText="font-size:.78rem;color:var(--muted);margin-left:8px";
+    const strip=document.querySelector(".calculated-strip strong");
+    if(strip)strip.parentNode.appendChild(hint);
+  }
+  hint.textContent=rateHint;
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1463,7 +1526,7 @@ function resetWorkerForm(){
   $("#workerPayRate").value=55;$("#workerCostRate").value=62;
   $("#workerRole").value="labourer";$("#workerStatus").value="active";
 }
-function resetSiteForm(){$("#siteForm").reset();$("#siteId").value="";$("#siteBillRate").value=55;$("#siteTaxRate").value=10}
+function resetSiteForm(){$("#siteForm").reset();$("#siteId").value="";$("#siteBillRateLabourer").value="";$("#siteBillRateLeadingHand").value="";$("#siteBillRateForeman").value="";$("#siteBillRatePM").value="";$("#siteTaxRate").value=10}
 function resetCertForm(){$("#certForm").reset();$("#certId").value="";if(state.workers[0])$("#certWorker").value=state.workers[0].id}
 
 // ══════════════════════════════════════════════════════════════
@@ -1498,10 +1561,19 @@ function handleWorkerSubmit(e){
 function handleSiteSubmit(e){
   e.preventDefault();
   const id=$("#siteId").value||uid("s");
+  const rateLabourer=Number($("#siteBillRateLabourer").value||0);
   const site={id,clientShort:$("#siteClientShort").value.trim().toUpperCase(),
     client:$("#siteClient").value.trim(),clientAbn:$("#siteClientAbn").value.trim(),
     clientEmail:$("#siteClientEmail").value.trim(),name:$("#siteName").value.trim(),
-    billRate:Number($("#siteBillRate").value||0),taxRate:Number($("#siteTaxRate").value||10)};
+    // 向下兼容：billRate 保留为 Labourer 的值（旧版发票逻辑依赖它）
+    billRate:rateLabourer,
+    billRates:{
+      labourer:rateLabourer,
+      leading_hand:Number($("#siteBillRateLeadingHand").value||0)||rateLabourer,
+      foreman:Number($("#siteBillRateForeman").value||0)||rateLabourer,
+      pm:Number($("#siteBillRatePM").value||0)||rateLabourer,
+    },
+    taxRate:Number($("#siteTaxRate").value||10)};
   const idx=state.sites.findIndex(x=>x.id===id);
   if(idx>=0)state.sites[idx]=site;else state.sites.push(site);
   save();resetSiteForm();renderAll();
@@ -1575,7 +1647,14 @@ function editSite(id){
   const s=state.sites.find(x=>x.id===id);if(!s)return;
   $("#siteId").value=s.id;$("#siteClientShort").value=s.clientShort||"";$("#siteClient").value=s.client;
   $("#siteClientAbn").value=s.clientAbn||"";$("#siteClientEmail").value=s.clientEmail||"";
-  $("#siteName").value=s.name;$("#siteBillRate").value=s.billRate;$("#siteTaxRate").value=s.taxRate;
+  $("#siteName").value=s.name;$("#siteTaxRate").value=s.taxRate;
+  // 填回各职位 bill rate；兼容只有旧 billRate 的数据
+  const br=s.billRates||{};
+  const legacy=s.billRate||0;
+  $("#siteBillRateLabourer").value=br.labourer||legacy||"";
+  $("#siteBillRateLeadingHand").value=br.leading_hand||"";
+  $("#siteBillRateForeman").value=br.foreman||"";
+  $("#siteBillRatePM").value=br.pm||"";
   switchView("adminView");
 }
 
@@ -1880,6 +1959,9 @@ function fmtMoneyCompact(v){
 // ══════════════════════════════════════════════════════════════
 $$(".nav-btn").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));
 ["entryStart","entryEnd","entryBreak"].forEach(id=>$(`#${id}`).addEventListener("input",updatePreview));
+// 选工人/工地时也刷新 bill rate 提示
+$("#entryWorker").addEventListener("change",updatePreview);
+$("#entrySite").addEventListener("change",updatePreview);
 $("#weekStart").addEventListener("change",renderAll);
 $("#workerSummarySelect").addEventListener("change",renderWorkerSummary);
 $("#entryClient").addEventListener("change",()=>{renderSiteOptions();renderReports()});
