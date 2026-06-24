@@ -2120,10 +2120,22 @@ const GH={
 let ghSha=null;let syncTimer=null;
 
 // 带超时的 fetch：信号差/请求挂起时不会让整个App卡死，超过 timeoutMs 直接判定失败
-function fetchWithTimeout(url,options={},timeoutMs=8000){
+// 工地现场信号弱，接口请求比加载普通网页更容易卡顿，超时时间调宽到25秒
+async function fetchWithTimeoutOnce(url,options={},timeoutMs=25000){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),timeoutMs);
   return fetch(url,{...options,signal:controller.signal}).finally(()=>clearTimeout(timer));
+}
+// 超时/网络失败时自动重试一次（弱信号下常见的偶发卡顿，重试一次往往就成功了），
+// 仍然失败才真正抛出错误
+async function fetchWithTimeout(url,options={},timeoutMs=25000){
+  try{
+    return await fetchWithTimeoutOnce(url,options,timeoutMs);
+  }catch(e){
+    console.warn("第一次请求失败，1秒后自动重试:",e.message);
+    await new Promise(res=>setTimeout(res,1000));
+    return await fetchWithTimeoutOnce(url,options,timeoutMs);
+  }
 }
 
 async function ghGet(){
