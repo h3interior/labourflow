@@ -2177,6 +2177,35 @@ function showSyncStatus(msg,color){
   clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity="0",3000);
 }
 
+// ──────────────────────────────────────────────────────────────
+// 安全合并：不再用云端数据无条件覆盖本地（之前这样做导致过本地未同步的
+// 新数据被旧的云端数据冲掉、造成数据丢失）。改为：
+//  1) 整体上谁的 _lastModified 更新，就以谁的记录集合为基础
+//  2) 但任何一边独有的记录（对方没有这个id）都会被保留下来，不会被丢弃
+// 这样无论本地还是云端哪边更新，两边各自独有的新增数据都不会消失。
+// ──────────────────────────────────────────────────────────────
+function mergeRemoteIntoLocal(remote){
+  if(!remote)return;
+  const localNewer = (state._lastModified||"") >= (remote._lastModified||"");
+  const base   = localNewer ? state  : remote;
+  const other  = localNewer ? remote : state;
+
+  const mergedState = {...base};
+  ["workers","sites","entries","certs"].forEach(key=>{
+    const baseList  = Array.isArray(base[key]) ?base[key] :[];
+    const otherList = Array.isArray(other[key])?other[key]:[];
+    const ids = new Set(baseList.map(r=>r.id));
+    // 把 other 里 base 没有的记录追加进来，而不是丢弃
+    const onlyInOther = otherList.filter(r=>!ids.has(r.id));
+    mergedState[key] = [...baseList, ...onlyInOther];
+  });
+  mergedState.invoiceCounters = {...other.invoiceCounters, ...base.invoiceCounters};
+  mergedState.settings = base.settings || other.settings;
+  mergedState._lastModified = base._lastModified || other._lastModified;
+
+  Object.assign(state, mergedState);
+}
+
 let pendingSync=false; // 是否有数据改动尚未同步到云端
 
 async function doSync(){
@@ -2214,7 +2243,7 @@ document.addEventListener("visibilitychange",()=>{
 window.addEventListener("pagehide",flushPendingSync);
 
 // 统一的 save：立即写 localStorage，再异步同步到 GitHub
-function save(){localStorage.setItem(KEY,JSON.stringify(state));scheduleSave();}
+function save(){state._lastModified=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));scheduleSave();}
 
 function addSyncButton(){
   // Cloud sync is now handled at boot; sidebar button re-opens token setup for admins
@@ -2456,10 +2485,13 @@ async function bootLoadData(){
       showSyncStatus("⏳ 从云端加载数据...","#737d76");
       const remote=await ghGet();
       if(remote){
-        // GitHub is the single source of truth — always load remote on boot
-        Object.assign(state,remote);
+        const beforeJson=JSON.stringify(state);
+        mergeRemoteIntoLocal(remote);
         localStorage.setItem(KEY,JSON.stringify(state));
         showSyncStatus("✅ 数据已同步","#15614f");
+        // 合并后如果本地数据有变化（说明本地曾经有云端没有的新记录），
+        // 立刻把合并结果再推回云端，避免下次开机又要重新合并
+        if(JSON.stringify(state)!==beforeJson)scheduleSave();
       } else {
         showSyncStatus("⚠️ 云端加载失败，使用本地数据","#bd7332");
       }
@@ -2508,7 +2540,7 @@ function showTokenSetupOnBoot(){
     document.getElementById("tokenSave").textContent="连接中... Connecting...";
     try{
       const remote=await ghGet();
-      if(remote){Object.assign(state,remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#15614f");}
+      if(remote){mergeRemoteIntoLocal(remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#15614f");}
       else{const ok=await ghPut(state);if(!ok)throw new Error("写入失败，请检查Token权限是否勾选了 repo");}
       overlay.remove();
       await bootLoadData();
