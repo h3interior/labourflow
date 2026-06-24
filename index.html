@@ -2177,22 +2177,41 @@ function showSyncStatus(msg,color){
   clearTimeout(el._t);el._t=setTimeout(()=>el.style.opacity="0",3000);
 }
 
-function scheduleSave(){
-  clearTimeout(syncTimer);
-  syncTimer=setTimeout(async()=>{
-    if(!GH.token)return;
-    showSyncStatus("⏳ 同步中...","#737d76");
-    try{
-      // If we don't have the sha yet, fetch it first (required by GitHub API to update existing file)
-      if(!ghSha)await ghGet();
-      const ok=await ghPut(state);
-      if(!ok)showSyncStatus("❌ 同步失败","#b84132");
-    }catch(err){
-      showSyncStatus("❌ 同步失败: "+err.message.slice(0,40),"#b84132");
-      console.error("Save sync error:",err);
-    }
-  },2000);
+let pendingSync=false; // 是否有数据改动尚未同步到云端
+
+async function doSync(){
+  if(!GH.token)return;
+  showSyncStatus("⏳ 同步中...","#737d76");
+  try{
+    // If we don't have the sha yet, fetch it first (required by GitHub API to update existing file)
+    if(!ghSha)await ghGet();
+    const ok=await ghPut(state);
+    if(ok)pendingSync=false;
+    else showSyncStatus("❌ 同步失败","#b84132");
+  }catch(err){
+    showSyncStatus("❌ 同步失败: "+err.message.slice(0,40),"#b84132");
+    console.error("Save sync error:",err);
+  }
 }
+
+function scheduleSave(){
+  pendingSync=true;
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(doSync,2000);
+}
+
+// 手机切后台/锁屏/关闭页面前，若还有未同步的改动，立刻同步，不再等待2秒的延迟
+// 避免数据只留在本机 localStorage、从未推送到云端的情况
+function flushPendingSync(){
+  if(pendingSync&&GH.token){
+    clearTimeout(syncTimer);
+    doSync();
+  }
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="hidden")flushPendingSync();
+});
+window.addEventListener("pagehide",flushPendingSync);
 
 // 统一的 save：立即写 localStorage，再异步同步到 GitHub
 function save(){localStorage.setItem(KEY,JSON.stringify(state));scheduleSave();}
