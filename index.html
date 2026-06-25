@@ -2150,11 +2150,13 @@ async function ghGet(){
       throw new Error(`HTTP ${r.status}${t?" — "+t.slice(0,120):""}`);
     }
     const d=await r.json();ghSha=d.sha;
-    // GitHub Contents API 对超过1MB的文件不会把内容塞进 content 字段（会是空的），
-    // 这种情况下必须改用 download_url 单独拉取原始内容，否则会拿空字符串去解析JSON报错
-    if(!d.content&&d.download_url){
-      const raw=await fetchWithTimeout(d.download_url,{headers:{Authorization:`token ${GH.token}`}});
-      if(!raw.ok)throw new Error(`下载原始内容失败 HTTP ${raw.status}`);
+    // GitHub Contents API 对超过1MB的文件不会把内容塞进 content 字段（会是空的）。
+    // 这种情况改用同一个 api.github.com 接口、换 Accept:raw 请求头直接要原始内容——
+    // 不跨域到 raw.githubusercontent.com（之前那样会被浏览器CORS拦掉，报"Load failed"）
+    if(!d.content){
+      const raw=await fetchWithTimeout(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
+        {headers:{Authorization:`token ${GH.token}`,Accept:"application/vnd.github.raw"}});
+      if(!raw.ok)throw new Error(`读取大文件失败 HTTP ${raw.status}`);
       return JSON.parse(await raw.text());
     }
     return JSON.parse(atob(d.content.replace(/\n/g,"")));
