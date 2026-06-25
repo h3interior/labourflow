@@ -2138,16 +2138,22 @@ async function fetchWithTimeout(url,options={},timeoutMs=25000){
   }
 }
 
+let lastGhError=""; // 记录最近一次云端读取失败的具体原因，供界面提示显示
 async function ghGet(){
   if(!GH.token)return null;
   try{
     const r=await fetchWithTimeout(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
       {headers:{Authorization:`token ${GH.token}`,Accept:"application/vnd.github+json"}});
-    if(r.status===404)return null;if(!r.ok)throw new Error(`${r.status}`);
+    if(r.status===404){lastGhError="404 文件不存在";return null;}
+    if(!r.ok){
+      const t=await r.text().catch(()=>"");
+      throw new Error(`HTTP ${r.status}${t?" — "+t.slice(0,120):""}`);
+    }
     const d=await r.json();ghSha=d.sha;
     return JSON.parse(atob(d.content.replace(/\n/g,"")));
   }catch(e){
-    const msg=e.name==="AbortError"?"timeout (网络太慢/无响应)":e.message;
+    const msg=e.name==="AbortError"?"timeout 超时(网络太慢/无响应)":e.message;
+    lastGhError=msg;
     console.warn("GitHub read failed:",msg);return null;
   }
 }
@@ -2508,7 +2514,7 @@ async function bootLoadData(){
         // 立刻把合并结果再推回云端，避免下次开机又要重新合并
         if(JSON.stringify(state)!==beforeJson)scheduleSave();
       } else {
-        showSyncStatus("⚠️ 云端加载失败，使用本地数据","#bd7332");
+        showSyncStatus("⚠️ 云端加载失败("+(lastGhError||"未知原因")+")，使用本地数据","#bd7332");
       }
     }
   }catch(err){
