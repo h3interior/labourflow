@@ -2150,16 +2150,20 @@ async function ghGet(){
       throw new Error(`HTTP ${r.status}${t?" — "+t.slice(0,120):""}`);
     }
     const d=await r.json();ghSha=d.sha;
-    // GitHub Contents API 对超过1MB的文件不会把内容塞进 content 字段（会是空的）。
-    // 这种情况改用同一个 api.github.com 接口、换 Accept:raw 请求头直接要原始内容——
-    // 不跨域到 raw.githubusercontent.com（之前那样会被浏览器CORS拦掉，报"Load failed"）
-    if(!d.content){
-      const raw=await fetchWithTimeout(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
-        {headers:{Authorization:`token ${GH.token}`,Accept:"application/vnd.github.raw"}});
-      if(!raw.ok)throw new Error(`读取大文件失败 HTTP ${raw.status}`);
-      return JSON.parse(await raw.text());
+    if(d.content){
+      return JSON.parse(atob(d.content.replace(/\n/g,"")));
     }
-    return JSON.parse(atob(d.content.replace(/\n/g,"")));
+    // GitHub Contents API 对超过1MB的文件不会把内容塞进 content 字段（会是空的）。
+    // 改用 Git Blobs API（通过文件的sha单独取内容，官方文档明确支持最大100MB，
+    // 解码方式跟读小文件完全一样，比之前试过的 Accept请求头/download_url 两种方式都更可靠）
+    const blobR=await fetchWithTimeout(`https://api.github.com/repos/${GH.owner}/${GH.repo}/git/blobs/${d.sha}`,
+      {headers:{Authorization:`token ${GH.token}`,Accept:"application/vnd.github+json"}});
+    if(!blobR.ok){
+      const t=await blobR.text().catch(()=>"");
+      throw new Error(`读取大文件失败 HTTP ${blobR.status}${t?" — "+t.slice(0,120):""}`);
+    }
+    const blobD=await blobR.json();
+    return JSON.parse(atob(blobD.content.replace(/\n/g,"")));
   }catch(e){
     const msg=e.name==="AbortError"?"timeout 超时(网络太慢/无响应)":e.message;
     lastGhError=msg;
