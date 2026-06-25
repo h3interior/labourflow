@@ -2501,6 +2501,9 @@ async function bootLoadData(){
         mergeRemoteIntoLocal(remote);
         localStorage.setItem(KEY,JSON.stringify(state));
         showSyncStatus("✅ 数据已同步","#15614f");
+        // 合并后必须主动刷新界面，否则数据已经在内存里、但页面还停留在
+        // 合并之前渲染的（空白）状态，看起来就像"同步了但没数据"
+        if(typeof renderAll==="function")renderAll();
         // 合并后如果本地数据有变化（说明本地曾经有云端没有的新记录），
         // 立刻把合并结果再推回云端，避免下次开机又要重新合并
         if(JSON.stringify(state)!==beforeJson)scheduleSave();
@@ -2552,7 +2555,7 @@ function showTokenSetupOnBoot(){
     document.getElementById("tokenSave").textContent="连接中... Connecting...";
     try{
       const remote=await ghGet();
-      if(remote){mergeRemoteIntoLocal(remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#15614f");}
+      if(remote){mergeRemoteIntoLocal(remote);localStorage.setItem(KEY,JSON.stringify(state));showSyncStatus("✅ 数据已从云端加载","#15614f");if(typeof renderAll==="function")renderAll();}
       else{const ok=await ghPut(state);if(!ok)throw new Error("写入失败，请检查Token权限是否勾选了 repo");}
       overlay.remove();
       await bootLoadData();
