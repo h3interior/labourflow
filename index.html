@@ -827,7 +827,7 @@ tr.entry-pending td:first-child::after{content:'';} /* handled inline */
         <label class="wide">备注 Notes<input id="certNotes" placeholder="e.g. renewal booked"/></label>
       </div>
       <div class="button-row" style="margin-top:14px">
-        <button class="secondary-btn" id="closeCertModal" type="button" type="button">取消</button>
+        <button class="secondary-btn" id="closeCertModal" type="button">取消</button>
         <button class="primary-btn" type="submit">保存 Save</button>
       </div>
     </form>
@@ -859,7 +859,7 @@ const num    = v => (Number(v)||0).toFixed(2);
 const esc    = v => String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 const uid    = p => `${p}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 const isoDate= d => {const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return`${y}-${m}-${day}`}
-const today  = new Date();
+let today  = new Date(); // 用 let：PWA 常驻后台跨天后需要刷新（见 visibilitychange 处理）
 
 function mondayOf(d){const c=new Date(d);const day=c.getDay()||7;c.setDate(c.getDate()-day+1);c.setHours(0,0,0,0);return c}
 function addDays(d,n){const c=new Date(d);c.setDate(c.getDate()+n);return c}
@@ -896,6 +896,7 @@ function loadState(){
     entries:[],
     certs:[],
     invoiceCounters:{},
+    tombstones:{},
   };
 }
 
@@ -906,6 +907,22 @@ state.sites      = state.sites      || [];
 state.entries    = state.entries    || [];
 state.certs      = state.certs      || [];
 state.invoiceCounters = state.invoiceCounters || {};
+state.tombstones = state.tombstones || {};
+
+// 【Bug修复】删除墓碑：记录"哪些id已被删除"。之前的合并逻辑会把任何一边
+// 独有的记录都保留下来，导致在一台设备上删除的记录，被另一台设备同步时
+// 又"复活"回来。现在删除时记下墓碑，合并时把墓碑里的id过滤掉。
+function markDeleted(...ids){
+  const now=new Date().toISOString();
+  ids.forEach(id=>{if(id)state.tombstones[id]=now;});
+}
+// 清理180天前的墓碑，避免无限膨胀占用存储空间
+(function pruneTombstones(){
+  const cutoff=new Date(Date.now()-180*24*3600*1000).toISOString();
+  Object.keys(state.tombstones).forEach(id=>{
+    if(state.tombstones[id]<cutoff)delete state.tombstones[id];
+  });
+})();
 
 // migrate old entries that lack confirmed field
 state.entries.forEach(e=>{ if(e.confirmed===undefined)e.confirmed=false; });
@@ -928,7 +945,6 @@ state.sites.forEach(s=>{
   }
 });
 
-function _savePlaceholder_replaced_below(){}
 
 // ── Core helpers ──────────────────────────────────────────────
 function getWorker(id){return state.workers.find(w=>w.id===id)}
@@ -1081,10 +1097,11 @@ function renderSettings(){
 function renderWorkers(){
   const roles={labourer:"Labourer",leading_hand:"Leading Hand",foreman:"Foreman",pm:"PM"};
   const statusColors={active:"green",leave:"amber",inactive:"grey"};
+  const roleColors={labourer:"grey",leading_hand:"blue",foreman:"purple",pm:"purple"};
   $("#workersTable").innerHTML=state.workers.map(w=>`
     <tr>
       <td><strong>${esc(w.name)}</strong><div class="muted" style="font-size:.78rem">${esc(w.phone||"")}</div></td>
-      <td><span class="badge ${statusColors[w.role]||"grey"}">${roles[w.role]||w.role}</span></td>
+      <td><span class="badge ${roleColors[w.role]||"grey"}">${roles[w.role]||w.role}</span></td>
       <td>${money(w.payRate)}/h</td>
       <td><span class="badge ${statusColors[w.status]||"grey"}">${STATUS_LABELS[w.status]||w.status}</span></td>
       <td><div class="table-actions">
@@ -1549,7 +1566,10 @@ function resetEntryForm(){
   $("#entryForm").reset();$("#entryId").value="";
   $("#entryDate").value=isoDate(today);$("#entryStart").value="05:00";$("#entryEnd").value="15:00";
   $("#entryBreak").value=0;$("#entryAllowance").value=0;
-  if(state.workers[0])$("#entryWorker").value=state.workers[0].id;
+  // 【Bug修复】工人模式下必须保持当前登录工人：之前重置为第一个工人，
+  // 而工人模式的选择框是禁用的、无法改回，导致下一条日报记到别人头上
+  if(currentRole==="worker"&&currentWorkerId){$("#entryWorker").value=currentWorkerId;}
+  else if(state.workers[0]){$("#entryWorker").value=state.workers[0].id;}
   renderSiteOptions();$("#entrySubmitLabel").textContent="保存日报 / Save Entry";updatePreview();
 }
 function resetWorkerForm(){
@@ -2095,10 +2115,10 @@ document.addEventListener("click",e=>{
   if(ec)editCert(ec.dataset.editCert);
   if(acw)openAddCertModal(acw.dataset.addCertWorker);
   if(ce)confirmEntry(ce.dataset.confirmEntry);
-  if(dw&&currentRole==="admin"&&confirm("确定删除这个工人吗？")){state.workers=state.workers.filter(w=>w.id!==dw.dataset.deleteWorker);state.certs=state.certs.filter(c=>c.workerId!==dw.dataset.deleteWorker);save();renderAll()}
-  if(ds&&currentRole==="admin"&&confirm("确定删除这个工地吗？")){state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);save();renderAll()}
-  if(de&&currentRole==="admin"&&confirm("确定删除这条日报吗？")){state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);save();renderAll()}
-  if(dc&&currentRole==="admin"&&confirm("确定删除这条证书记录吗？")){state.certs=state.certs.filter(x=>x.id!==dc.dataset.deleteCert);save();renderAll()}
+  if(dw&&currentRole==="admin"&&confirm("确定删除这个工人吗？")){const wid=dw.dataset.deleteWorker;const certIds=state.certs.filter(c=>c.workerId===wid).map(c=>c.id);markDeleted(wid,...certIds);state.workers=state.workers.filter(w=>w.id!==wid);state.certs=state.certs.filter(c=>c.workerId!==wid);save();renderAll()}
+  if(ds&&currentRole==="admin"&&confirm("确定删除这个工地吗？")){markDeleted(ds.dataset.deleteSite);state.sites=state.sites.filter(s=>s.id!==ds.dataset.deleteSite);save();renderAll()}
+  if(de&&currentRole==="admin"&&confirm("确定删除这条日报吗？")){markDeleted(de.dataset.deleteEntry);state.entries=state.entries.filter(x=>x.id!==de.dataset.deleteEntry);save();renderAll()}
+  if(dc&&currentRole==="admin"&&confirm("确定删除这条证书记录吗？")){markDeleted(dc.dataset.deleteCert);state.certs=state.certs.filter(x=>x.id!==dc.dataset.deleteCert);save();renderAll()}
 });
 
 document.getElementById("confirmAllBtn")?.addEventListener("click",confirmAllEntries);
@@ -2132,6 +2152,16 @@ const GH={
 };
 let ghSha=null;let syncTimer=null;
 
+// 【Bug修复】正确解码含中文的云端数据：
+// 上传时用的是 UTF-8 编码(btoa(unescape(encodeURIComponent(...))))，
+// 但之前下载只用 atob 解码，中文全部变乱码（"张三"→"å¼ ä¸‰"）。
+// 这里用 TextDecoder 按 UTF-8 正确还原。
+function b64ToUtf8(b64){
+  const bin=atob(String(b64||"").replace(/\n/g,""));
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
 // 带超时的 fetch：信号差/请求挂起时不会让整个App卡死，超过 timeoutMs 直接判定失败
 // 工地现场信号弱，接口请求比加载普通网页更容易卡顿，超时时间调宽到25秒
 async function fetchWithTimeoutOnce(url,options={},timeoutMs=25000){
@@ -2157,14 +2187,14 @@ async function ghGet(){
   try{
     const r=await fetchWithTimeout(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
       {headers:{Authorization:`token ${GH.token}`,Accept:"application/vnd.github+json"}});
-    if(r.status===404){lastGhError="404 文件不存在";return null;}
+    if(r.status===404){lastGhError="404 文件不存在";ghSha=null;return null;}
     if(!r.ok){
       const t=await r.text().catch(()=>"");
       throw new Error(`HTTP ${r.status}${t?" — "+t.slice(0,120):""}`);
     }
     const d=await r.json();ghSha=d.sha;
     if(d.content){
-      return JSON.parse(atob(d.content.replace(/\n/g,"")));
+      return JSON.parse(b64ToUtf8(d.content));
     }
     // GitHub Contents API 对超过1MB的文件不会把内容塞进 content 字段（会是空的）。
     // 改用 Git Blobs API（通过文件的sha单独取内容，官方文档明确支持最大100MB，
@@ -2176,7 +2206,7 @@ async function ghGet(){
       throw new Error(`读取大文件失败 HTTP ${blobR.status}${t?" — "+t.slice(0,120):""}`);
     }
     const blobD=await blobR.json();
-    return JSON.parse(atob(blobD.content.replace(/\n/g,"")));
+    return JSON.parse(b64ToUtf8(blobD.content));
   }catch(e){
     const msg=e.name==="AbortError"?"timeout 超时(网络太慢/无响应)":e.message;
     lastGhError=msg;
@@ -2193,11 +2223,19 @@ async function ghPut(data){
     {method:"PUT",headers:{Authorization:`token ${GH.token}`,"Content-Type":"application/json"},body:JSON.stringify(body)});
   if(!r.ok){
     const t=await r.text();
-    // If conflict (sha mismatch), refresh sha and retry once
+    // If conflict (sha mismatch), another device just wrote data.
+    // 【Bug修复】之前只是刷新sha后用本地数据强行重试，会把对方刚写入的
+    // 数据直接覆盖掉。现在先把远端数据合并进本地，再上传合并结果。
     if(r.status===409||r.status===422){
-      console.warn("SHA mismatch, refreshing...");
-      await ghGet();
+      console.warn("SHA mismatch, merging remote then retrying...");
+      const remote=await ghGet();
+      if(remote){
+        mergeRemoteIntoLocal(remote);
+        safeSetLocal(JSON.stringify(state));
+        if(typeof renderAll==="function"&&currentRole)renderAll();
+      }
       body.sha=ghSha;
+      body.content=btoa(unescape(encodeURIComponent(JSON.stringify(state))));
       const r2=await fetchWithTimeout(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.file}`,
         {method:"PUT",headers:{Authorization:`token ${GH.token}`,"Content-Type":"application/json"},body:JSON.stringify({...body,sha:ghSha})});
       if(!r2.ok){const t2=await r2.text();throw new Error(`HTTP ${r2.status} — ${t2.slice(0,200)}`);}
@@ -2235,14 +2273,18 @@ function mergeRemoteIntoLocal(remote){
   const other  = localNewer ? remote : state;
 
   const mergedState = {...base};
+  // 合并双方的删除墓碑，任何一边删除过的记录都不再复活
+  const mergedTombstones={...(other.tombstones||{}),...(base.tombstones||{})};
   ["workers","sites","entries","certs"].forEach(key=>{
     const baseList  = Array.isArray(base[key]) ?base[key] :[];
     const otherList = Array.isArray(other[key])?other[key]:[];
     const ids = new Set(baseList.map(r=>r.id));
     // 把 other 里 base 没有的记录追加进来，而不是丢弃
     const onlyInOther = otherList.filter(r=>!ids.has(r.id));
-    mergedState[key] = [...baseList, ...onlyInOther];
+    // 再过滤掉任何一边已明确删除的记录
+    mergedState[key] = [...baseList, ...onlyInOther].filter(r=>!mergedTombstones[r.id]);
   });
+  mergedState.tombstones = mergedTombstones;
   mergedState.invoiceCounters = {...other.invoiceCounters, ...base.invoiceCounters};
   mergedState.settings = base.settings || other.settings;
   mergedState._lastModified = base._lastModified || other._lastModified;
@@ -2282,7 +2324,14 @@ function flushPendingSync(){
   }
 }
 document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden")flushPendingSync();
+  if(document.visibilityState==="hidden"){flushPendingSync();return;}
+  // 【Bug修复】PWA 常驻后台跨天：today 是打开时定格的，第二天早上直接
+  // 从后台唤醒时日期还是昨天，证书到期天数和默认日期都会算错。
+  const now=new Date();
+  if(isoDate(now)!==isoDate(today)){
+    today=now;
+    if(currentRole)renderAll();
+  }
 });
 window.addEventListener("pagehide",flushPendingSync);
 
@@ -2356,7 +2405,6 @@ function showLoginStep(stepId){
   ["loginLoadingState","roleSelectStep","workerSelectStep","workerVerifyStep","adminPassStep"].forEach(id=>{
     const el=document.getElementById(id);
     if(!el)return;
-    el.style.cssText=el.style.cssText; // force style recalc
     el.style.display=(id===stepId)?"block":"none";
     el.style.visibility=(id===stepId)?"visible":"hidden";
     el.style.height=(id===stepId)?"auto":"0";
@@ -2460,8 +2508,6 @@ function initLoginEvents(){
   document.getElementById("switchRoleBtn")?.addEventListener("click",showLoginScreen);
 }
 
-// Override handleEntrySubmit to mark worker entries as pending
-const _origHandleEntrySubmit = handleEntrySubmit;
 function handleEntrySubmit(e){
   e.preventDefault();
   if(!$("#entryWorker").value||!$("#entryClient").value||!$("#entrySite").value){alert("请先在管理设置添加工人和工地。");return}
@@ -2470,6 +2516,15 @@ function handleEntrySubmit(e){
   const existingEntry=existingId?state.entries.find(x=>x.id===existingId):null;
   const id=existingId||uid("entry");
   const entryDate=$("#entryDate").value;
+  // 【优化】防重复提交：工地信号差时容易连按两次保存，这里检测
+  // 同工人+同日期+同工地+同时段的已有记录，二次确认后才允许重复添加
+  if(!existingId){
+    const dup=state.entries.find(x=>
+      x.workerId===$("#entryWorker").value&&x.date===entryDate&&
+      x.client===$("#entryClient").value.trim()&&x.site===$("#entrySite").value.trim()&&
+      x.start===$("#entryStart").value&&x.end===$("#entryEnd").value);
+    if(dup&&!confirm("⚠️ 已存在一条相同工人、日期、工地和时间的日报。\n确定要重复添加吗？")){return}
+  }
   const entry={id,workerId:$("#entryWorker").value,date:entryDate,
     client:$("#entryClient").value.trim(),site:$("#entrySite").value.trim(),
     start:$("#entryStart").value,end:$("#entryEnd").value,
